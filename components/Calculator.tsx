@@ -59,16 +59,18 @@ function Pill({
   active,
   onClick,
   children,
+  small,
 }: {
   active: boolean;
   onClick: () => void;
   children: React.ReactNode;
+  small?: boolean;
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className="px-2 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 text-center w-full"
+      className={`py-2.5 rounded-xl font-medium transition-all duration-150 text-center w-full whitespace-nowrap overflow-hidden ${small ? "px-1 text-xs" : "px-2 text-sm"}`}
       style={{
         minHeight: 44,
         background: active ? "rgba(99,102,241,0.2)" : "rgba(255,255,255,0.05)",
@@ -1042,13 +1044,14 @@ export default function Calculator() {
                     <div className="grid grid-cols-3 gap-2">
                       {(
                         [
-                          { v: "soltero"      as FamilySituation, l: "Soltero/a"    },
-                          { v: "casado"       as FamilySituation, l: "Casado/a"     },
-                          { v: "monoparental" as FamilySituation, l: "Monoparental" },
+                          { v: "soltero"      as FamilySituation, l: "Soltero/a"  },
+                          { v: "casado"       as FamilySituation, l: "Casado/a"   },
+                          { v: "monoparental" as FamilySituation, l: "Monop."     },
                         ] as const
                       ).map(({ v, l }) => (
                         <Pill
                           key={v}
+                          small
                           active={situation === v}
                           onClick={() => {
                             setSituation(v);
@@ -1085,6 +1088,7 @@ export default function Calculator() {
                       ].map(({ v, l }) => (
                         <Pill
                           key={v}
+                          small
                           active={numChildren === v}
                           onClick={() => {
                             setNumChildren(v);
