@@ -68,7 +68,7 @@ function Pill({
     <button
       type="button"
       onClick={onClick}
-      className="px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-150"
+      className="px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 whitespace-nowrap"
       style={{
         minHeight: 44,
         background: active ? "rgba(99,102,241,0.2)" : "rgba(255,255,255,0.05)",
@@ -776,7 +776,7 @@ function EmptyState({ mode }: { mode: Mode }) {
 export default function Calculator() {
   // ── State ────────────────────────────────────────────────────────────────
   const [mode,          setMode]          = useState<Mode>("bruto-neto");
-  const [rawInput,      setRawInput]      = useState("");
+  const [rawInput,      setRawInput]      = useState("30000");
   const [period,        setPeriod]        = useState<Period>("anual");
   const [numPayments,   setNumPayments]   = useState<NumPayments>(12);
   const [comunidad,     setComunidad]     = useState<ComunidadAutonoma>("madrid");

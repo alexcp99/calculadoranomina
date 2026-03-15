@@ -38,7 +38,7 @@ export default function HomePage() {
           <h1
             className="font-syne font-extrabold tracking-tight leading-tight mb-3 md:mb-4"
             style={{
-              fontSize: "clamp(2rem, 9vw, 4rem)",
+              fontSize: "clamp(1.5rem, 7vw, 4rem)",
               color: "#f0f0ff",
             }}
           >
