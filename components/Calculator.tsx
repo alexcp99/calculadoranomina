@@ -88,8 +88,8 @@ function Pill({
 function Label({ children }: { children: React.ReactNode }) {
   return (
     <p
-      className="text-xs font-semibold uppercase tracking-widest mb-2"
-      style={{ color: "#a0a0c8" }}
+      className="text-xs font-semibold uppercase tracking-wider mb-2"
+      style={{ color: "#b8b8d8" }}
     >
       {children}
     </p>
@@ -115,10 +115,10 @@ function SectionHeader({
       style={{ color: "var(--text-secondary)" }}
     >
       <span
-        className="text-xs font-medium uppercase tracking-widest pl-3"
+        className="text-sm font-semibold uppercase tracking-wider pl-3"
         style={{
-          color: "#c0c0e0",
-          borderLeft: "3px solid rgba(99,102,241,0.6)",
+          color: "#e0e0ff",
+          borderLeft: "3px solid rgba(99,102,241,0.7)",
         }}
       >
         {title}
@@ -958,10 +958,10 @@ export default function Calculator() {
             {/* ══════════ Sección: Datos básicos — order-4 ══════════ */}
             <div className="order-4 flex flex-col gap-4">
               <p
-                className="text-xs font-medium uppercase tracking-widest pl-3"
+                className="text-sm font-semibold uppercase tracking-wider pl-3"
                 style={{
-                  color: "#c0c0e0",
-                  borderLeft: "3px solid rgba(99,102,241,0.6)",
+                  color: "#e0e0ff",
+                  borderLeft: "3px solid rgba(99,102,241,0.7)",
                 }}
               >
                 Datos básicos
