@@ -783,6 +783,7 @@ export default function Calculator() {
   const [childrenUnder3, setChildrenUnder3] = useState(0);
   const [spouseNoIncome, setSpouseNoIncome] = useState(false);
   const [age,           setAge]           = useState(30);
+  const [ageRaw,        setAgeRaw]        = useState("30");
   const [disability,    setDisability]    = useState<Disability>("none");
   const [mobility,      setMobility]      = useState(false);
   const [openFamiliar,  setOpenFamiliar]  = useState(true);
@@ -1140,11 +1141,14 @@ export default function Calculator() {
                       <input
                         type="number"
                         min={16}
-                        max={75}
-                        value={age}
-                        onChange={(e) => {
+                        max={99}
+                        value={ageRaw}
+                        onChange={(e) => setAgeRaw(e.target.value)}
+                        onBlur={(e) => {
                           const v = parseInt(e.target.value, 10);
-                          if (!isNaN(v)) setAge(Math.min(75, Math.max(16, v)));
+                          const clamped = isNaN(v) ? 30 : Math.min(99, Math.max(16, v));
+                          setAge(clamped);
+                          setAgeRaw(String(clamped));
                         }}
                         className="flex-1 bg-transparent outline-none font-syne font-bold tabnum min-w-0 text-center"
                         style={{
