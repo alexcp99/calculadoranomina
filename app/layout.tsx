@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Syne, DM_Sans } from "next/font/google";
+import StructuredData from "./structured-data";
 import "./globals.css";
 
 const syne = Syne({
@@ -17,26 +18,75 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Calculadora de Nómina 2026 — IRPF y Seguridad Social",
+  metadataBase: new URL("https://calculadoranomina.org"),
+
+  title: {
+    default: "Calculadora de Nómina 2026 — Salario Bruto y Neto | IRPF y Seguridad Social",
+    template: "%s | Calculadora de Nómina 2026",
+  },
   description:
-    "Calcula tu salario neto desde el bruto y viceversa. IRPF 2026 + cotizaciones a la Seguridad Social. Situaciones familiares completas. Datos oficiales AEAT.",
-  keywords:
-    "calculadora nómina, salario neto, IRPF 2026, seguridad social, bruto neto, España, calculadora salario",
+    "Calcula tu salario neto desde el bruto o el bruto desde el neto en segundos. Aplica los tramos del IRPF 2026, cotizaciones a la Seguridad Social y mínimos personales. Situaciones familiares completas. Datos oficiales AEAT España.",
+  keywords: [
+    "calculadora nómina",
+    "calculadora salario neto",
+    "salario bruto neto",
+    "IRPF 2026",
+    "tramos IRPF 2026",
+    "Seguridad Social 2026",
+    "calculadora IRPF España",
+    "retención IRPF",
+    "sueldo neto España",
+    "calculadora retención",
+    "nómina España",
+    "salario neto 2026",
+  ],
+
+  alternates: {
+    canonical: "https://calculadoranomina.org",
+  },
+
   openGraph: {
-    title: "Calculadora de Nómina 2026",
-    description: "Calcula tu salario neto o bruto en segundos. AEAT 2026.",
+    title: "Calculadora de Nómina 2026 — Salario Bruto y Neto",
+    description:
+      "Calcula tu salario neto desde el bruto (o al revés) con IRPF 2026 y Seguridad Social. Datos oficiales AEAT. Gratis y sin registro.",
+    url: "https://calculadoranomina.org",
+    siteName: "Calculadora de Nómina",
     type: "website",
     locale: "es_ES",
   },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "Calculadora de Nómina 2026 — Bruto / Neto",
+    description:
+      "Calcula tu salario neto o bruto con IRPF 2026 y Seguridad Social. Gratis, sin registro, datos AEAT.",
+  },
+
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-snippet": -1,
+      "max-image-preview": "large",
+      "max-video-preview": -1,
+    },
   },
+
+  icons: {
+    icon: "/favicon.ico",
+  },
+
+  manifest: "/manifest.json",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es" className={`${syne.variable} ${dmSans.variable}`}>
+      <head>
+        <StructuredData />
+      </head>
       <body>{children}</body>
     </html>
   );

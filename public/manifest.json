@@ -1,0 +1,17 @@
+{
+  "name": "Calculadora de Nómina 2026",
+  "short_name": "Calculadora Nómina",
+  "description": "Calcula tu salario neto o bruto con IRPF 2026 y Seguridad Social.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#080810",
+  "theme_color": "#6366f1",
+  "lang": "es-ES",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon"
+    }
+  ]
+}

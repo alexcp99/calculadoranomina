@@ -1,6 +1,8 @@
 import Calculator from "@/components/Calculator";
 
 export default function HomePage() {
+  const currentYear = new Date().getFullYear();
+
   return (
     <main className="min-h-screen" style={{ background: "#080810" }}>
       {/* Radial gradient spotlight */}
@@ -17,12 +19,14 @@ export default function HomePage() {
         {/* ── Header ── */}
         <header className="pt-14 pb-10 px-4 text-center">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium mb-8"
+          <div
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium mb-8"
             style={{
               background: "rgba(99,102,241,0.1)",
               border: "1px solid rgba(99,102,241,0.22)",
               color: "#818CF8",
-            }}>
+            }}
+          >
             <span
               className="w-1.5 h-1.5 rounded-full bg-emerald-400"
               style={{ boxShadow: "0 0 6px rgba(52,211,153,0.7)" }}
@@ -30,7 +34,7 @@ export default function HomePage() {
             Actualizado · AEAT 2026
           </div>
 
-          {/* Heading */}
+          {/* H1 — texto completo accesible para SEO, estilos visuales separados */}
           <h1
             className="font-syne font-extrabold tracking-tight leading-none mb-4"
             style={{
@@ -48,30 +52,56 @@ export default function HomePage() {
                 backgroundClip: "text",
               }}
             >
-              Nómina
+              Nómina 2026
             </span>
           </h1>
 
-          {/* Subtitle */}
+          {/* Subtítulo principal */}
           <p
-            className="text-base md:text-lg max-w-lg mx-auto leading-relaxed"
+            className="text-base md:text-lg max-w-lg mx-auto leading-relaxed mb-4"
             style={{ color: "#7c7ca0" }}
           >
             Salario bruto → neto y neto → bruto.
             <br className="hidden sm:block" />
             IRPF + Seguridad Social incluidos.
           </p>
+
+          {/* Párrafo descriptivo — rico en keywords, útil para el usuario y para SEO */}
+          <p
+            className="text-sm max-w-2xl mx-auto leading-relaxed"
+            style={{ color: "#4a4a6a" }}
+          >
+            Calcula al instante cuánto cobras en neto aplicando los{" "}
+            <strong style={{ color: "#5a5a80", fontWeight: 600 }}>
+              tramos del IRPF 2026
+            </strong>{" "}
+            y las cotizaciones a la{" "}
+            <strong style={{ color: "#5a5a80", fontWeight: 600 }}>
+              Seguridad Social
+            </strong>
+            . Introduce tu{" "}
+            <strong style={{ color: "#5a5a80", fontWeight: 600 }}>
+              salario bruto anual o mensual
+            </strong>{" "}
+            y obtén el{" "}
+            <strong style={{ color: "#5a5a80", fontWeight: 600 }}>
+              salario neto
+            </strong>{" "}
+            exacto según las tablas oficiales de la AEAT para España. También
+            funciona al revés: indica el neto deseado y te calculamos el bruto
+            necesario.
+          </p>
         </header>
 
         {/* ── Calculator ── */}
-        <section className="flex-1 px-4 pb-16">
+        <section className="flex-1 px-4 pb-16" aria-label="Calculadora de nómina">
           <Calculator />
         </section>
 
         {/* ── Footer ── */}
         <footer className="pb-8 px-4 text-center">
           <p className="text-xs" style={{ color: "#3e3e60" }}>
-            Datos oficiales AEAT · España · 2026
+            Datos oficiales AEAT · España · {currentYear}
           </p>
         </footer>
       </div>
