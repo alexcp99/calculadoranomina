@@ -57,7 +57,7 @@ function computeResult(
 function Label({ children }: { children: React.ReactNode }) {
   return (
     <p
-      className="text-xs font-semibold uppercase tracking-widest mb-3"
+      className="text-xs font-semibold uppercase tracking-widest mb-2"
       style={{ color: "var(--text-muted)" }}
     >
       {children}
@@ -163,27 +163,31 @@ function CompactResult({ r, mode }: { r: TaxResult; mode: Mode }) {
 
   return (
     <div
-      className="rounded-2xl p-5"
+      className="rounded-2xl p-4"
       style={{
         background: isNB ? "rgba(99,102,241,0.07)" : "rgba(52,211,153,0.06)",
         border: `1px solid ${isNB ? "rgba(99,102,241,0.2)" : "rgba(52,211,153,0.18)"}`,
       }}
     >
-      <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "var(--text-muted)" }}>
+      <p className="text-xs font-semibold uppercase tracking-widest mb-1.5" style={{ color: "var(--text-muted)" }}>
         {label}
       </p>
-      <div className="flex items-end gap-1.5 mb-1">
-        <span className="font-syne font-extrabold tabnum leading-none" style={{ fontSize: "2.5rem", color }}>
+      {/* Número grande — clamp entre 2rem (móvil) y 2.5rem (sm+) para ocupar el espacio correcto */}
+      <div className="flex items-end gap-1.5 mb-0.5">
+        <span
+          className="font-syne font-extrabold tabnum leading-none"
+          style={{ fontSize: "clamp(2rem, 10vw, 2.5rem)", color }}
+        >
           {fmtEur(monthly)}
         </span>
-        <span className="text-lg font-semibold mb-1" style={{ color: `${color}70` }}>€</span>
+        <span className="text-lg font-semibold mb-0.5" style={{ color: `${color}70` }}>€</span>
       </div>
-      <p className="text-sm tabnum mb-4" style={{ color: "var(--text-secondary)" }}>
+      <p className="text-sm tabnum mb-3" style={{ color: "var(--text-secondary)" }}>
         {fmtEur(annual)} € al año
       </p>
 
       {/* Rate chips */}
-      <div className="flex gap-2 mb-4">
+      <div className="flex gap-2 mb-3">
         <StatChip label="IRPF" value={fmtPct(r.irpfRate)} color="#fbbf24" bg="rgba(251,191,36,0.08)" />
         <StatChip label="Seg. Social" value={fmtPct(r.ssRate)} color="#818cf8" bg="rgba(99,102,241,0.08)" />
         <StatChip label="Neto" value={fmtPct(r.netPercent)} color="#34d399" bg="rgba(52,211,153,0.08)" />
@@ -383,7 +387,8 @@ export default function Calculator() {
         <div className="grid lg:grid-cols-2">
 
           {/* ══════════ LEFT / TOP: Inputs ══════════ */}
-          <div className="p-5 sm:p-7 lg:p-8 flex flex-col gap-6">
+          {/* gap-4 en móvil para compactar; lg:gap-6 restaura el espaciado desktop */}
+          <div className="p-4 sm:p-6 lg:p-8 flex flex-col gap-4 lg:gap-6">
 
             {/* Mode toggle */}
             <div className="flex rounded-xl p-1 gap-1" style={{ background: "rgba(255,255,255,0.05)" }}>

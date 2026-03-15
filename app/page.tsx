@@ -17,10 +17,12 @@ export default function HomePage() {
 
       <div className="relative z-10 flex flex-col min-h-screen">
         {/* ── Header ── */}
-        <header className="pt-14 pb-10 px-4 text-center">
-          {/* Badge */}
+        {/* mobile: pt-5 pb-3 — compacto para que la calculadora quede en el fold */}
+        {/* md+:    pt-14 pb-10 — espaciado original intacto */}
+        <header className="pt-5 pb-3 px-4 text-center md:pt-14 md:pb-10">
+          {/* Badge — menos margen inferior en móvil */}
           <div
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium mb-8"
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium mb-4 md:mb-8"
             style={{
               background: "rgba(99,102,241,0.1)",
               border: "1px solid rgba(99,102,241,0.22)",
@@ -34,11 +36,12 @@ export default function HomePage() {
             Actualizado · AEAT 2026
           </div>
 
-          {/* H1 — texto completo accesible para SEO, estilos visuales separados */}
+          {/* H1 — fuente más pequeña en móvil para caber en 2 líneas sin ocupar demasiado */}
+          {/* clamp: mín 1.55rem (~25px) en móvil, escala con viewport, máx 4rem en desktop */}
           <h1
-            className="font-syne font-extrabold tracking-tight leading-none mb-4"
+            className="font-syne font-extrabold tracking-tight leading-tight mb-2 md:mb-4"
             style={{
-              fontSize: "clamp(2.25rem, 6vw, 4rem)",
+              fontSize: "clamp(1.55rem, 7vw, 4rem)",
               color: "#f0f0ff",
             }}
           >
@@ -56,9 +59,9 @@ export default function HomePage() {
             </span>
           </h1>
 
-          {/* Subtítulo principal */}
+          {/* Subtítulo — margen reducido en móvil */}
           <p
-            className="text-base md:text-lg max-w-lg mx-auto leading-relaxed mb-4"
+            className="text-sm md:text-lg max-w-lg mx-auto leading-relaxed mb-2 md:mb-4"
             style={{ color: "#7c7ca0" }}
           >
             Salario bruto → neto y neto → bruto.
@@ -66,9 +69,10 @@ export default function HomePage() {
             IRPF + Seguridad Social incluidos.
           </p>
 
-          {/* Párrafo descriptivo — rico en keywords, útil para el usuario y para SEO */}
+          {/* Párrafo SEO — oculto en móvil para no empujar la calculadora fuera del fold */}
+          {/* Google indexa el contenido aunque esté oculto con hidden (no es display:none fraudulento) */}
           <p
-            className="text-sm max-w-2xl mx-auto leading-relaxed"
+            className="hidden md:block text-sm max-w-2xl mx-auto leading-relaxed"
             style={{ color: "#4a4a6a" }}
           >
             Calcula al instante cuánto cobras en neto aplicando los{" "}
@@ -94,7 +98,7 @@ export default function HomePage() {
         </header>
 
         {/* ── Calculator ── */}
-        <section className="flex-1 px-4 pb-16" aria-label="Calculadora de nómina">
+        <section className="flex-1 px-4 pb-8 md:pb-16" aria-label="Calculadora de nómina">
           <Calculator />
         </section>
 
