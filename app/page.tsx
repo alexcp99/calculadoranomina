@@ -1,4 +1,3 @@
-import Link from "next/link";
 import Calculator from "@/components/Calculator";
 
 export default function HomePage() {
@@ -18,21 +17,7 @@ export default function HomePage() {
 
       <div className="relative z-10 flex flex-col min-h-screen">
         {/* ── Header ── */}
-        <header className="relative pt-8 pb-4 px-4 text-center md:pt-14 md:pb-10">
-          {/* Blog nav link */}
-          <nav className="absolute top-6 right-4 md:top-8 md:right-8">
-            <Link
-              href="/blog"
-              className="text-xs font-medium px-3 py-1.5 rounded-full transition-colors"
-              style={{
-                background: "rgba(99,102,241,0.08)",
-                border: "1px solid rgba(99,102,241,0.18)",
-                color: "#818CF8",
-              }}
-            >
-              Blog
-            </Link>
-          </nav>
+        <header className="pt-8 pb-4 px-4 text-center md:pt-14 md:pb-10">
           {/* Badge */}
           <div
             className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium mb-4 md:mb-8"
