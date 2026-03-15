@@ -59,7 +59,7 @@ export default function HomePage() {
           {/* Subtítulo */}
           <p
             className="text-sm md:text-lg max-w-lg mx-auto leading-relaxed mb-3 md:mb-4"
-            style={{ color: "#7c7ca0" }}
+            style={{ color: "#a0a0c0" }}
           >
             Bruto → Neto y Neto → Bruto.{" "}
             <span className="inline">IRPF + Seguridad Social incluidos.</span>
