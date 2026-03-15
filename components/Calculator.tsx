@@ -68,7 +68,7 @@ function Pill({
     <button
       type="button"
       onClick={onClick}
-      className="px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 whitespace-nowrap"
+      className="px-2 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 text-center w-full"
       style={{
         minHeight: 44,
         background: active ? "rgba(99,102,241,0.2)" : "rgba(255,255,255,0.05)",
@@ -1039,7 +1039,7 @@ export default function Calculator() {
                   {/* Estado civil */}
                   <div>
                     <Label>Estado civil</Label>
-                    <div className="flex gap-2 flex-wrap">
+                    <div className="grid grid-cols-3 gap-2">
                       {(
                         [
                           { v: "soltero"      as FamilySituation, l: "Soltero/a"    },
@@ -1076,7 +1076,7 @@ export default function Calculator() {
                   {/* Total hijos */}
                   <div>
                     <Label>Hijos menores de 25 años</Label>
-                    <div className="flex gap-2 flex-wrap">
+                    <div className="grid grid-cols-4 gap-2">
                       {[
                         { v: 0, l: "Sin hijos" },
                         { v: 1, l: "1 hijo"    },
