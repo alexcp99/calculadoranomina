@@ -39,6 +39,8 @@ body {
   font-family: var(--font-dm-sans), system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Evita scroll horizontal en móvil */
+  overflow-x: hidden;
 }
 
 /* ─── Remove number input spinners ─────────────────────────────────────────── */

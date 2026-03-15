@@ -300,50 +300,37 @@ function CompactResult({ r, mode }: { r: TaxResult; mode: Mode }) {
       className="rounded-2xl p-4"
       style={{ background: accentBg, border: `1px solid ${accentBorder}` }}
     >
-      {/* Main number */}
+      {/* Label */}
       <p
-        className="text-xs font-semibold uppercase tracking-widest mb-1"
+        className="text-xs font-semibold uppercase tracking-widest mb-2"
         style={{ color: "var(--text-muted)" }}
       >
         {label}
       </p>
 
-      {/* Monthly + annual on same row */}
-      <div className="flex items-end justify-between gap-2 mb-3">
-        <div>
-          <div className="flex items-baseline gap-1.5">
-            <span
-              className="font-syne font-extrabold tabnum leading-none"
-              style={{ fontSize: "clamp(2rem, 11vw, 2.8rem)", color }}
-            >
-              {fmtEur(monthly)}
-            </span>
-            <span
-              className="font-bold"
-              style={{ fontSize: "clamp(1.1rem, 5vw, 1.4rem)", color: `${color}70` }}
-            >
-              €
-            </span>
-          </div>
-          <p
-            className="text-xs mt-0.5"
-            style={{ color: "var(--text-muted)" }}
-          >
-            al mes
-          </p>
-        </div>
-        <div className="text-right shrink-0">
-          <p
-            className="font-syne font-bold tabnum text-lg leading-none"
-            style={{ color: `${color}90` }}
-          >
-            {fmtEur(annual)} €
-          </p>
-          <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>
-            al año
-          </p>
-        </div>
+      {/* Número mensual — ocupa su propia línea, sin nada al lado */}
+      <div className="flex items-baseline gap-1.5 mb-0.5">
+        <span
+          className="font-syne font-extrabold tabnum leading-none"
+          style={{ fontSize: "2.4rem", color }}
+        >
+          {fmtEur(monthly)}
+        </span>
+        <span
+          className="text-xl font-bold"
+          style={{ color: `${color}70` }}
+        >
+          €
+        </span>
+        <span className="text-xs ml-1" style={{ color: "var(--text-muted)" }}>
+          /mes
+        </span>
       </div>
+
+      {/* Anual debajo, pequeño */}
+      <p className="tabnum text-sm mb-4" style={{ color: `${color}80` }}>
+        {fmtEur(annual)} € al año
+      </p>
 
       {/* 3 chips */}
       <div className="grid grid-cols-3 gap-2 mb-3">
