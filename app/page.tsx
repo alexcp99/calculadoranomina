@@ -61,8 +61,8 @@ export default function HomePage() {
             className="text-sm md:text-lg max-w-lg mx-auto leading-relaxed mb-3 md:mb-4"
             style={{ color: "#a0a0c0" }}
           >
-            Bruto → Neto y Neto → Bruto.{" "}
-            <span className="inline">IRPF + Seguridad Social incluidos.</span>
+            Calcula tu salario neto desde el bruto, o el bruto que necesitas para un neto deseado.{" "}
+            <span className="inline">IRPF y Seguridad Social 2026 incluidos.</span>
           </p>
 
           {/* Párrafo SEO — solo desktop */}
