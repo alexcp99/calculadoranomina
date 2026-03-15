@@ -597,19 +597,25 @@ export default function Calculator() {
             >
               {(
                 [
-                  { v: "bruto-neto" as Mode, short: "Bruto→Neto", full: "Bruto → Neto" },
-                  { v: "neto-bruto" as Mode, short: "Neto→Bruto", full: "Neto → Bruto" },
+                  { v: "bruto-neto" as Mode, l: "Bruto → Neto" },
+                  { v: "neto-bruto" as Mode, l: "Neto → Bruto" },
                 ] as const
-              ).map(({ v, short, full }) => (
+              ).map(({ v, l }) => (
                 <button
                   key={v}
                   type="button"
                   onClick={() => setMode(v)}
-                  className="w-full rounded-xl font-semibold transition-all duration-200 text-center overflow-hidden truncate"
+                  className="w-full min-w-0 rounded-xl font-semibold transition-all duration-200 text-center"
                   style={{
-                    padding: "12px 6px",
+                    /* font-size fijo: desactiva el font boosting de Chrome Android */
+                    fontSize: "0.85rem",
+                    lineHeight: 1.25,
+                    padding: "10px 4px",
                     minHeight: 48,
-                    fontSize: "clamp(0.78rem, 3.8vw, 0.9rem)",
+                    /* WebkitTextSizeAdjust impide que Chrome infle el texto */
+                    WebkitTextSizeAdjust: "100%",
+                    /* Sin whitespace-nowrap: el texto puede partir en 2 líneas si es necesario */
+                    wordBreak: "break-word",
                     background:
                       mode === v
                         ? "linear-gradient(135deg,#6366f1,#818cf8)"
@@ -621,8 +627,7 @@ export default function Calculator() {
                         : "none",
                   }}
                 >
-                  <span className="md:hidden">{short}</span>
-                  <span className="hidden md:inline">{full}</span>
+                  {l}
                 </button>
               ))}
             </div>

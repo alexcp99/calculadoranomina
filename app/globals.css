@@ -28,6 +28,9 @@
 
 html {
   scroll-behavior: smooth;
+  /* Evita que Chrome Android infle automáticamente los tamaños de fuente */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
