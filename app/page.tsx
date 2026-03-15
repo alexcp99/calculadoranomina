@@ -94,7 +94,7 @@ export default function HomePage() {
 
         {/* ── Calculator ── */}
         <section
-          className="flex-1 px-4 pb-8 md:pb-16"
+          className="w-full flex-1 px-4 pb-8 md:pb-16"
           aria-label="Calculadora de nómina"
         >
           <Calculator />

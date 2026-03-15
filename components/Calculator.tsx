@@ -562,19 +562,18 @@ export default function Calculator() {
   const placeholder = period === "anual" ? "30000" : "2500";
 
   return (
-    <div className="max-w-5xl mx-auto">
+    <div className="w-full max-w-5xl mx-auto">
       <div
-        className="rounded-2xl overflow-hidden"
+        className="w-full rounded-2xl overflow-hidden"
         style={{
           background: "rgba(255,255,255,0.025)",
           border: "1px solid rgba(255,255,255,0.08)",
         }}
       >
-        <div className="grid lg:grid-cols-2">
+        <div className="w-full grid lg:grid-cols-2">
 
           {/* ══════════ LEFT / TOP: Inputs ══════════ */}
-          {/* flex-col en móvil con order explícito para garantizar: toggle→input→resultado→opciones */}
-          <div className="p-4 sm:p-6 lg:p-8 flex flex-col gap-5 lg:gap-6">
+          <div className="w-full min-w-0 p-4 sm:p-6 lg:p-8 flex flex-col gap-5 lg:gap-6">
 
             {/* ── Mode toggle — order-1 ── */}
             {/* overflow-hidden + min-w-0 evitan cualquier desbordamiento en pantallas <360px */}
@@ -861,7 +860,7 @@ export default function Calculator() {
 
           {/* ══════════ RIGHT (desktop only): Results ══════════ */}
           <div
-            className="hidden lg:flex flex-col p-8 results-panel"
+            className="hidden lg:flex flex-col p-8 min-w-0 results-panel"
             style={{ background: "rgba(99,102,241,0.025)" }}
           >
             {result ? (
