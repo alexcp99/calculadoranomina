@@ -1,14 +1,25 @@
 "use client";
 
 import { useState } from "react";
-import { computeTax, computeNetToGross } from "@/lib/tax";
-import type { ContractType, FamilySituation, TaxResult } from "@/lib/tax";
+import {
+  computeCalc,
+  computeNetToGrossCalc,
+  COMUNIDADES_LABEL,
+} from "@/lib/calculator";
+import type {
+  CalcResult,
+  CalcInput,
+  ContractType,
+  FamilySituation,
+  Disability,
+  NumPayments,
+  ComunidadAutonoma,
+} from "@/lib/calculator";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type Mode = "bruto-neto" | "neto-bruto";
+type Mode   = "bruto-neto" | "neto-bruto";
 type Period = "anual" | "mensual";
-type Children = 0 | 1 | 2;
 
 // ─── Formatters ───────────────────────────────────────────────────────────────
 
@@ -29,26 +40,17 @@ function computeResult(
   rawInput: string,
   period: Period,
   mode: Mode,
-  contract: ContractType,
-  situation: FamilySituation,
-  children: Children,
-  spouseNoIncome: boolean
-): TaxResult | null {
-  const clean = rawInput.replace(/\./g, "").replace(",", ".");
+  opts: Omit<CalcInput, "annualGross">
+): CalcResult | null {
+  const clean  = rawInput.replace(/\./g, "").replace(",", ".");
   const parsed = parseFloat(clean);
   if (!isFinite(parsed) || parsed <= 0) return null;
 
   const annual = period === "mensual" ? parsed * 12 : parsed;
-  const opts = {
-    contractType: contract,
-    familySituation: situation,
-    numChildren: children,
-    spouseWithoutIncome: spouseNoIncome,
-  };
 
   return mode === "bruto-neto"
-    ? computeTax({ annualGross: annual, ...opts })
-    : computeNetToGross(annual, opts);
+    ? computeCalc({ annualGross: annual, ...opts })
+    : computeNetToGrossCalc(annual, opts);
 }
 
 // ─── Pill button ──────────────────────────────────────────────────────────────
@@ -89,6 +91,108 @@ function Label({ children }: { children: React.ReactNode }) {
     >
       {children}
     </p>
+  );
+}
+
+// ─── Collapsible section header ───────────────────────────────────────────────
+
+function SectionHeader({
+  title,
+  open,
+  onToggle,
+}: {
+  title: string;
+  open: boolean;
+  onToggle: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onToggle}
+      className="w-full flex items-center justify-between py-3"
+      style={{ color: "var(--text-secondary)" }}
+    >
+      <span
+        className="text-xs font-semibold uppercase tracking-widest"
+        style={{ color: "var(--text-muted)" }}
+      >
+        {title}
+      </span>
+      <svg
+        width="14"
+        height="14"
+        viewBox="0 0 14 14"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        style={{
+          transform: open ? "rotate(180deg)" : "rotate(0)",
+          transition: "transform 0.2s",
+          flexShrink: 0,
+        }}
+      >
+        <path d="M2 4l5 5 5-5" />
+      </svg>
+    </button>
+  );
+}
+
+// ─── Checkbox row ─────────────────────────────────────────────────────────────
+
+function CheckboxRow({
+  checked,
+  onToggle,
+  label,
+  hint,
+}: {
+  checked: boolean;
+  onToggle: () => void;
+  label: string;
+  hint?: string;
+}) {
+  return (
+    <div
+      className="flex items-center gap-3 rounded-xl px-4 py-3 cursor-pointer select-none"
+      style={{
+        background: checked ? "rgba(99,102,241,0.1)" : "rgba(255,255,255,0.03)",
+        border: `1px solid ${checked ? "rgba(99,102,241,0.35)" : "rgba(255,255,255,0.08)"}`,
+        minHeight: 56,
+      }}
+      onClick={onToggle}
+      role="checkbox"
+      aria-checked={checked}
+    >
+      <div
+        className="w-5 h-5 rounded-md flex items-center justify-center shrink-0 transition-all duration-150"
+        style={{
+          background: checked ? "#6366f1" : "rgba(255,255,255,0.08)",
+          border: `1px solid ${checked ? "#6366f1" : "rgba(255,255,255,0.15)"}`,
+        }}
+      >
+        {checked && (
+          <svg width="11" height="8" viewBox="0 0 11 8" fill="none">
+            <path
+              d="M1 3.5l3 3L10 1"
+              stroke="white"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        )}
+      </div>
+      <div>
+        <p className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>
+          {label}
+        </p>
+        {hint && (
+          <p className="text-xs" style={{ color: "var(--text-muted)" }}>
+            {hint}
+          </p>
+        )}
+      </div>
+    </div>
   );
 }
 
@@ -134,28 +238,26 @@ function BreakdownRow({
   color,
   bold,
   topBorder,
+  indent,
 }: {
   label: string;
   amount: number;
   color: string;
   bold?: boolean;
   topBorder?: boolean;
+  indent?: boolean;
 }) {
   return (
     <div
       className="flex justify-between items-baseline py-1"
       style={
         topBorder
-          ? {
-              borderTop: "1px solid rgba(255,255,255,0.07)",
-              marginTop: 4,
-              paddingTop: 10,
-            }
+          ? { borderTop: "1px solid rgba(255,255,255,0.07)", marginTop: 4, paddingTop: 10 }
           : {}
       }
     >
       <span
-        className={`text-sm ${bold ? "font-semibold" : ""}`}
+        className={`text-sm ${bold ? "font-semibold" : ""} ${indent ? "pl-4" : ""}`}
         style={{ color: bold ? "var(--text-primary)" : "var(--text-secondary)" }}
       >
         {label}
@@ -171,9 +273,9 @@ function BreakdownRow({
   );
 }
 
-// ─── Desglose (collapsible) ───────────────────────────────────────────────────
+// ─── Desglose (collapsible, full) ─────────────────────────────────────────────
 
-function Desglose({ r }: { r: TaxResult }) {
+function Desglose({ r }: { r: CalcResult }) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -214,6 +316,7 @@ function Desglose({ r }: { r: TaxResult }) {
         </svg>
       </button>
 
+      {/* Always-visible summary */}
       <div className="px-4 pb-4 space-y-0.5">
         <BreakdownRow
           label="Salario bruto"
@@ -227,7 +330,7 @@ function Desglose({ r }: { r: TaxResult }) {
           color="#818cf8"
         />
         <BreakdownRow
-          label={`IRPF (${fmtPct(r.irpfRate)})`}
+          label={`IRPF ef. ${fmtPct(r.irpfEfectivo)} / marg. ${fmtPct(r.irpfMarginal)}`}
           amount={-r.annualIRPF}
           color="#fbbf24"
         />
@@ -240,41 +343,118 @@ function Desglose({ r }: { r: TaxResult }) {
         />
       </div>
 
+      {/* Expandable detail */}
       {open && (
         <div
           className="px-4 pb-4 pt-1 space-y-0.5"
           style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
         >
+          {/* SS breakdown */}
           <p
             className="text-xs font-semibold uppercase tracking-widest py-2"
+            style={{ color: "var(--text-muted)" }}
+          >
+            Seguridad Social empleado
+          </p>
+          <BreakdownRow
+            label="Base de cotización"
+            amount={r.cotizacionBase}
+            color="var(--text-secondary)"
+            indent
+          />
+          <BreakdownRow
+            label={`Contingencias (4,70%)`}
+            amount={-r.ssContingencias}
+            color="#818cf8"
+            indent
+          />
+          <BreakdownRow
+            label={`Desempleo`}
+            amount={-r.ssDesempleo}
+            color="#818cf8"
+            indent
+          />
+          <BreakdownRow
+            label={`Formación Profesional (0,10%)`}
+            amount={-r.ssFP}
+            color="#818cf8"
+            indent
+          />
+          <BreakdownRow
+            label={`MEI (0,15%)`}
+            amount={-r.ssMEI}
+            color="#818cf8"
+            indent
+          />
+
+          {/* IRPF paso a paso */}
+          <p
+            className="text-xs font-semibold uppercase tracking-widest py-2 pt-4"
             style={{ color: "var(--text-muted)" }}
           >
             Cálculo IRPF paso a paso
           </p>
           <BreakdownRow
+            label="Gastos deducibles (Art. 19)"
+            amount={-r.gastosDeducibles}
+            color="var(--text-secondary)"
+            indent
+          />
+          <BreakdownRow
             label="Rdto. neto trabajo"
             amount={r.rendimientoNeto}
             color="var(--text-secondary)"
+            indent
           />
           <BreakdownRow
-            label="Reducción rdtos. trabajo"
-            amount={-r.reduccion}
+            label="Reducción Art. 20"
+            amount={-r.reduccionArt20}
             color="var(--text-secondary)"
+            indent
           />
           <BreakdownRow
             label="Rdto. neto reducido"
             amount={r.rendimientoNetoReducido}
             color="var(--text-secondary)"
+            indent
           />
           <BreakdownRow
-            label="Mínimo personal y familiar"
+            label={`Mínimo personal (edad)`}
             amount={-r.minimoPersonal}
             color="var(--text-secondary)"
+            indent
           />
           <BreakdownRow
-            label="Base de retención"
+            label="Mínimo familiar"
+            amount={-r.minimoFamiliar}
+            color="var(--text-secondary)"
+            indent
+          />
+          <BreakdownRow
+            label="Base de retención IRPF"
             amount={r.baseRetencion}
             color="var(--text-primary)"
+            bold
+            topBorder
+          />
+
+          {/* Empresa */}
+          <p
+            className="text-xs font-semibold uppercase tracking-widest py-2 pt-4"
+            style={{ color: "var(--text-muted)" }}
+          >
+            Coste empresa
+          </p>
+          <BreakdownRow
+            label="SS empresa"
+            amount={r.employerSS}
+            color="var(--text-secondary)"
+            indent
+          />
+          <BreakdownRow
+            label="Coste total empresa"
+            amount={r.totalEmployerCost}
+            color="#a5b4fc"
             bold
             topBorder
           />
@@ -286,14 +466,14 @@ function Desglose({ r }: { r: TaxResult }) {
 
 // ─── Compact result (mobile) ──────────────────────────────────────────────────
 
-function CompactResult({ r, mode }: { r: TaxResult; mode: Mode }) {
-  const isNB = mode === "neto-bruto";
-  const monthly = isNB ? r.monthlyGross : r.monthlyNet;
-  const annual = isNB ? r.annualGross : r.annualNet;
-  const color = isNB ? "#a5b4fc" : "#34d399";
-  const accentBg = isNB ? "rgba(99,102,241,0.08)" : "rgba(52,211,153,0.07)";
+function CompactResult({ r, mode }: { r: CalcResult; mode: Mode }) {
+  const isNB    = mode === "neto-bruto";
+  const monthly = isNB ? r.monthlyGross : r.netPerPayment;
+  const annual  = isNB ? r.annualGross  : r.annualNet;
+  const color       = isNB ? "#a5b4fc" : "#34d399";
+  const accentBg    = isNB ? "rgba(99,102,241,0.08)"  : "rgba(52,211,153,0.07)";
   const accentBorder = isNB ? "rgba(99,102,241,0.22)" : "rgba(52,211,153,0.2)";
-  const label = isNB ? "Bruto necesario" : "Salario neto";
+  const label       = isNB ? "Bruto necesario" : "Salario neto";
 
   return (
     <div
@@ -308,7 +488,7 @@ function CompactResult({ r, mode }: { r: TaxResult; mode: Mode }) {
         {label}
       </p>
 
-      {/* Número mensual — ocupa su propia línea, sin nada al lado */}
+      {/* Número mensual */}
       <div className="flex items-baseline gap-1.5 mb-0.5">
         <span
           className="font-syne font-extrabold tabnum leading-none"
@@ -316,10 +496,7 @@ function CompactResult({ r, mode }: { r: TaxResult; mode: Mode }) {
         >
           {fmtEur(monthly)}
         </span>
-        <span
-          className="text-xl font-bold"
-          style={{ color: `${color}70` }}
-        >
+        <span className="text-xl font-bold" style={{ color: `${color}70` }}>
           €
         </span>
         <span className="text-xs ml-1" style={{ color: "var(--text-muted)" }}>
@@ -327,7 +504,7 @@ function CompactResult({ r, mode }: { r: TaxResult; mode: Mode }) {
         </span>
       </div>
 
-      {/* Anual debajo, pequeño */}
+      {/* Anual */}
       <p className="tabnum text-sm mb-4" style={{ color: `${color}80` }}>
         {fmtEur(annual)} € al año
       </p>
@@ -335,8 +512,8 @@ function CompactResult({ r, mode }: { r: TaxResult; mode: Mode }) {
       {/* 3 chips */}
       <div className="grid grid-cols-3 gap-2 mb-3">
         <StatChip
-          label="IRPF"
-          value={fmtPct(r.irpfRate)}
+          label="IRPF ef."
+          value={fmtPct(r.irpfEfectivo)}
           color="#fbbf24"
           bg="rgba(251,191,36,0.1)"
         />
@@ -355,7 +532,7 @@ function CompactResult({ r, mode }: { r: TaxResult; mode: Mode }) {
       </div>
 
       {/* Bar */}
-      <div className="h-2 rounded-full overflow-hidden flex">
+      <div className="h-2 rounded-full overflow-hidden flex mb-4">
         <div
           style={{
             width: `${r.netPercent}%`,
@@ -364,7 +541,7 @@ function CompactResult({ r, mode }: { r: TaxResult; mode: Mode }) {
         />
         <div
           style={{
-            width: `${r.irpfRate}%`,
+            width: `${r.irpfEfectivo}%`,
             background: "linear-gradient(90deg,#fbbf24,#d97706)",
           }}
         />
@@ -375,21 +552,50 @@ function CompactResult({ r, mode }: { r: TaxResult; mode: Mode }) {
           }}
         />
       </div>
+
+      {/* Mini table */}
+      <div className="space-y-1.5">
+        <div className="flex justify-between text-xs">
+          <span style={{ color: "var(--text-secondary)" }}>SS anual</span>
+          <span className="tabnum font-medium" style={{ color: "#818cf8" }}>
+            −{fmtEur(r.annualSS)} €
+          </span>
+        </div>
+        <div className="flex justify-between text-xs">
+          <span style={{ color: "var(--text-secondary)" }}>IRPF anual</span>
+          <span className="tabnum font-medium" style={{ color: "#fbbf24" }}>
+            −{fmtEur(r.annualIRPF)} €
+          </span>
+        </div>
+        <div className="flex justify-between text-xs font-semibold" style={{ paddingTop: 4, borderTop: "1px solid rgba(255,255,255,0.07)" }}>
+          <span style={{ color: "var(--text-primary)" }}>Neto anual</span>
+          <span className="tabnum" style={{ color: "#34d399" }}>
+            {fmtEur(r.annualNet)} €
+          </span>
+        </div>
+        <div className="flex justify-between text-xs">
+          <span style={{ color: "var(--text-secondary)" }}>Coste empresa</span>
+          <span className="tabnum font-medium" style={{ color: "#a5b4fc" }}>
+            {fmtEur(r.totalEmployerCost)} €
+          </span>
+        </div>
+      </div>
     </div>
   );
 }
 
 // ─── Full results (desktop) ───────────────────────────────────────────────────
 
-function FullResults({ r, mode }: { r: TaxResult; mode: Mode }) {
-  const isNB = mode === "neto-bruto";
-  const monthly = isNB ? r.monthlyGross : r.monthlyNet;
-  const annual = isNB ? r.annualGross : r.annualNet;
-  const color = isNB ? "#a5b4fc" : "#34d399";
-  const label = isNB ? "Bruto necesario / mes" : "Salario neto mensual";
+function FullResults({ r, mode }: { r: CalcResult; mode: Mode }) {
+  const isNB    = mode === "neto-bruto";
+  const monthly = isNB ? r.monthlyGross : r.netPerPayment;
+  const annual  = isNB ? r.annualGross  : r.annualNet;
+  const color   = isNB ? "#a5b4fc" : "#34d399";
+  const label   = isNB ? "Bruto necesario / mes" : "Salario neto mensual";
 
   return (
     <div className="flex flex-col space-y-6 h-full">
+      {/* Big number */}
       <div>
         <p
           className="text-xs font-semibold uppercase tracking-widest mb-2"
@@ -408,25 +614,20 @@ function FullResults({ r, mode }: { r: TaxResult; mode: Mode }) {
           >
             {fmtEur(monthly)}
           </span>
-          <span
-            className="text-xl font-semibold mb-1"
-            style={{ color: `${color}60` }}
-          >
+          <span className="text-xl font-semibold mb-1" style={{ color: `${color}60` }}>
             €
           </span>
         </div>
-        <p
-          className="text-sm mt-1.5 tabnum"
-          style={{ color: "var(--text-secondary)" }}
-        >
+        <p className="text-sm mt-1.5 tabnum" style={{ color: "var(--text-secondary)" }}>
           {fmtEur(annual)} € al año
         </p>
       </div>
 
+      {/* 3 chips */}
       <div className="grid grid-cols-3 gap-2">
         <StatChip
-          label="IRPF"
-          value={fmtPct(r.irpfRate)}
+          label="IRPF efectivo"
+          value={fmtPct(r.irpfEfectivo)}
           color="#fbbf24"
           bg="rgba(251,191,36,0.08)"
         />
@@ -444,6 +645,7 @@ function FullResults({ r, mode }: { r: TaxResult; mode: Mode }) {
         />
       </div>
 
+      {/* Bar */}
       <div>
         <div className="h-2.5 rounded-full overflow-hidden flex">
           <div
@@ -456,7 +658,7 @@ function FullResults({ r, mode }: { r: TaxResult; mode: Mode }) {
           <div
             className="transition-all duration-500"
             style={{
-              width: `${r.irpfRate}%`,
+              width: `${r.irpfEfectivo}%`,
               background: "linear-gradient(90deg,#fbbf24,#d97706)",
             }}
           />
@@ -468,15 +670,49 @@ function FullResults({ r, mode }: { r: TaxResult; mode: Mode }) {
             }}
           />
         </div>
-        <div className="flex gap-4 mt-2" style={{ fontSize: 11 }}>
+        <div className="flex gap-4 mt-2 flex-wrap" style={{ fontSize: 11 }}>
           <span style={{ color: "#34d399" }}>● Neto {fmtPct(r.netPercent)}</span>
-          <span style={{ color: "#fbbf24" }}>● IRPF {fmtPct(r.irpfRate)}</span>
+          <span style={{ color: "#fbbf24" }}>● IRPF ef. {fmtPct(r.irpfEfectivo)}</span>
           <span style={{ color: "#818cf8" }}>● SS {fmtPct(r.ssRate)}</span>
         </div>
       </div>
 
+      {/* Desglose */}
       <Desglose r={r} />
 
+      {/* Marginal rate info */}
+      <div
+        className="rounded-xl px-4 py-3 flex justify-between items-center"
+        style={{
+          background: "rgba(251,191,36,0.05)",
+          border: "1px solid rgba(251,191,36,0.12)",
+        }}
+      >
+        <span className="text-xs" style={{ color: "var(--text-secondary)" }}>
+          Tipo marginal IRPF
+        </span>
+        <span className="tabnum font-bold text-sm" style={{ color: "#fbbf24" }}>
+          {fmtPct(r.irpfMarginal)}
+        </span>
+      </div>
+
+      {/* Employer cost */}
+      <div
+        className="rounded-xl px-4 py-3 flex justify-between items-center"
+        style={{
+          background: "rgba(99,102,241,0.05)",
+          border: "1px solid rgba(99,102,241,0.12)",
+        }}
+      >
+        <span className="text-xs" style={{ color: "var(--text-secondary)" }}>
+          Coste total empresa
+        </span>
+        <span className="tabnum font-bold text-sm" style={{ color: "#a5b4fc" }}>
+          {fmtEur(r.totalEmployerCost)} €
+        </span>
+      </div>
+
+      {/* Disclaimer */}
       <p
         className="text-xs leading-relaxed mt-auto pt-4"
         style={{
@@ -484,10 +720,9 @@ function FullResults({ r, mode }: { r: TaxResult; mode: Mode }) {
           borderTop: "1px solid rgba(255,255,255,0.06)",
         }}
       >
-        Cálculo orientativo basado en la escala general estatal. El tipo real
-        puede variar según comunidad autónoma y deducciones personales. Fuente:{" "}
-        <strong style={{ color: "#4a4a6a" }}>AEAT 2026</strong>. Consulta con un
-        asesor fiscal.
+        Cálculo orientativo basado en la escala general estatal y autonómica 2026. El tipo
+        real puede variar según deducciones personales y situaciones específicas. Fuente:{" "}
+        <strong style={{ color: "#4a4a6a" }}>AEAT 2026</strong>. Consulta con un asesor fiscal.
       </p>
     </div>
   );
@@ -521,10 +756,7 @@ function EmptyState({ mode }: { mode: Mode }) {
           <line x1="6" y1="13" x2="13" y2="13" />
         </svg>
       </div>
-      <p
-        className="font-syne font-semibold text-base mb-1.5"
-        style={{ color: "var(--text-primary)" }}
-      >
+      <p className="font-syne font-semibold text-base mb-1.5" style={{ color: "var(--text-primary)" }}>
         Introduce un salario
       </p>
       <p className="text-sm" style={{ color: "var(--text-muted)" }}>
@@ -539,28 +771,43 @@ function EmptyState({ mode }: { mode: Mode }) {
 // ─── Main Calculator ──────────────────────────────────────────────────────────
 
 export default function Calculator() {
-  const [mode, setMode] = useState<Mode>("bruto-neto");
-  const [rawInput, setRawInput] = useState("");
-  const [period, setPeriod] = useState<Period>("anual");
-  const [contract, setContract] = useState<ContractType>("indefinido");
-  const [situation, setSituation] = useState<FamilySituation>("soltero");
-  const [children, setChildren] = useState<Children>(0);
+  // ── State ────────────────────────────────────────────────────────────────
+  const [mode,          setMode]          = useState<Mode>("bruto-neto");
+  const [rawInput,      setRawInput]      = useState("");
+  const [period,        setPeriod]        = useState<Period>("anual");
+  const [numPayments,   setNumPayments]   = useState<NumPayments>(12);
+  const [comunidad,     setComunidad]     = useState<ComunidadAutonoma>("madrid");
+  const [contract,      setContract]      = useState<ContractType>("indefinido");
+  const [situation,     setSituation]     = useState<FamilySituation>("soltero");
+  const [numChildren,   setNumChildren]   = useState(0);
+  const [childrenUnder3, setChildrenUnder3] = useState(0);
   const [spouseNoIncome, setSpouseNoIncome] = useState(false);
+  const [age,           setAge]           = useState(30);
+  const [disability,    setDisability]    = useState<Disability>("none");
+  const [mobility,      setMobility]      = useState(false);
+  const [openFamiliar,  setOpenFamiliar]  = useState(true);
+  const [openOtros,     setOpenOtros]     = useState(false);
 
-  const result = computeResult(
-    rawInput,
-    period,
-    mode,
-    contract,
-    situation,
-    children,
-    spouseNoIncome
-  );
+  // ── Derived ──────────────────────────────────────────────────────────────
+  const opts: Omit<CalcInput, "annualGross"> = {
+    contractType:       contract,
+    familySituation:    situation,
+    numChildren,
+    childrenUnder3:     Math.min(childrenUnder3, numChildren),
+    spouseWithoutIncome: spouseNoIncome,
+    age,
+    comunidad,
+    numPayments,
+    disability,
+    geographicMobility: mobility,
+  };
 
-  const inputLabel =
-    mode === "bruto-neto" ? "Salario bruto" : "Neto deseado";
+  const result = computeResult(rawInput, period, mode, opts);
+
+  const inputLabel = mode === "bruto-neto" ? "Salario bruto" : "Neto deseado";
   const placeholder = period === "anual" ? "30000" : "2500";
 
+  // ── Render ───────────────────────────────────────────────────────────────
   return (
     <div className="w-full max-w-5xl mx-auto">
       <div
@@ -576,7 +823,6 @@ export default function Calculator() {
           <div className="w-full min-w-0 p-4 sm:p-6 lg:p-8 flex flex-col gap-5 lg:gap-6">
 
             {/* ── Mode toggle — order-1 ── */}
-            {/* overflow-hidden + min-w-0 evitan cualquier desbordamiento en pantallas <360px */}
             <div
               className="order-1 w-full grid grid-cols-2 gap-1 rounded-2xl p-1 overflow-hidden"
               style={{ background: "rgba(255,255,255,0.06)" }}
@@ -593,14 +839,11 @@ export default function Calculator() {
                   onClick={() => setMode(v)}
                   className="w-full min-w-0 rounded-xl font-semibold transition-all duration-200 text-center"
                   style={{
-                    /* font-size fijo: desactiva el font boosting de Chrome Android */
                     fontSize: "0.85rem",
                     lineHeight: 1.25,
                     padding: "10px 4px",
                     minHeight: 48,
-                    /* WebkitTextSizeAdjust impide que Chrome infle el texto */
                     WebkitTextSizeAdjust: "100%",
-                    /* Sin whitespace-nowrap: el texto puede partir en 2 líneas si es necesario */
                     wordBreak: "break-word",
                     background:
                       mode === v
@@ -618,7 +861,7 @@ export default function Calculator() {
               ))}
             </div>
 
-            {/* ── Input — order-2 ── */}
+            {/* ── Input + period — order-2 ── */}
             <div className="order-2 flex flex-col gap-2">
               <Label>{inputLabel}</Label>
 
@@ -655,7 +898,7 @@ export default function Calculator() {
                 />
               </div>
 
-              {/* Period toggle — fila separada, full width */}
+              {/* Period toggle */}
               <div className="grid grid-cols-2 gap-2">
                 {(["anual", "mensual"] as const).map((p) => (
                   <button
@@ -675,8 +918,7 @@ export default function Calculator() {
                           ? "rgba(99,102,241,0.45)"
                           : "rgba(255,255,255,0.08)"
                       }`,
-                      color:
-                        period === p ? "#a5b4fc" : "var(--text-secondary)",
+                      color: period === p ? "#a5b4fc" : "var(--text-secondary)",
                     }}
                   >
                     {p === "anual" ? "Anual" : "Mensual"}
@@ -685,7 +927,7 @@ export default function Calculator() {
               </div>
             </div>
 
-            {/* ── Resultado móvil — order-3 (siempre presente para anclar posición) ── */}
+            {/* ── Resultado móvil — order-3 ── */}
             <div className="order-3 lg:hidden">
               {result ? (
                 <CompactResult r={result} mode={mode} />
@@ -707,150 +949,287 @@ export default function Calculator() {
               )}
             </div>
 
-            {/* ── Contract type — order-4 ── */}
-            <div className="order-4">
-              <Label>Tipo de contrato</Label>
-              <div className="flex gap-2 flex-wrap">
-                {(
-                  [
-                    { v: "indefinido" as ContractType, l: "Indefinido" },
-                    { v: "temporal" as ContractType, l: "Temporal" },
-                  ] as const
-                ).map(({ v, l }) => (
-                  <Pill
-                    key={v}
-                    active={contract === v}
-                    onClick={() => setContract(v)}
-                  >
-                    {l}
-                  </Pill>
-                ))}
-              </div>
-            </div>
+            {/* ══════════ Sección: Datos básicos — order-4 ══════════ */}
+            <div className="order-4 flex flex-col gap-4">
+              <p
+                className="text-xs font-semibold uppercase tracking-widest"
+                style={{ color: "var(--text-muted)" }}
+              >
+                Datos básicos
+              </p>
 
-            {/* ── Family situation — order-5 ── */}
-            <div className="order-5">
-              <Label>Situación familiar</Label>
-              <div className="flex gap-2 flex-wrap">
-                {(
-                  [
-                    { v: "soltero" as FamilySituation, l: "Soltero/a" },
-                    { v: "casado" as FamilySituation, l: "Casado/a" },
-                    {
-                      v: "monoparental" as FamilySituation,
-                      l: "Monoparental",
-                    },
-                  ] as const
-                ).map(({ v, l }) => (
-                  <Pill
-                    key={v}
-                    active={situation === v}
-                    onClick={() => {
-                      setSituation(v);
-                      if (v !== "casado") setSpouseNoIncome(false);
-                      if (v === "monoparental" && children === 0)
-                        setChildren(1);
+              {/* Número de pagas */}
+              <div>
+                <Label>Número de pagas</Label>
+                <div className="grid grid-cols-2 gap-2">
+                  {([12, 14] as NumPayments[]).map((n) => (
+                    <Pill
+                      key={n}
+                      active={numPayments === n}
+                      onClick={() => setNumPayments(n)}
+                    >
+                      {n} pagas
+                    </Pill>
+                  ))}
+                </div>
+              </div>
+
+              {/* Comunidad Autónoma */}
+              <div>
+                <Label>Comunidad Autónoma</Label>
+                <div className="relative">
+                  <select
+                    value={comunidad}
+                    onChange={(e) => setComunidad(e.target.value as ComunidadAutonoma)}
+                    className="w-full rounded-xl px-4 text-sm font-medium appearance-none"
+                    style={{
+                      height: 48,
+                      background: "rgba(255,255,255,0.06)",
+                      border: "1px solid rgba(255,255,255,0.11)",
+                      color: "var(--text-primary)",
+                      outline: "none",
                     }}
                   >
-                    {l}
-                  </Pill>
-                ))}
-              </div>
-            </div>
-
-            {/* ── Children — order-6 ── */}
-            <div className="order-6">
-              <Label>Hijos menores de 25 años</Label>
-              <div className="flex gap-2 flex-wrap">
-                {(
-                  [
-                    { v: 0 as Children, l: "Sin hijos" },
-                    { v: 1 as Children, l: "1 hijo" },
-                    { v: 2 as Children, l: "2 o más" },
-                  ] as const
-                ).map(({ v, l }) => (
-                  <Pill
-                    key={v}
-                    active={children === v}
-                    onClick={() => setChildren(v)}
+                    {(Object.entries(COMUNIDADES_LABEL) as [ComunidadAutonoma, string][])
+                      .sort((a, b) => a[1].localeCompare(b[1], "es"))
+                      .map(([value, label]) => (
+                        <option
+                          key={value}
+                          value={value}
+                          style={{ background: "#0c0c1e", color: "#f0f0ff" }}
+                        >
+                          {label}
+                        </option>
+                      ))}
+                  </select>
+                  {/* Custom chevron */}
+                  <div
+                    className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2"
+                    style={{ color: "var(--text-muted)" }}
                   >
-                    {l}
-                  </Pill>
-                ))}
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                      <path d="M2 4l5 5 5-5" />
+                    </svg>
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* ── Spouse toggle — order-7 ── */}
-            {situation === "casado" && (
+            {/* ══════════ Sección: Situación familiar — order-5 ══════════ */}
+            <div className="order-5 flex flex-col">
               <div
-                className="order-7 flex items-center gap-3 rounded-xl px-4 py-3 cursor-pointer select-none"
-                style={{
-                  background: spouseNoIncome
-                    ? "rgba(99,102,241,0.1)"
-                    : "rgba(255,255,255,0.03)",
-                  border: `1px solid ${
-                    spouseNoIncome
-                      ? "rgba(99,102,241,0.35)"
-                      : "rgba(255,255,255,0.08)"
-                  }`,
-                  minHeight: 56,
-                }}
-                onClick={() => setSpouseNoIncome((v) => !v)}
-                role="checkbox"
-                aria-checked={spouseNoIncome}
+                style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
               >
-                <div
-                  className="w-5 h-5 rounded-md flex items-center justify-center shrink-0 transition-all duration-150"
-                  style={{
-                    background: spouseNoIncome
-                      ? "#6366f1"
-                      : "rgba(255,255,255,0.08)",
-                    border: `1px solid ${
-                      spouseNoIncome ? "#6366f1" : "rgba(255,255,255,0.15)"
-                    }`,
-                  }}
-                >
-                  {spouseNoIncome && (
-                    <svg
-                      width="11"
-                      height="8"
-                      viewBox="0 0 11 8"
-                      fill="none"
-                    >
-                      <path
-                        d="M1 3.5l3 3L10 1"
-                        stroke="white"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
+                <SectionHeader
+                  title="Situación familiar"
+                  open={openFamiliar}
+                  onToggle={() => setOpenFamiliar((v) => !v)}
+                />
+              </div>
+
+              {openFamiliar && (
+                <div className="flex flex-col gap-4 pb-2">
+                  {/* Estado civil */}
+                  <div>
+                    <Label>Estado civil</Label>
+                    <div className="flex gap-2 flex-wrap">
+                      {(
+                        [
+                          { v: "soltero"      as FamilySituation, l: "Soltero/a"    },
+                          { v: "casado"       as FamilySituation, l: "Casado/a"     },
+                          { v: "monoparental" as FamilySituation, l: "Monoparental" },
+                        ] as const
+                      ).map(({ v, l }) => (
+                        <Pill
+                          key={v}
+                          active={situation === v}
+                          onClick={() => {
+                            setSituation(v);
+                            if (v !== "casado") setSpouseNoIncome(false);
+                            if (v === "monoparental" && numChildren === 0)
+                              setNumChildren(1);
+                          }}
+                        >
+                          {l}
+                        </Pill>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Cónyuge sin ingresos */}
+                  {situation === "casado" && (
+                    <CheckboxRow
+                      checked={spouseNoIncome}
+                      onToggle={() => setSpouseNoIncome((v) => !v)}
+                      label="Cónyuge sin ingresos propios"
+                      hint="Añade 3.400 € al mínimo personal"
+                    />
+                  )}
+
+                  {/* Total hijos */}
+                  <div>
+                    <Label>Hijos menores de 25 años</Label>
+                    <div className="flex gap-2 flex-wrap">
+                      {[
+                        { v: 0, l: "Sin hijos" },
+                        { v: 1, l: "1 hijo"    },
+                        { v: 2, l: "2 hijos"   },
+                        { v: 3, l: "3 o más"   },
+                      ].map(({ v, l }) => (
+                        <Pill
+                          key={v}
+                          active={numChildren === v}
+                          onClick={() => {
+                            setNumChildren(v);
+                            if (childrenUnder3 > v) setChildrenUnder3(v);
+                          }}
+                        >
+                          {l}
+                        </Pill>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Hijos < 3 años */}
+                  {numChildren > 0 && (
+                    <div>
+                      <Label>Hijos menores de 3 años</Label>
+                      <div className="flex gap-2 flex-wrap">
+                        {[0, 1, 2, 3].filter((v) => v <= numChildren).map((v) => (
+                          <Pill
+                            key={v}
+                            active={childrenUnder3 === v}
+                            onClick={() => setChildrenUnder3(v)}
+                          >
+                            {v === 0 ? "Ninguno" : `${v}`}
+                          </Pill>
+                        ))}
+                      </div>
+                    </div>
                   )}
                 </div>
-                <div>
-                  <p
-                    className="text-sm font-medium"
-                    style={{ color: "var(--text-primary)" }}
-                  >
-                    Cónyuge sin ingresos propios
-                  </p>
-                  <p className="text-xs" style={{ color: "var(--text-muted)" }}>
-                    Añade 3.400 € al mínimo personal
-                  </p>
-                </div>
-              </div>
-            )}
+              )}
+            </div>
 
-            {/* ── Mobile desglose + disclaimer — order-8 ── */}
+            {/* ══════════ Sección: Otros datos — order-6 ══════════ */}
+            <div className="order-6 flex flex-col">
+              <div
+                style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
+              >
+                <SectionHeader
+                  title="Otros datos"
+                  open={openOtros}
+                  onToggle={() => setOpenOtros((v) => !v)}
+                />
+              </div>
+
+              {openOtros && (
+                <div className="flex flex-col gap-4 pb-2">
+                  {/* Edad */}
+                  <div>
+                    <Label>Edad</Label>
+                    <div
+                      className="flex items-center gap-3 rounded-xl px-4 overflow-hidden"
+                      style={{
+                        background: "rgba(255,255,255,0.06)",
+                        border: "1px solid rgba(255,255,255,0.11)",
+                        height: 48,
+                        maxWidth: 160,
+                      }}
+                    >
+                      <input
+                        type="number"
+                        min={16}
+                        max={75}
+                        value={age}
+                        onChange={(e) => {
+                          const v = parseInt(e.target.value, 10);
+                          if (!isNaN(v)) setAge(Math.min(75, Math.max(16, v)));
+                        }}
+                        className="flex-1 bg-transparent outline-none font-syne font-bold tabnum min-w-0 text-center"
+                        style={{
+                          fontSize: "1.1rem",
+                          color: "var(--text-primary)",
+                          caretColor: "#818cf8",
+                        }}
+                        aria-label="Edad"
+                      />
+                      <span className="text-sm shrink-0" style={{ color: "var(--text-muted)" }}>
+                        años
+                      </span>
+                    </div>
+                    <p className="text-xs mt-1" style={{ color: "var(--text-muted)" }}>
+                      {age < 65 ? "Mínimo personal: 5.550 €"
+                        : age < 75 ? "Mínimo personal: 6.700 € (+1.150 por edad)"
+                        : "Mínimo personal: 8.100 € (+2.550 por edad)"}
+                    </p>
+                  </div>
+
+                  {/* Tipo de contrato */}
+                  <div>
+                    <Label>Tipo de contrato</Label>
+                    <div className="flex gap-2 flex-wrap">
+                      {(
+                        [
+                          { v: "indefinido" as ContractType, l: "Indefinido" },
+                          { v: "temporal"   as ContractType, l: "Temporal"   },
+                        ] as const
+                      ).map(({ v, l }) => (
+                        <Pill
+                          key={v}
+                          active={contract === v}
+                          onClick={() => setContract(v)}
+                        >
+                          {l}
+                        </Pill>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Discapacidad */}
+                  <div>
+                    <Label>Discapacidad reconocida</Label>
+                    <div className="flex gap-2 flex-wrap">
+                      {(
+                        [
+                          { v: "none"          as Disability, l: "Ninguna"       },
+                          { v: "33-65"         as Disability, l: "33–65%"        },
+                          { v: "65plus"        as Disability, l: "+65%"          },
+                          { v: "65plus-mobility" as Disability, l: "+65% mov." },
+                        ] as const
+                      ).map(({ v, l }) => (
+                        <Pill
+                          key={v}
+                          active={disability === v}
+                          onClick={() => setDisability(v)}
+                        >
+                          {l}
+                        </Pill>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Movilidad geográfica */}
+                  <CheckboxRow
+                    checked={mobility}
+                    onToggle={() => setMobility((v) => !v)}
+                    label="Movilidad geográfica"
+                    hint="Gastos deducibles +2.000 € adicionales (Art. 19)"
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* ── Mobile desglose + disclaimer — order-7 ── */}
             {result && (
-              <div className="order-8 lg:hidden flex flex-col gap-4">
+              <div className="order-7 lg:hidden flex flex-col gap-4">
                 <Desglose r={result} />
                 <p
                   className="text-xs leading-relaxed"
                   style={{ color: "var(--text-muted)" }}
                 >
-                  Cálculo orientativo. Escala general estatal. El tipo real varía
-                  según CCAA y deducciones personales.{" "}
+                  Cálculo orientativo. Escala estatal + autonómica 2026. El tipo real varía
+                  según deducciones personales.{" "}
                   <strong style={{ color: "#4a4a6a" }}>AEAT 2026</strong>.
                   Consulta con un asesor fiscal.
                 </p>
