@@ -586,13 +586,14 @@ export default function Calculator() {
         <div className="grid lg:grid-cols-2">
 
           {/* ══════════ LEFT / TOP: Inputs ══════════ */}
+          {/* flex-col en móvil con order explícito para garantizar: toggle→input→resultado→opciones */}
           <div className="p-4 sm:p-6 lg:p-8 flex flex-col gap-5 lg:gap-6">
 
-            {/* ── Mode toggle ── */}
-            {/* w-full + grid garantiza que los 2 botones se repartan el 50% exacto */}
+            {/* ── Mode toggle — order-1 ── */}
+            {/* overflow-hidden + min-w-0 evitan cualquier desbordamiento en pantallas <360px */}
             <div
-              className="w-full grid grid-cols-2 rounded-2xl p-1"
-              style={{ background: "rgba(255,255,255,0.06)", gap: 4 }}
+              className="order-1 w-full grid grid-cols-2 gap-1 rounded-2xl p-1 overflow-hidden"
+              style={{ background: "rgba(255,255,255,0.06)" }}
             >
               {(
                 [
@@ -604,10 +605,9 @@ export default function Calculator() {
                   key={v}
                   type="button"
                   onClick={() => setMode(v)}
-                  className="w-full rounded-xl font-semibold transition-all duration-200 text-center"
+                  className="w-full min-w-0 rounded-xl text-sm font-semibold transition-all duration-200 text-center overflow-hidden"
                   style={{
-                    fontSize: "clamp(0.8rem, 3.5vw, 0.875rem)",
-                    padding: "12px 8px",
+                    padding: "12px 4px",
                     minHeight: 48,
                     background:
                       mode === v
@@ -625,13 +625,13 @@ export default function Calculator() {
               ))}
             </div>
 
-            {/* ── Input ── */}
-            <div className="flex flex-col gap-2">
+            {/* ── Input — order-2 ── */}
+            <div className="order-2 flex flex-col gap-2">
               <Label>{inputLabel}</Label>
 
               {/* € + number input */}
               <div
-                className="flex items-center gap-3 rounded-2xl px-4 w-full"
+                className="flex items-center gap-3 rounded-2xl px-4 w-full overflow-hidden"
                 style={{
                   background: "rgba(255,255,255,0.06)",
                   border: "1px solid rgba(255,255,255,0.11)",
@@ -662,17 +662,16 @@ export default function Calculator() {
                 />
               </div>
 
-              {/* Period toggle — fila separada, full width en móvil */}
+              {/* Period toggle — fila separada, full width */}
               <div className="grid grid-cols-2 gap-2">
                 {(["anual", "mensual"] as const).map((p) => (
                   <button
                     key={p}
                     type="button"
                     onClick={() => setPeriod(p)}
-                    className="w-full rounded-xl font-semibold transition-all duration-150 text-center"
+                    className="w-full min-w-0 rounded-xl text-sm font-semibold transition-all duration-150 text-center"
                     style={{
                       minHeight: 44,
-                      fontSize: "0.875rem",
                       padding: "10px 8px",
                       background:
                         period === p
@@ -693,26 +692,30 @@ export default function Calculator() {
               </div>
             </div>
 
-            {/* ── Mobile-only result ── */}
-            <div className="lg:hidden">
+            {/* ── Resultado móvil — order-3 (siempre presente para anclar posición) ── */}
+            <div className="order-3 lg:hidden">
               {result ? (
                 <CompactResult r={result} mode={mode} />
-              ) : rawInput.length > 0 ? (
+              ) : (
                 <div
-                  className="rounded-xl px-4 py-3 text-sm"
+                  className="rounded-2xl px-4 py-5 flex items-center justify-center"
                   style={{
-                    background: "rgba(255,255,255,0.03)",
+                    background: "rgba(255,255,255,0.02)",
                     border: "1px solid rgba(255,255,255,0.06)",
-                    color: "var(--text-muted)",
+                    minHeight: 72,
                   }}
                 >
-                  Introduce un importe válido (ej. 30000)
+                  <p className="text-sm text-center" style={{ color: "var(--text-muted)" }}>
+                    {rawInput.length > 0
+                      ? "Introduce un importe válido (ej. 30000)"
+                      : "Introduce tu salario para ver el resultado"}
+                  </p>
                 </div>
-              ) : null}
+              )}
             </div>
 
-            {/* ── Contract type ── */}
-            <div>
+            {/* ── Contract type — order-4 ── */}
+            <div className="order-4">
               <Label>Tipo de contrato</Label>
               <div className="flex gap-2 flex-wrap">
                 {(
@@ -732,8 +735,8 @@ export default function Calculator() {
               </div>
             </div>
 
-            {/* ── Family situation ── */}
-            <div>
+            {/* ── Family situation — order-5 ── */}
+            <div className="order-5">
               <Label>Situación familiar</Label>
               <div className="flex gap-2 flex-wrap">
                 {(
@@ -762,8 +765,8 @@ export default function Calculator() {
               </div>
             </div>
 
-            {/* ── Children ── */}
-            <div>
+            {/* ── Children — order-6 ── */}
+            <div className="order-6">
               <Label>Hijos menores de 25 años</Label>
               <div className="flex gap-2 flex-wrap">
                 {(
@@ -784,10 +787,10 @@ export default function Calculator() {
               </div>
             </div>
 
-            {/* ── Spouse toggle ── */}
+            {/* ── Spouse toggle — order-7 ── */}
             {situation === "casado" && (
               <div
-                className="flex items-center gap-3 rounded-xl px-4 py-3 cursor-pointer select-none"
+                className="order-7 flex items-center gap-3 rounded-xl px-4 py-3 cursor-pointer select-none"
                 style={{
                   background: spouseNoIncome
                     ? "rgba(99,102,241,0.1)"
@@ -845,9 +848,9 @@ export default function Calculator() {
               </div>
             )}
 
-            {/* ── Mobile desglose + disclaimer ── */}
+            {/* ── Mobile desglose + disclaimer — order-8 ── */}
             {result && (
-              <div className="lg:hidden flex flex-col gap-4">
+              <div className="order-8 lg:hidden flex flex-col gap-4">
                 <Desglose r={result} />
                 <p
                   className="text-xs leading-relaxed"
