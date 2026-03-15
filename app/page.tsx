@@ -17,10 +17,8 @@ export default function HomePage() {
 
       <div className="relative z-10 flex flex-col min-h-screen">
         {/* ── Header ── */}
-        {/* mobile: pt-5 pb-3 — compacto para que la calculadora quede en el fold */}
-        {/* md+:    pt-14 pb-10 — espaciado original intacto */}
-        <header className="pt-5 pb-3 px-4 text-center md:pt-14 md:pb-10">
-          {/* Badge — menos margen inferior en móvil */}
+        <header className="pt-8 pb-4 px-4 text-center md:pt-14 md:pb-10">
+          {/* Badge */}
           <div
             className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium mb-4 md:mb-8"
             style={{
@@ -36,12 +34,11 @@ export default function HomePage() {
             Actualizado · AEAT 2026
           </div>
 
-          {/* H1 — fuente más pequeña en móvil para caber en 2 líneas sin ocupar demasiado */}
-          {/* clamp: mín 1.55rem (~25px) en móvil, escala con viewport, máx 4rem en desktop */}
+          {/* H1 — grande y prominente en móvil */}
           <h1
-            className="font-syne font-extrabold tracking-tight leading-tight mb-2 md:mb-4"
+            className="font-syne font-extrabold tracking-tight leading-tight mb-3 md:mb-4"
             style={{
-              fontSize: "clamp(1.55rem, 7vw, 4rem)",
+              fontSize: "clamp(2rem, 9vw, 4rem)",
               color: "#f0f0ff",
             }}
           >
@@ -59,18 +56,16 @@ export default function HomePage() {
             </span>
           </h1>
 
-          {/* Subtítulo — margen reducido en móvil */}
+          {/* Subtítulo */}
           <p
-            className="text-sm md:text-lg max-w-lg mx-auto leading-relaxed mb-2 md:mb-4"
+            className="text-sm md:text-lg max-w-lg mx-auto leading-relaxed mb-3 md:mb-4"
             style={{ color: "#7c7ca0" }}
           >
-            Salario bruto → neto y neto → bruto.
-            <br className="hidden sm:block" />
-            IRPF + Seguridad Social incluidos.
+            Bruto → Neto y Neto → Bruto.{" "}
+            <span className="inline">IRPF + Seguridad Social incluidos.</span>
           </p>
 
-          {/* Párrafo SEO — oculto en móvil para no empujar la calculadora fuera del fold */}
-          {/* Google indexa el contenido aunque esté oculto con hidden (no es display:none fraudulento) */}
+          {/* Párrafo SEO — solo desktop */}
           <p
             className="hidden md:block text-sm max-w-2xl mx-auto leading-relaxed"
             style={{ color: "#4a4a6a" }}
@@ -98,7 +93,10 @@ export default function HomePage() {
         </header>
 
         {/* ── Calculator ── */}
-        <section className="flex-1 px-4 pb-8 md:pb-16" aria-label="Calculadora de nómina">
+        <section
+          className="flex-1 px-4 pb-8 md:pb-16"
+          aria-label="Calculadora de nómina"
+        >
           <Calculator />
         </section>
 
