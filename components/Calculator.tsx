@@ -1182,7 +1182,7 @@ export default function Calculator() {
                   {/* Tipo de contrato */}
                   <div>
                     <Label>Tipo de contrato</Label>
-                    <div className="flex gap-2 flex-wrap">
+                    <div className="grid grid-cols-2 gap-2">
                       {(
                         [
                           { v: "indefinido" as ContractType, l: "Indefinido" },
@@ -1203,17 +1203,18 @@ export default function Calculator() {
                   {/* Discapacidad */}
                   <div>
                     <Label>Discapacidad reconocida</Label>
-                    <div className="flex gap-2 flex-wrap">
+                    <div className="grid grid-cols-4 gap-2">
                       {(
                         [
-                          { v: "none"          as Disability, l: "Ninguna"       },
-                          { v: "33-65"         as Disability, l: "33–65%"        },
-                          { v: "65plus"        as Disability, l: "+65%"          },
-                          { v: "65plus-mobility" as Disability, l: "+65% mov." },
+                          { v: "none"            as Disability, l: "Ninguna"  },
+                          { v: "33-65"           as Disability, l: "33–65%"   },
+                          { v: "65plus"          as Disability, l: "+65%"     },
+                          { v: "65plus-mobility" as Disability, l: "+65% mov" },
                         ] as const
                       ).map(({ v, l }) => (
                         <Pill
                           key={v}
+                          small
                           active={disability === v}
                           onClick={() => setDisability(v)}
                         >

@@ -17,47 +17,35 @@ export default function HomePage() {
       />
 
       <div className="relative z-10 flex flex-col min-h-screen">
-        {/* ── Navbar ── */}
-        <nav
-          className="w-full px-4 py-4 flex items-center justify-between"
-          style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}
-        >
-          <Link
-            href="/"
-            className="font-syne font-bold text-sm tracking-tight"
-            style={{ color: "#e0e0ff" }}
-          >
-            Calculadora<span style={{ color: "#818cf8" }}>Nomina</span>
-          </Link>
-          <Link
-            href="/blog"
-            className="text-xs font-medium px-3 py-1.5 rounded-full transition-colors"
-            style={{
-              background: "rgba(99,102,241,0.08)",
-              border: "1px solid rgba(99,102,241,0.2)",
-              color: "#818CF8",
-            }}
-          >
-            Blog
-          </Link>
-        </nav>
-
         {/* ── Header ── */}
         <header className="pt-8 pb-4 px-4 text-center md:pt-14 md:pb-10">
-          {/* Badge */}
-          <div
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium mb-4 md:mb-8"
-            style={{
-              background: "rgba(99,102,241,0.1)",
-              border: "1px solid rgba(99,102,241,0.22)",
-              color: "#818CF8",
-            }}
-          >
-            <span
-              className="w-1.5 h-1.5 rounded-full bg-emerald-400"
-              style={{ boxShadow: "0 0 6px rgba(52,211,153,0.7)" }}
-            />
-            Actualizado · AEAT 2026
+          {/* Badge row */}
+          <div className="inline-flex items-center gap-3 mb-4 md:mb-8">
+            <div
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium"
+              style={{
+                background: "rgba(99,102,241,0.1)",
+                border: "1px solid rgba(99,102,241,0.22)",
+                color: "#818CF8",
+              }}
+            >
+              <span
+                className="w-1.5 h-1.5 rounded-full bg-emerald-400"
+                style={{ boxShadow: "0 0 6px rgba(52,211,153,0.7)" }}
+              />
+              Actualizado · AEAT 2026
+            </div>
+            <Link
+              href="/blog"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-colors"
+              style={{
+                background: "rgba(255,255,255,0.04)",
+                border: "1px solid rgba(255,255,255,0.1)",
+                color: "#7c7ca0",
+              }}
+            >
+              Blog →
+            </Link>
           </div>
 
           {/* H1 — grande y prominente en móvil */}
