@@ -111,7 +111,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <Navbar />
-        <div className="pt-14">{children}</div>
+        {children}
       </body>
     </html>
   );
