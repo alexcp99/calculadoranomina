@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Syne, DM_Sans } from "next/font/google";
 import Script from "next/script";
 import StructuredData from "./structured-data";
+import Navbar from "@/components/Navbar";
 import "./globals.css";
 
 const syne = Syne({
@@ -108,7 +109,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           `}
         </Script>
       </head>
-      <body>{children}</body>
+      <body>
+        <Navbar />
+        <div className="pt-14">{children}</div>
+      </body>
     </html>
   );
 }

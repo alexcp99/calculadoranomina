@@ -36,17 +36,6 @@ export default function HomePage() {
               />
               Actualizado · AEAT 2026
             </div>
-            <Link
-              href="/blog"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-colors"
-              style={{
-                background: "rgba(255,255,255,0.04)",
-                border: "1px solid rgba(255,255,255,0.1)",
-                color: "#7c7ca0",
-              }}
-            >
-              Blog →
-            </Link>
           </div>
 
           {/* H1 — grande y prominente en móvil */}
