@@ -26,7 +26,7 @@ const ALL: SalarioData[] = [
     irpfEf: "9,8",
     costeEmpresa: 26097,
     ssEuros: 1300,
-    irpfEuros: 0, // effectively 0/negative due to large work reductions
+    irpfEuros: 1096,
     ccaaTable: [
       { ccaa: "Comunidad de Madrid",     neto: 1575, irpf: "9,8 %" },
       { ccaa: "Andalucía",               neto: 1568, irpf: "10,2 %" },
@@ -68,7 +68,7 @@ const ALL: SalarioData[] = [
     irpfEf: "13,7",
     costeEmpresa: 32621,
     ssEuros: 1625,
-    irpfEuros: 445,
+    irpfEuros: 3425,
     ccaaTable: [
       { ccaa: "Comunidad de Madrid",     neto: 1911, irpf: "13,7 %" },
       { ccaa: "Andalucía",               neto: 1900, irpf: "14,2 %" },
@@ -110,7 +110,7 @@ const ALL: SalarioData[] = [
     irpfEf: "17,7",
     costeEmpresa: 39144,
     ssEuros: 1950,
-    irpfEuros: 758,
+    irpfEuros: 4967,
     ccaaTable: [
       { ccaa: "Comunidad de Madrid",     neto: 2274, irpf: "17,7 %" },
       { ccaa: "Andalucía",               neto: 2259, irpf: "18,2 %" },
@@ -152,7 +152,7 @@ const ALL: SalarioData[] = [
     irpfEf: "22,1",
     costeEmpresa: 52191,
     ssEuros: 2600,
-    irpfEuros: 2884,
+    irpfEuros: 8844,
     ccaaTable: [
       { ccaa: "Comunidad de Madrid",     neto: 2876, irpf: "22,1 %" },
       { ccaa: "Andalucía",               neto: 2853, irpf: "22,8 %" },
@@ -194,7 +194,7 @@ const ALL: SalarioData[] = [
     irpfEf: "25,1",
     costeEmpresa: 65239,
     ssEuros: 3250,
-    irpfEuros: 5782,
+    irpfEuros: 12532,
     ccaaTable: [
       { ccaa: "Comunidad de Madrid",     neto: 3414, irpf: "25,1 %" },
       { ccaa: "Andalucía",               neto: 3381, irpf: "26,0 %" },

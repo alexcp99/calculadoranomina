@@ -4,11 +4,11 @@ export default function SiteFooter({ year }: { year?: number }) {
   const currentYear = year ?? new Date().getFullYear();
   return (
     <footer
-      className="w-full px-4 pt-10 pb-8"
+      className="w-full px-4 pt-5 pb-4"
       style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
     >
       <div className="max-w-5xl mx-auto">
-        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-8 mb-8">
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6 mb-4">
           {/* Brand */}
           <div>
             <Link
@@ -122,7 +122,7 @@ export default function SiteFooter({ year }: { year?: number }) {
         </div>
 
         <div
-          className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-2"
+          className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-2"
           style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
         >
           <p className="text-xs" style={{ color: "#a0a0c0" }}>

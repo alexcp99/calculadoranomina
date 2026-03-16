@@ -17,7 +17,7 @@ function StatCard({
 }) {
   return (
     <div
-      className="rounded-2xl p-5 flex flex-col gap-1"
+      className="rounded-2xl p-5 flex flex-col gap-2"
       style={{
         background: "rgba(99,102,241,0.07)",
         border: `1px solid ${accent ? "rgba(52,211,153,0.25)" : "rgba(99,102,241,0.18)"}`,
@@ -189,7 +189,7 @@ export default function SalarioPage({ data }: { data: SalarioData }) {
                   { label: `− Cotización SS (6,5%)`, value: `−${fmt(data.ssEuros)} €`, color: "#f87171", indent: true },
                   {
                     label: `− Retención IRPF (tipo ef. ${data.irpfEf}%)`,
-                    value: data.irpfEuros > 0 ? `−${fmt(data.irpfEuros)} €` : "mínima*",
+                    value: `−${fmt(data.irpfEuros)} €`,
                     color: "#f87171",
                     indent: true,
                   },
@@ -210,12 +210,6 @@ export default function SalarioPage({ data }: { data: SalarioData }) {
                     <span>{row.value}</span>
                   </div>
                 ))}
-                {data.irpfEuros === 0 && (
-                  <p className="text-xs mt-3" style={{ color: "#5050a0" }}>
-                    * Para este nivel salarial, las reducciones por rendimientos del trabajo y el mínimo personal
-                    resultan en una retención IRPF prácticamente nula.
-                  </p>
-                )}
               </div>
             </section>
 
