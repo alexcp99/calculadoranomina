@@ -118,7 +118,7 @@ export default function Navbar() {
 
             {/* Dropdown panel — pt-2 bridges the gap so mouse stays in hover zone */}
             <div
-              className="absolute top-full left-0 w-64 pt-2 transition-all duration-200"
+              className="absolute top-full left-0 w-72 pt-2 transition-all duration-200"
               style={{
                 opacity: dropdownOpen ? 1 : 0,
                 pointerEvents: dropdownOpen ? "auto" : "none",
@@ -143,8 +143,8 @@ export default function Navbar() {
                     onMouseEnter={(e) => (e.currentTarget as HTMLElement).style.background = "rgba(99,102,241,0.1)"}
                     onMouseLeave={(e) => (e.currentTarget as HTMLElement).style.background = "transparent"}
                   >
-                    <span className="text-sm">{s.label}</span>
-                    <span className="text-xs font-medium" style={{ color: "#34d399" }}>{s.neto}</span>
+                    <span className="text-sm whitespace-nowrap">{s.label}</span>
+                    <span className="text-xs font-medium shrink-0" style={{ color: "#34d399" }}>{s.neto}</span>
                   </Link>
                 ))}
               </div>
