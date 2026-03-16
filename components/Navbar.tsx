@@ -72,8 +72,9 @@ export default function Navbar() {
             </svg>
           </div>
 
-          <span className="font-syne font-bold text-sm leading-none transition-opacity group-hover:opacity-90" style={{ color: "#e0e0ff" }}>
-            CalculadoraNomina.org
+          <span className="font-syne font-bold text-sm leading-none transition-opacity group-hover:opacity-90">
+            <span style={{ color: "#e0e0ff" }}>Calculadora</span>
+            <span style={{ color: "#818cf8" }}>Nomina</span>
           </span>
         </Link>
 
