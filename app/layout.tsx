@@ -54,6 +54,7 @@ export const metadata: Metadata = {
     siteName: "Calculadora de Nómina",
     type: "website",
     locale: "es_ES",
+    images: [{ url: "/opengraph-image.png", width: 1200, height: 630 }],
   },
 
   twitter: {

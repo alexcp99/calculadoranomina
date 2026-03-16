@@ -120,30 +120,37 @@ input[type="number"] {
   font-family: var(--font-syne), sans-serif;
   font-weight: 700;
   font-size: 1.35rem;
-  color: var(--text-primary);
-  margin-top: 2.25rem;
+  color: #f0f0ff;
+  margin-top: 2.5rem;
   margin-bottom: 0.75rem;
+  padding-top: 2rem;
   padding-left: 0.75rem;
   border-left: 3px solid rgba(99, 102, 241, 0.6);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+.blog-prose h2:first-of-type {
+  padding-top: 0;
+  border-top: none;
+  margin-top: 0;
 }
 .blog-prose h3 {
   font-family: var(--font-syne), sans-serif;
   font-weight: 600;
   font-size: 1.05rem;
-  color: #c0c0e0;
+  color: #d0d0f0;
   margin-top: 1.75rem;
   margin-bottom: 0.5rem;
 }
 .blog-prose p {
-  color: #8888b0;
+  color: #c0c0d8;
   line-height: 1.8;
   margin-bottom: 1rem;
 }
 .blog-prose ul,
 .blog-prose ol {
   padding-left: 1.5rem;
-  color: #8888b0;
-  margin-bottom: 1rem;
+  color: #c0c0d8;
+  margin-bottom: 1.25rem;
   line-height: 1.8;
 }
 .blog-prose ul {
@@ -153,10 +160,11 @@ input[type="number"] {
   list-style: decimal;
 }
 .blog-prose li {
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.4rem;
+  padding-left: 0.25rem;
 }
 .blog-prose strong {
-  color: var(--text-primary);
+  color: #f0f0ff;
   font-weight: 600;
 }
 .blog-prose a {
@@ -206,7 +214,7 @@ input[type="number"] {
 }
 .blog-prose tbody td {
   padding: 0.55rem 0.75rem;
-  color: #8888b0;
+  color: #a0a0c0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 .blog-prose tbody tr:last-child td {

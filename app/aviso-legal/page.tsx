@@ -118,7 +118,7 @@ export default function AvisoLegalPage() {
                 el contenido del presente aviso legal. Se recomienda revisar periódicamente este documento.
               </p>
 
-              <p style={{ color: "#3e3e60", fontSize: "0.8rem", marginTop: "2rem" }}>
+              <p style={{ color: "#8080a0", fontSize: "0.8rem", marginTop: "2rem" }}>
                 Última actualización: marzo 2026
               </p>
             </div>
