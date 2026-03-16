@@ -51,12 +51,40 @@ export default function SiteFooter({ year }: { year?: number }) {
 
             <div>
               <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "#6060a0" }}>
+                Información
+              </p>
+              <ul className="flex flex-col gap-2">
+                <li>
+                  <Link href="/metodologia" className="text-xs hover:underline" style={{ color: "#a0a0c0" }}>
+                    Metodología
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/preguntas-frecuentes" className="text-xs hover:underline" style={{ color: "#a0a0c0" }}>
+                    Preguntas frecuentes
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/contacto" className="text-xs hover:underline" style={{ color: "#a0a0c0" }}>
+                    Contacto
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "#6060a0" }}>
                 Legal
               </p>
               <ul className="flex flex-col gap-2">
                 <li>
                   <Link href="/aviso-legal" className="text-xs hover:underline" style={{ color: "#a0a0c0" }}>
                     Aviso legal
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/aviso-legal" className="text-xs hover:underline" style={{ color: "#a0a0c0" }}>
+                    Términos de uso
                   </Link>
                 </li>
                 <li>
@@ -68,16 +96,6 @@ export default function SiteFooter({ year }: { year?: number }) {
                   <Link href="/politica-cookies" className="text-xs hover:underline" style={{ color: "#a0a0c0" }}>
                     Política de cookies
                   </Link>
-                </li>
-                <li>
-                  <Link href="/metodologia" className="text-xs hover:underline" style={{ color: "#a0a0c0" }}>
-                    Metodología
-                  </Link>
-                </li>
-                <li>
-                  <a href="mailto:contact.acebolla@gmail.com" className="text-xs hover:underline" style={{ color: "#a0a0c0" }}>
-                    Contacto
-                  </a>
                 </li>
               </ul>
             </div>
