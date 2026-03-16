@@ -17,26 +17,26 @@ function StatCard({
 }) {
   return (
     <div
-      className="rounded-2xl p-5 flex flex-col gap-2"
+      className="rounded-2xl p-4 flex flex-col gap-1.5 min-w-0"
       style={{
         background: "rgba(99,102,241,0.07)",
         border: `1px solid ${accent ? "rgba(52,211,153,0.25)" : "rgba(99,102,241,0.18)"}`,
       }}
     >
-      <span className="text-xs font-medium uppercase tracking-wider" style={{ color: "#6060a0" }}>
+      <span className="text-xs font-medium uppercase tracking-wider truncate" style={{ color: "#6060a0" }}>
         {label}
       </span>
       <span
-        className="font-syne font-extrabold leading-none"
+        className="font-syne font-extrabold leading-tight break-all"
         style={{
-          fontSize: "clamp(1.6rem, 5vw, 2.2rem)",
+          fontSize: "clamp(1.1rem, 2.8vw, 1.55rem)",
           color: accent ? "#34d399" : "#e0e0ff",
         }}
       >
         {value}
       </span>
       {sub && (
-        <span className="text-xs" style={{ color: "#6060a0" }}>
+        <span className="text-xs leading-tight" style={{ color: "#6060a0" }}>
           {sub}
         </span>
       )}

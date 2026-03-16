@@ -116,18 +116,23 @@ export default function Navbar() {
               </svg>
             </button>
 
-            {/* Dropdown panel */}
+            {/* Dropdown panel — pt-2 bridges the gap so mouse stays in hover zone */}
             <div
-              className="absolute top-full left-0 mt-2 w-64 rounded-xl overflow-hidden transition-all duration-200"
+              className="absolute top-full left-0 w-64 pt-2 transition-all duration-200"
               style={{
-                background: "#0d0d1a",
-                border: "1px solid rgba(255,255,255,0.1)",
-                boxShadow: "0 20px 40px rgba(0,0,0,0.6)",
                 opacity: dropdownOpen ? 1 : 0,
                 pointerEvents: dropdownOpen ? "auto" : "none",
                 transform: dropdownOpen ? "translateY(0)" : "translateY(-4px)",
               }}
             >
+              <div
+                className="rounded-xl overflow-hidden"
+                style={{
+                  background: "#0d0d1a",
+                  border: "1px solid rgba(255,255,255,0.1)",
+                  boxShadow: "0 20px 40px rgba(0,0,0,0.6)",
+                }}
+              >
               <div className="p-1.5">
                 {SALARY_LINKS.map((s) => (
                   <Link
@@ -142,6 +147,7 @@ export default function Navbar() {
                     <span className="text-xs font-medium" style={{ color: "#34d399" }}>{s.neto}</span>
                   </Link>
                 ))}
+              </div>
               </div>
             </div>
           </div>
