@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { compileMDX } from "next-mdx-remote/rsc";
 import { getAllSlugs, getPostBySlug, getAllPosts } from "@/lib/blog";
+import SiteFooter from "@/components/SiteFooter";
 
 // ─── Static generation ────────────────────────────────────────────────────────
 
@@ -256,12 +257,7 @@ export default async function BlogPostPage({
           </div>
         </div>
 
-        {/* Footer */}
-        <footer className="pb-8 px-4 text-center">
-          <p className="text-xs" style={{ color: "#3e3e60" }}>
-            Datos oficiales AEAT · España · 2026
-          </p>
-        </footer>
+        <SiteFooter />
       </div>
     </main>
   );

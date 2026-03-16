@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Calculator from "@/components/Calculator";
+import SiteFooter from "@/components/SiteFooter";
 
 export default function HomePage() {
   const currentYear = new Date().getFullYear();
@@ -114,12 +115,7 @@ export default function HomePage() {
           <Calculator />
         </section>
 
-        {/* ── Footer ── */}
-        <footer className="pb-8 px-4 text-center">
-          <p className="text-xs" style={{ color: "#3e3e60" }}>
-            Datos oficiales AEAT · España · {currentYear}
-          </p>
-        </footer>
+        <SiteFooter year={currentYear} />
       </div>
     </main>
   );

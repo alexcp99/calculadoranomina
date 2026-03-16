@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getAllPosts } from "@/lib/blog";
+import SiteFooter from "@/components/SiteFooter";
 
 export const metadata: Metadata = {
   title: "Blog sobre nóminas, IRPF y Seguridad Social en España",
@@ -155,12 +156,7 @@ export default function BlogPage() {
           </div>
         </section>
 
-        {/* Footer */}
-        <footer className="pb-8 px-4 text-center">
-          <p className="text-xs" style={{ color: "#3e3e60" }}>
-            Datos oficiales AEAT · España · 2026
-          </p>
-        </footer>
+        <SiteFooter />
       </div>
     </main>
   );
