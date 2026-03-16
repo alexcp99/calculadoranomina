@@ -94,13 +94,13 @@ export default function BlogPage() {
 
         {/* Articles grid */}
         <section className="flex-1 px-4 pb-16">
-          <div className="max-w-3xl mx-auto">
-            <div className="flex flex-col gap-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {posts.map((post) => (
                 <Link
                   key={post.slug}
                   href={`/blog/${post.slug}`}
-                  className="group blog-card block rounded-2xl p-5 md:p-6"
+                  className="group blog-card flex flex-col h-full rounded-2xl p-5 md:p-6"
                 >
                   {/* Meta row */}
                   <div className="flex items-center gap-3 mb-3">
@@ -128,7 +128,7 @@ export default function BlogPage() {
                   </h2>
 
                   {/* Description */}
-                  <p className="text-sm leading-relaxed" style={{ color: "#7c7ca0" }}>
+                  <p className="text-sm leading-relaxed flex-1" style={{ color: "#7c7ca0" }}>
                     {post.description}
                   </p>
 
