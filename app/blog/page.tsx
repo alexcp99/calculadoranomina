@@ -156,6 +156,42 @@ export default function BlogPage() {
           </div>
         </section>
 
+        {/* Salary chips */}
+        <section className="px-4 pb-10">
+          <div className="max-w-6xl mx-auto">
+            <div
+              className="rounded-2xl px-6 py-5"
+              style={{ background: "rgba(99,102,241,0.05)", border: "1px solid rgba(99,102,241,0.12)" }}
+            >
+              <p className="text-sm font-semibold mb-3" style={{ color: "#c0c0e0" }}>
+                Calcula tu salario exacto
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {[
+                  { slug: "20000", label: "20.000€" },
+                  { slug: "25000", label: "25.000€" },
+                  { slug: "30000", label: "30.000€" },
+                  { slug: "40000", label: "40.000€" },
+                  { slug: "50000", label: "50.000€" },
+                ].map((s) => (
+                  <Link
+                    key={s.slug}
+                    href={`/cuanto-es-${s.slug}-euros-brutos-neto`}
+                    className="text-sm px-4 py-2 rounded-full transition-all duration-200"
+                    style={{
+                      background: "rgba(99,102,241,0.1)",
+                      border: "1px solid rgba(99,102,241,0.2)",
+                      color: "#818cf8",
+                    }}
+                  >
+                    {s.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
         <SiteFooter />
       </div>
     </main>

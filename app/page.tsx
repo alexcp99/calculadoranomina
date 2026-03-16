@@ -2,6 +2,14 @@ import Link from "next/link";
 import Calculator from "@/components/Calculator";
 import SiteFooter from "@/components/SiteFooter";
 
+const SALARY_CARDS = [
+  { slug: "20000", bruto: "20.000€", neto: "1.575", label: "netos/mes" },
+  { slug: "25000", bruto: "25.000€", neto: "1.911", label: "netos/mes" },
+  { slug: "30000", bruto: "30.000€", neto: "2.274", label: "netos/mes" },
+  { slug: "40000", bruto: "40.000€", neto: "2.876", label: "netos/mes" },
+  { slug: "50000", bruto: "50.000€", neto: "3.414", label: "netos/mes" },
+];
+
 export default function HomePage() {
   const currentYear = new Date().getFullYear();
 
@@ -84,6 +92,45 @@ export default function HomePage() {
           aria-label="Calculadora de nómina"
         >
           <Calculator />
+        </section>
+
+        {/* ── Salary quick links ── */}
+        <section className="px-4 pb-12 md:pb-16">
+          <div className="max-w-5xl mx-auto">
+            <div className="mb-6 text-center">
+              <h2
+                className="font-syne font-bold mb-1"
+                style={{ fontSize: "clamp(1.1rem, 3vw, 1.4rem)", color: "#e0e0ff" }}
+              >
+                ¿Cuánto cobras según tu salario?
+              </h2>
+              <p className="text-sm" style={{ color: "#7c7ca0" }}>
+                Resultados instantáneos para los sueldos más consultados en España
+              </p>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+              {SALARY_CARDS.map((c) => (
+                <Link
+                  key={c.slug}
+                  href={`/cuanto-es-${c.slug}-euros-brutos-neto`}
+                  className="salary-quick-card group flex flex-col items-center text-center rounded-2xl p-4 transition-all duration-200"
+                  style={{
+                    background: "rgba(99,102,241,0.06)",
+                    border: "1px solid rgba(99,102,241,0.14)",
+                  }}
+                >
+                  <span className="text-xs mb-2" style={{ color: "#6060a0" }}>{c.bruto} brutos</span>
+                  <span
+                    className="font-syne font-extrabold leading-none mb-1"
+                    style={{ fontSize: "clamp(1.3rem, 4vw, 1.6rem)", color: "#34d399" }}
+                  >
+                    {c.neto}€
+                  </span>
+                  <span className="text-xs" style={{ color: "#6060a0" }}>{c.label}</span>
+                </Link>
+              ))}
+            </div>
+          </div>
         </section>
 
         <SiteFooter year={currentYear} />
