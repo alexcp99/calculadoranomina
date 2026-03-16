@@ -25,7 +25,31 @@ export default function SiteFooter({ year }: { year?: number }) {
           </div>
 
           {/* Links */}
-          <div className="flex flex-col sm:flex-row gap-6 sm:gap-12">
+          <div className="flex flex-col sm:flex-row gap-6 sm:gap-12 flex-wrap">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "#6060a0" }}>
+                Calculadoras por salario
+              </p>
+              <ul className="flex flex-col gap-2">
+                {[
+                  { slug: "20000", label: "20.000€ brutos en neto" },
+                  { slug: "25000", label: "25.000€ brutos en neto" },
+                  { slug: "30000", label: "30.000€ brutos en neto" },
+                  { slug: "40000", label: "40.000€ brutos en neto" },
+                  { slug: "50000", label: "50.000€ brutos en neto" },
+                ].map(({ slug, label }) => (
+                  <li key={slug}>
+                    <Link
+                      href={`/cuanto-es-${slug}-euros-brutos-neto`}
+                      className="text-xs hover:underline"
+                      style={{ color: "#a0a0c0" }}
+                    >
+                      {label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
             <div>
               <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "#6060a0" }}>
                 Herramienta

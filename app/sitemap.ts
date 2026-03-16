@@ -11,6 +11,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
+  const salarioEntries: MetadataRoute.Sitemap = [
+    "20000", "25000", "30000", "40000", "50000",
+  ].map((slug) => ({
+    url: `https://calculadoranomina.org/cuanto-es-${slug}-euros-brutos-neto`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.8,
+  }));
+
   return [
     {
       url: "https://calculadoranomina.org",
@@ -24,6 +33,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 0.8,
     },
+    ...salarioEntries,
     ...postEntries,
   ];
 }
