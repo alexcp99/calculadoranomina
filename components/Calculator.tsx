@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
+import Link from "next/link";
 import {
   computeCalc,
   computeNetToGrossCalc,
@@ -793,6 +794,7 @@ export default function Calculator() {
   const [mobility,      setMobility]      = useState(false);
   const [openFamiliar,  setOpenFamiliar]  = useState(true);
   const [openOtros,     setOpenOtros]     = useState(false);
+  const [showAdvanced,  setShowAdvanced]  = useState(false);
 
   // ── Derived ──────────────────────────────────────────────────────────────
   const opts: Omit<CalcInput, "annualGross"> = {
@@ -811,6 +813,25 @@ export default function Calculator() {
   const result = computeResult(rawInput, period, mode, opts);
 
   const inputLabel = mode === "bruto-neto" ? "Salario bruto" : "Neto deseado";
+
+  // ── Summary line ────────────────────────────────────────────────────────────
+  const communityName = COMUNIDADES_LABEL[comunidad] ?? "Madrid";
+  const situacionName = situation === "soltero" ? "Soltero/a" : situation === "casado" ? "Casado/a" : "Monoparental";
+  const hijosName = numChildren === 0 ? "Sin hijos" : `${numChildren} hijo${numChildren > 1 ? "s" : ""}`;
+  const summaryLine = `${communityName} · ${numPayments} pagas · ${situacionName} · ${hijosName}`;
+
+  // ── Related salary pages ────────────────────────────────────────────────────
+  const SALARY_SLUGS = [20000, 25000, 30000, 40000, 50000];
+  const relatedSalaries = useMemo(() => {
+    const inputNum = parseFloat(rawInput.replace(/\./g, "").replace(",", "."));
+    if (!isFinite(inputNum) || inputNum <= 0) return [20000, 30000, 50000];
+    const annualBruto = period === "mensual" ? inputNum * 12 : inputNum;
+    return [...SALARY_SLUGS]
+      .sort((a, b) => Math.abs(a - annualBruto) - Math.abs(b - annualBruto))
+      .slice(0, 3)
+      .sort((a, b) => a - b);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rawInput, period]);
   const placeholder = period === "anual" ? "30000" : "2500";
 
   // ── Render ───────────────────────────────────────────────────────────────
@@ -955,8 +976,45 @@ export default function Calculator() {
               )}
             </div>
 
-            {/* ══════════ Sección: Datos básicos — order-4 ══════════ */}
-            <div className="order-4 flex flex-col gap-4">
+            {/* ── Summary + personalizar — order-4 ── */}
+            <div className="order-4 flex flex-col gap-2">
+              <p className="text-xs" style={{ color: "#4a4a6a" }}>
+                Calculando para:{" "}
+                <span style={{ color: "#7c7ca0" }}>{summaryLine}</span>
+              </p>
+              <button
+                type="button"
+                onClick={() => setShowAdvanced((v) => !v)}
+                className="flex items-center gap-2 self-start text-xs font-medium rounded-lg px-3 py-2 transition-all duration-200"
+                style={{
+                  background: showAdvanced ? "rgba(99,102,241,0.12)" : "rgba(255,255,255,0.05)",
+                  border: `1px solid ${showAdvanced ? "rgba(99,102,241,0.35)" : "rgba(255,255,255,0.09)"}`,
+                  color: showAdvanced ? "#a5b4fc" : "#7c7ca0",
+                }}
+              >
+                {showAdvanced ? (
+                  <>
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M2 2l8 8M10 2l-8 8" /></svg>
+                    Ocultar opciones avanzadas
+                  </>
+                ) : (
+                  <>
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="6" cy="6" r="2.5"/><path d="M6 1v1.5M6 9.5V11M1 6h1.5M9.5 6H11M2.6 2.6l1.1 1.1M8.3 8.3l1.1 1.1M9.4 2.6L8.3 3.7M3.7 8.3L2.6 9.4" /></svg>
+                    Personalizar cálculo
+                  </>
+                )}
+              </button>
+            </div>
+
+            {/* ══════════ Advanced fields wrapper — order-5 ══════════ */}
+            <div
+              className="order-5 overflow-hidden transition-all duration-300"
+              style={{ maxHeight: showAdvanced ? "2000px" : "0px", opacity: showAdvanced ? 1 : 0 }}
+            >
+            <div className="flex flex-col gap-5 lg:gap-6">
+
+            {/* ══════════ Sección: Datos básicos ══════════ */}
+            <div className="flex flex-col gap-4">
               <p
                 className="text-sm font-semibold uppercase tracking-wider pl-3"
                 style={{
@@ -1024,8 +1082,8 @@ export default function Calculator() {
               </div>
             </div>
 
-            {/* ══════════ Sección: Situación familiar — order-5 ══════════ */}
-            <div className="order-5 flex flex-col">
+            {/* ══════════ Sección: Situación familiar ══════════ */}
+            <div className="flex flex-col">
               <div
                 style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
               >
@@ -1122,8 +1180,8 @@ export default function Calculator() {
               )}
             </div>
 
-            {/* ══════════ Sección: Otros datos — order-6 ══════════ */}
-            <div className="order-6 flex flex-col">
+            {/* ══════════ Sección: Otros datos ══════════ */}
+            <div className="flex flex-col">
               <div
                 style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
               >
@@ -1235,9 +1293,9 @@ export default function Calculator() {
               )}
             </div>
 
-            {/* ── Mobile desglose + disclaimer — order-7 ── */}
+            {/* ── Mobile desglose + disclaimer ── */}
             {result && (
-              <div className="order-7 lg:hidden flex flex-col gap-4">
+              <div className="lg:hidden flex flex-col gap-4">
                 <Desglose r={result} />
                 <p
                   className="text-xs leading-relaxed"
@@ -1250,6 +1308,9 @@ export default function Calculator() {
                 </p>
               </div>
             )}
+
+            </div>{/* end flex flex-col gap advanced */}
+            </div>{/* end advanced wrapper */}
           </div>
 
           {/* ══════════ RIGHT (desktop only): Results ══════════ */}
@@ -1264,6 +1325,34 @@ export default function Calculator() {
             )}
           </div>
         </div>
+
+        {/* ══════════ También te puede interesar ══════════ */}
+        {result && (
+          <div
+            className="px-4 sm:px-6 lg:px-8 py-4"
+            style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
+          >
+            <p className="text-xs font-medium mb-3" style={{ color: "#5a5a80" }}>
+              También te puede interesar
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {relatedSalaries.map((sal) => (
+                <Link
+                  key={sal}
+                  href={`/cuanto-es-${sal}-euros-brutos-neto`}
+                  className="text-xs px-3 py-1.5 rounded-lg transition-all duration-200"
+                  style={{
+                    background: "rgba(99,102,241,0.08)",
+                    border: "1px solid rgba(99,102,241,0.18)",
+                    color: "#818cf8",
+                  }}
+                >
+                  Ver desglose completo para {new Intl.NumberFormat("es-ES").format(sal)} € →
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
