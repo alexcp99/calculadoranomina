@@ -153,6 +153,8 @@ export default function SalarioPage({ data }: { data: SalarioData }) {
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                     backgroundClip: "text",
+                    display: "inline-block",
+                    paddingBottom: "0.1em",
                   }}
                 >
                   {fmt(data.netoMensual)}€ netos al mes

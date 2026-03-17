@@ -154,7 +154,7 @@ export default async function BlogPostPage({
             {/* Article header */}
             <header className="mb-10">
               <h1
-                className="font-syne font-extrabold tracking-tight leading-tight mb-4"
+                className="font-syne font-extrabold tracking-tight leading-snug mb-4"
                 style={{
                   fontSize: "clamp(1.6rem, 5vw, 2.5rem)",
                   color: "#f0f0ff",

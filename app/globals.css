@@ -104,15 +104,37 @@ input[type="number"] {
   box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.4);
 }
 
-/* ─── Blog card hover ────────────────────────────────────────────────────────── */
+/* ─── Blog card ──────────────────────────────────────────────────────────────── */
 .blog-card {
   background: #0c0c1e;
   border: 1px solid rgba(255, 255, 255, 0.07);
-  transition: border-color 0.2s, background 0.2s;
+  transition: border-color 0.25s, background 0.25s, box-shadow 0.25s, transform 0.25s;
+  position: relative;
+  overflow: hidden;
+}
+.blog-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 2px;
+  background: linear-gradient(90deg, #6366f1, #818cf8, #a5b4fc);
+  opacity: 0.5;
+  transition: opacity 0.25s;
 }
 .blog-card:hover {
-  border-color: rgba(99, 102, 241, 0.35);
-  background: rgba(99, 102, 241, 0.05);
+  border-color: rgba(99, 102, 241, 0.4);
+  background: rgba(10, 10, 28, 0.98);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(99, 102, 241, 0.18), 0 0 40px rgba(99, 102, 241, 0.07);
+  transform: translateY(-3px);
+}
+.blog-card:hover::before {
+  opacity: 1;
+}
+.blog-card-arrow {
+  transition: transform 0.2s;
+}
+.blog-card:hover .blog-card-arrow {
+  transform: translateX(4px);
 }
 
 /* ─── SEO table link ─────────────────────────────────────────────────────────── */
@@ -144,6 +166,15 @@ input[type="number"] {
   background: rgba(20, 20, 40, 0.95);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(99, 102, 241, 0.15);
   transform: translateY(-2px);
+}
+
+/* ─── Gradient text — prevent descender clipping ────────────────────────────── */
+.gradient-text {
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  padding-bottom: 0.12em;
+  display: inline-block;
 }
 
 /* ─── Blog prose ─────────────────────────────────────────────────────────────── */

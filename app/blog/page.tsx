@@ -81,6 +81,8 @@ export default function BlogPage() {
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   backgroundClip: "text",
+                  display: "inline-block",
+                  paddingBottom: "0.1em",
                 }}
               >
                 nóminas e IRPF
@@ -95,53 +97,23 @@ export default function BlogPage() {
         {/* Articles grid */}
         <section className="flex-1 px-4 pb-16">
           <div className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {posts.map((post) => (
                 <Link
                   key={post.slug}
                   href={`/blog/${post.slug}`}
                   className="group blog-card flex flex-col h-full rounded-2xl p-5 md:p-6"
                 >
-                  {/* Meta row */}
-                  <div className="flex items-center gap-3 mb-3">
-                    <span
-                      className="text-xs font-medium"
-                      style={{ color: "#818CF8" }}
-                    >
-                      {formatDate(post.date)}
-                    </span>
-                    <span style={{ color: "#3e3e60" }}>·</span>
-                    <span className="text-xs" style={{ color: "#4a4a6a" }}>
-                      {post.readTime} lectura
-                    </span>
-                  </div>
-
-                  {/* Title */}
-                  <h2
-                    className="font-syne font-bold mb-2 leading-snug group-hover:text-indigo-300 transition-colors"
-                    style={{
-                      fontSize: "clamp(1rem, 3vw, 1.2rem)",
-                      color: "#e0e0ff",
-                    }}
-                  >
-                    {post.title}
-                  </h2>
-
-                  {/* Description */}
-                  <p className="text-sm leading-relaxed flex-1" style={{ color: "#7c7ca0" }}>
-                    {post.description}
-                  </p>
-
-                  {/* Keywords */}
+                  {/* Top: keywords */}
                   {post.keywords.length > 0 && (
-                    <div className="flex flex-wrap gap-2 mt-4">
-                      {post.keywords.slice(0, 3).map((kw) => (
+                    <div className="flex flex-wrap gap-1.5 mb-4">
+                      {post.keywords.slice(0, 2).map((kw) => (
                         <span
                           key={kw}
-                          className="text-xs px-2 py-0.5 rounded-full"
+                          className="text-xs px-2 py-0.5 rounded-full font-medium"
                           style={{
-                            background: "rgba(99,102,241,0.08)",
-                            border: "1px solid rgba(99,102,241,0.18)",
+                            background: "rgba(99,102,241,0.1)",
+                            border: "1px solid rgba(99,102,241,0.2)",
                             color: "#818CF8",
                           }}
                         >
@@ -150,6 +122,51 @@ export default function BlogPage() {
                       ))}
                     </div>
                   )}
+
+                  {/* Title */}
+                  <h2
+                    className="font-syne font-bold mb-2.5 leading-snug transition-colors"
+                    style={{
+                      fontSize: "clamp(1rem, 2.5vw, 1.15rem)",
+                      color: "#e8e8ff",
+                    }}
+                  >
+                    {post.title}
+                  </h2>
+
+                  {/* Description */}
+                  <p className="text-sm leading-relaxed flex-1 mb-5" style={{ color: "#6e6e96" }}>
+                    {post.description}
+                  </p>
+
+                  {/* Footer */}
+                  <div
+                    className="flex items-center justify-between pt-4"
+                    style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs" style={{ color: "#4a4a6a" }}>
+                        {formatDate(post.date)}
+                      </span>
+                      <span style={{ color: "#2e2e50" }}>·</span>
+                      <span className="flex items-center gap-1 text-xs" style={{ color: "#4a4a6a" }}>
+                        <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden>
+                          <circle cx="6" cy="6" r="5" stroke="#4a4a6a" strokeWidth="1.2"/>
+                          <path d="M6 3.5V6l1.5 1.5" stroke="#4a4a6a" strokeWidth="1.2" strokeLinecap="round"/>
+                        </svg>
+                        {post.readTime}
+                      </span>
+                    </div>
+                    <span
+                      className="blog-card-arrow flex items-center gap-1 text-xs font-semibold"
+                      style={{ color: "#6366f1" }}
+                    >
+                      Leer
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden>
+                        <path d="M2.5 6h7M6.5 3l3 3-3 3" stroke="#6366f1" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </span>
+                  </div>
                 </Link>
               ))}
             </div>

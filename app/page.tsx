@@ -145,6 +145,8 @@ export default function HomePage() {
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
+                display: "inline-block",
+                paddingBottom: "0.1em",
               }}
             >
               Nómina 2026

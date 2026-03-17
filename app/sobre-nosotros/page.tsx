@@ -113,6 +113,8 @@ export default function SobreNosotros() {
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                     backgroundClip: "text",
+                    display: "inline-block",
+                    paddingBottom: "0.1em",
                   }}
                 >
                   cómo trabajamos
