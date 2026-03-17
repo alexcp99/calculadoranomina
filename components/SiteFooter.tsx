@@ -30,32 +30,37 @@ export default function SiteFooter({ year }: { year?: number }) {
               <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "#6060a0" }}>
                 Calculadoras por salario
               </p>
-              <ul className="flex flex-col gap-2">
+              <div className="grid grid-cols-2 gap-x-6 gap-y-2">
                 {[
-                  { slug: "15000", label: "15.000€ brutos en neto" },
-                  { slug: "20000", label: "20.000€ brutos en neto" },
-                  { slug: "22000", label: "22.000€ brutos en neto" },
-                  { slug: "24000", label: "24.000€ brutos en neto" },
-                  { slug: "25000", label: "25.000€ brutos en neto" },
-                  { slug: "28000", label: "28.000€ brutos en neto" },
-                  { slug: "30000", label: "30.000€ brutos en neto" },
-                  { slug: "35000", label: "35.000€ brutos en neto" },
-                  { slug: "40000", label: "40.000€ brutos en neto" },
-                  { slug: "45000", label: "45.000€ brutos en neto" },
-                  { slug: "50000", label: "50.000€ brutos en neto" },
-                  { slug: "70000", label: "70.000€ brutos en neto" },
+                  { slug: "15000", label: "15.000€ brutos" },
+                  { slug: "16000", label: "16.000€ brutos" },
+                  { slug: "18000", label: "18.000€ brutos" },
+                  { slug: "20000", label: "20.000€ brutos" },
+                  { slug: "22000", label: "22.000€ brutos" },
+                  { slug: "24000", label: "24.000€ brutos" },
+                  { slug: "25000", label: "25.000€ brutos" },
+                  { slug: "28000", label: "28.000€ brutos" },
+                  { slug: "30000", label: "30.000€ brutos" },
+                  { slug: "32000", label: "32.000€ brutos" },
+                  { slug: "35000", label: "35.000€ brutos" },
+                  { slug: "40000", label: "40.000€ brutos" },
+                  { slug: "45000", label: "45.000€ brutos" },
+                  { slug: "50000", label: "50.000€ brutos" },
+                  { slug: "60000", label: "60.000€ brutos" },
+                  { slug: "70000", label: "70.000€ brutos" },
+                  { slug: "80000", label: "80.000€ brutos" },
+                  { slug: "100000", label: "100.000€ brutos" },
                 ].map(({ slug, label }) => (
-                  <li key={slug}>
-                    <Link
-                      href={`/cuanto-es-${slug}-euros-brutos-neto`}
-                      className="text-xs hover:underline"
-                      style={{ color: "#a0a0c0" }}
-                    >
-                      {label}
-                    </Link>
-                  </li>
+                  <Link
+                    key={slug}
+                    href={`/cuanto-es-${slug}-euros-brutos-neto`}
+                    className="text-xs hover:underline"
+                    style={{ color: "#a0a0c0" }}
+                  >
+                    {label}
+                  </Link>
                 ))}
-              </ul>
+              </div>
             </div>
             <div>
               <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "#6060a0" }}>

@@ -60,6 +60,90 @@ const ALL: SalarioData[] = [
     ],
   },
   {
+    bruto: 16000,
+    brutoLabel: "16.000",
+    slug: "16000",
+    netoMensual: 1298,
+    netoAnual: 15576,
+    irpfEf: "5,1",
+    costeEmpresa: 20877,
+    ssEuros: 1040,
+    irpfEuros: 816,
+    ccaaTable: [
+      { ccaa: "Comunidad de Madrid",     neto: 1298, irpf: "5,1 %" },
+      { ccaa: "Andalucía",               neto: 1293, irpf: "5,5 %" },
+      { ccaa: "Castilla y León",         neto: 1294, irpf: "5,4 %" },
+      { ccaa: "Comunitat Valenciana",    neto: 1292, irpf: "5,6 %" },
+      { ccaa: "Cataluña",               neto: 1283, irpf: "6,3 %" },
+    ],
+    familyTable: [
+      { label: "Soltero/a sin hijos",                extra: 0 },
+      { label: "Con 1 hijo",                         extra: 16 },
+      { label: "Con 2 hijos",                        extra: 33 },
+      { label: "Casado/a, cónyuge sin ingresos",     extra: 22 },
+    ],
+    faq: [
+      {
+        q: "¿Cuánto es 16.000€ brutos en neto al mes?",
+        a: "Con 16.000€ brutos anuales cobras aproximadamente 1.298€ netos al mes en Madrid (2026). A este nivel salarial, la reducción por rendimientos del trabajo mantiene el IRPF efectivo muy bajo, en torno al 5,1%.",
+      },
+      {
+        q: "¿Por qué con 16.000€ brutos se paga tan poco IRPF?",
+        a: "La reducción por rendimientos del trabajo del Art. 20 LIRPF y el mínimo personal (5.550€) reducen considerablemente la base imponible. Con 16.000€ brutos, la retención anual de IRPF es de apenas 816€.",
+      },
+      {
+        q: "¿Cuánto paga la empresa por un trabajador de 16.000€?",
+        a: "El coste total para la empresa es de aproximadamente 20.877€ anuales, incluyendo las cotizaciones patronales a la Seguridad Social (contingencias comunes, desempleo, FOGASA y formación profesional).",
+      },
+      {
+        q: "¿Cuánto varía el neto entre Madrid y Cataluña con 16.000€?",
+        a: "Con 16.000€ brutos, la diferencia entre Madrid (1.298€/mes) y Cataluña (1.283€/mes) es de 15€ al mes (180€/año). Las diferencias autonómicas del IRPF son pequeñas a este nivel salarial.",
+      },
+    ],
+  },
+  {
+    bruto: 18000,
+    brutoLabel: "18.000",
+    slug: "18000",
+    netoMensual: 1436,
+    netoAnual: 17232,
+    irpfEf: "7,4",
+    costeEmpresa: 23486,
+    ssEuros: 1170,
+    irpfEuros: 1332,
+    ccaaTable: [
+      { ccaa: "Comunidad de Madrid",     neto: 1436, irpf: "7,4 %" },
+      { ccaa: "Andalucía",               neto: 1430, irpf: "7,9 %" },
+      { ccaa: "Castilla y León",         neto: 1431, irpf: "7,8 %" },
+      { ccaa: "Comunitat Valenciana",    neto: 1428, irpf: "8,1 %" },
+      { ccaa: "Cataluña",               neto: 1414, irpf: "9,0 %" },
+    ],
+    familyTable: [
+      { label: "Soltero/a sin hijos",                extra: 0 },
+      { label: "Con 1 hijo",                         extra: 18 },
+      { label: "Con 2 hijos",                        extra: 38 },
+      { label: "Casado/a, cónyuge sin ingresos",     extra: 25 },
+    ],
+    faq: [
+      {
+        q: "¿Cuánto es 18.000€ brutos en neto al mes?",
+        a: "Con 18.000€ brutos anuales cobras aproximadamente 1.436€ netos al mes en Madrid (2026), después de descontar la Seguridad Social (6,5%) y la retención del IRPF (tipo efectivo 7,4%).",
+      },
+      {
+        q: "¿Cuánto IRPF se paga con 18.000€ brutos?",
+        a: "Con 18.000€ brutos, la retención efectiva del IRPF es del 7,4% en Madrid. La reducción por rendimientos del trabajo todavía aplica parcialmente a este nivel, resultando en una retención anual de aproximadamente 1.332€.",
+      },
+      {
+        q: "¿Cuánto paga la empresa por un trabajador de 18.000€?",
+        a: "El coste total para la empresa es de aproximadamente 23.486€ anuales, incluyendo las cotizaciones patronales a la Seguridad Social.",
+      },
+      {
+        q: "¿Cuánto varía el neto entre Madrid y Cataluña con 18.000€?",
+        a: "Con 18.000€ brutos, la diferencia entre Madrid (1.436€/mes) y Cataluña (1.414€/mes) es de 22€ al mes (264€/año). Los tipos autonómicos de Cataluña son más altos en todos los tramos.",
+      },
+    ],
+  },
+  {
     bruto: 20000,
     brutoLabel: "20.000",
     slug: "20000",
@@ -312,6 +396,48 @@ const ALL: SalarioData[] = [
     ],
   },
   {
+    bruto: 32000,
+    brutoLabel: "32.000",
+    slug: "32000",
+    netoMensual: 2388,
+    netoAnual: 28656,
+    irpfEf: "19,2",
+    costeEmpresa: 41754,
+    ssEuros: 2080,
+    irpfEuros: 6144,
+    ccaaTable: [
+      { ccaa: "Comunidad de Madrid",     neto: 2388, irpf: "19,2 %" },
+      { ccaa: "Andalucía",               neto: 2371, irpf: "19,8 %" },
+      { ccaa: "Castilla y León",         neto: 2374, irpf: "19,7 %" },
+      { ccaa: "Comunitat Valenciana",    neto: 2362, irpf: "20,1 %" },
+      { ccaa: "Cataluña",               neto: 2328, irpf: "21,3 %" },
+    ],
+    familyTable: [
+      { label: "Soltero/a sin hijos",                extra: 0 },
+      { label: "Con 1 hijo",                         extra: 34 },
+      { label: "Con 2 hijos",                        extra: 72 },
+      { label: "Casado/a, cónyuge sin ingresos",     extra: 48 },
+    ],
+    faq: [
+      {
+        q: "¿Cuánto es 32.000€ brutos en neto al mes?",
+        a: "Con 32.000€ brutos anuales cobras aproximadamente 2.388€ netos al mes en Madrid (2026). La retención IRPF efectiva es del 19,2%, situándose en un tramo medio-alto del IRPF.",
+      },
+      {
+        q: "¿Cuánto IRPF se paga con 32.000€ brutos?",
+        a: "Con 32.000€ brutos, la retención IRPF anual en Madrid es de aproximadamente 6.144€ (tipo efectivo 19,2%). En Cataluña sube al 21,3%, lo que supone unos 60€/mes menos neto.",
+      },
+      {
+        q: "¿Cuánto cuesta a la empresa un empleado de 32.000€?",
+        a: "El coste empresa para un salario bruto de 32.000€ es de aproximadamente 41.754€ anuales, incluyendo las cotizaciones patronales a la Seguridad Social.",
+      },
+      {
+        q: "¿Merece la pena negociar de 30.000€ a 32.000€?",
+        a: "Un aumento de 2.000€ brutos (de 30k a 32k) supone pasar de 2.274€ a 2.388€ netos mensuales, un incremento real de 114€/mes (1.368€/año). El incremento neto representa el 68% del bruto adicional.",
+      },
+    ],
+  },
+  {
     bruto: 35000,
     brutoLabel: "35.000",
     slug: "35000",
@@ -480,6 +606,48 @@ const ALL: SalarioData[] = [
     ],
   },
   {
+    bruto: 60000,
+    brutoLabel: "60.000",
+    slug: "60000",
+    netoMensual: 3795,
+    netoAnual: 45540,
+    irpfEf: "27,3",
+    costeEmpresa: 78288,
+    ssEuros: 3900,
+    irpfEuros: 16380,
+    ccaaTable: [
+      { ccaa: "Comunidad de Madrid",     neto: 3795, irpf: "27,3 %" },
+      { ccaa: "Andalucía",               neto: 3749, irpf: "28,5 %" },
+      { ccaa: "Castilla y León",         neto: 3758, irpf: "28,3 %" },
+      { ccaa: "Comunitat Valenciana",    neto: 3723, irpf: "29,2 %" },
+      { ccaa: "Cataluña",               neto: 3634, irpf: "31,5 %" },
+    ],
+    familyTable: [
+      { label: "Soltero/a sin hijos",                extra: 0 },
+      { label: "Con 1 hijo",                         extra: 53 },
+      { label: "Con 2 hijos",                        extra: 110 },
+      { label: "Casado/a, cónyuge sin ingresos",     extra: 75 },
+    ],
+    faq: [
+      {
+        q: "¿Cuánto es 60.000€ brutos en neto al mes?",
+        a: "Con 60.000€ brutos anuales cobras aproximadamente 3.795€ netos al mes en Madrid (2026). Es un salario alto donde la retención IRPF efectiva asciende al 27,3%.",
+      },
+      {
+        q: "¿Cuánto IRPF se paga con 60.000€ brutos?",
+        a: "Con 60.000€ brutos, la retención IRPF anual en Madrid es de aproximadamente 16.380€ (tipo efectivo 27,3%). En Cataluña sube al 31,5%, lo que supone unos 161€/mes menos neto.",
+      },
+      {
+        q: "¿Cuánto cuesta a la empresa un empleado de 60.000€?",
+        a: "El coste empresa para un salario bruto de 60.000€ es de aproximadamente 78.288€ anuales, incluyendo las cotizaciones patronales a la Seguridad Social.",
+      },
+      {
+        q: "¿Merece la pena negociar de 50.000€ a 60.000€?",
+        a: "Un aumento de 10.000€ brutos (de 50k a 60k) supone pasar de 3.414€ a 3.795€ netos mensuales, un incremento real de 381€/mes (4.572€/año). El incremento neto representa el 55% del bruto adicional.",
+      },
+    ],
+  },
+  {
     bruto: 70000,
     brutoLabel: "70.000",
     slug: "70000",
@@ -518,6 +686,90 @@ const ALL: SalarioData[] = [
       {
         q: "¿Merece la pena negociar de 50.000€ a 70.000€?",
         a: "Un aumento de 20.000€ brutos (de 50k a 70k) supone pasar de 3.414€ a 4.289€ netos mensuales, un incremento real de 875€/mes (10.500€/año). Aunque la tasa marginal es alta (~45%), el incremento neto sigue siendo muy significativo.",
+      },
+    ],
+  },
+  {
+    bruto: 80000,
+    brutoLabel: "80.000",
+    slug: "80000",
+    netoMensual: 4740,
+    netoAnual: 56880,
+    irpfEf: "30,5",
+    costeEmpresa: 104384,
+    ssEuros: 5200,
+    irpfEuros: 24400,
+    ccaaTable: [
+      { ccaa: "Comunidad de Madrid",     neto: 4740, irpf: "30,5 %" },
+      { ccaa: "Andalucía",               neto: 4670, irpf: "32,0 %" },
+      { ccaa: "Castilla y León",         neto: 4684, irpf: "31,7 %" },
+      { ccaa: "Comunitat Valenciana",    neto: 4628, irpf: "33,0 %" },
+      { ccaa: "Cataluña",               neto: 4502, irpf: "36,0 %" },
+    ],
+    familyTable: [
+      { label: "Soltero/a sin hijos",                extra: 0 },
+      { label: "Con 1 hijo",                         extra: 57 },
+      { label: "Con 2 hijos",                        extra: 119 },
+      { label: "Casado/a, cónyuge sin ingresos",     extra: 82 },
+    ],
+    faq: [
+      {
+        q: "¿Cuánto es 80.000€ brutos en neto al mes?",
+        a: "Con 80.000€ brutos anuales cobras aproximadamente 4.740€ netos al mes en Madrid (2026). A este nivel salarial, la retención IRPF efectiva alcanza el 30,5%, aplicándose los tramos superiores del impuesto.",
+      },
+      {
+        q: "¿Cuánto IRPF se paga con 80.000€ brutos?",
+        a: "Con 80.000€ brutos, la retención IRPF anual en Madrid es de aproximadamente 24.400€ (tipo efectivo 30,5%). En Cataluña sube al 36,0%, lo que supone unos 238€/mes menos neto que en Madrid.",
+      },
+      {
+        q: "¿Cuánto cuesta a la empresa un empleado de 80.000€?",
+        a: "El coste empresa para un salario bruto de 80.000€ es de aproximadamente 104.384€ anuales, incluyendo las cotizaciones patronales a la Seguridad Social.",
+      },
+      {
+        q: "¿Merece la pena negociar de 70.000€ a 80.000€?",
+        a: "Un aumento de 10.000€ brutos (de 70k a 80k) supone pasar de 4.289€ a 4.740€ netos mensuales, un incremento real de 451€/mes (5.412€/año). El tipo marginal es alto pero el incremento neto sigue siendo muy relevante.",
+      },
+    ],
+  },
+  {
+    bruto: 100000,
+    brutoLabel: "100.000",
+    slug: "100000",
+    netoMensual: 5631,
+    netoAnual: 67572,
+    irpfEf: "32,9",
+    costeEmpresa: 130480,
+    ssEuros: 6500,
+    irpfEuros: 32900,
+    ccaaTable: [
+      { ccaa: "Comunidad de Madrid",     neto: 5631, irpf: "32,9 %" },
+      { ccaa: "Andalucía",               neto: 5544, irpf: "34,5 %" },
+      { ccaa: "Castilla y León",         neto: 5560, irpf: "34,3 %" },
+      { ccaa: "Comunitat Valenciana",    neto: 5491, irpf: "35,7 %" },
+      { ccaa: "Cataluña",               neto: 5334, irpf: "38,8 %" },
+    ],
+    familyTable: [
+      { label: "Soltero/a sin hijos",                extra: 0 },
+      { label: "Con 1 hijo",                         extra: 60 },
+      { label: "Con 2 hijos",                        extra: 125 },
+      { label: "Casado/a, cónyuge sin ingresos",     extra: 88 },
+    ],
+    faq: [
+      {
+        q: "¿Cuánto es 100.000€ brutos en neto al mes?",
+        a: "Con 100.000€ brutos anuales cobras aproximadamente 5.631€ netos al mes en Madrid (2026). La retención IRPF efectiva es del 32,9%, entrando de lleno en los tramos más altos del impuesto estatal y autonómico.",
+      },
+      {
+        q: "¿Cuánto IRPF se paga con 100.000€ brutos?",
+        a: "Con 100.000€ brutos, la retención IRPF anual en Madrid es de aproximadamente 32.900€ (tipo efectivo 32,9%). En Cataluña sube al 38,8%, lo que supone unos 297€/mes menos neto que en Madrid.",
+      },
+      {
+        q: "¿Cuánto cuesta a la empresa un empleado de 100.000€?",
+        a: "El coste empresa para un salario bruto de 100.000€ es de aproximadamente 130.480€ anuales, incluyendo las cotizaciones patronales a la Seguridad Social.",
+      },
+      {
+        q: "¿Cuánto se queda Hacienda de 100.000€ brutos?",
+        a: "De 100.000€ brutos, entre IRPF (32.900€) y Seguridad Social del trabajador (6.500€), las detracciones totales ascienden a 39.400€. El trabajador recibe 60.600€ netos al año (5.050€/mes medio incluyendo pagas extra).",
       },
     ],
   },
