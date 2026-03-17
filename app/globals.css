@@ -124,6 +124,20 @@ input[type="number"] {
   color: #a5b4fc;
 }
 
+/* ─── SEO salary table row hover ────────────────────────────────────────────── */
+.seo-salary-row {
+  transition: background 0.15s;
+}
+.seo-salary-row:hover {
+  background: rgba(99, 102, 241, 0.08) !important;
+}
+
+/* ─── Section gradient divider ──────────────────────────────────────────────── */
+.seo-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(99,102,241,0.25) 30%, rgba(99,102,241,0.25) 70%, transparent 100%);
+}
+
 /* ─── Salary quick card hover ───────────────────────────────────────────────── */
 .salary-quick-card:hover {
   border-color: rgba(99, 102, 241, 0.3);
