@@ -81,6 +81,11 @@ export default function SiteFooter({ year }: { year?: number }) {
               </p>
               <ul className="flex flex-col gap-2">
                 <li>
+                  <Link href="/sobre-nosotros" className="text-xs hover:underline" style={{ color: "#a0a0c0" }}>
+                    Sobre nosotros
+                  </Link>
+                </li>
+                <li>
                   <Link href="/metodologia" className="text-xs hover:underline" style={{ color: "#a0a0c0" }}>
                     Metodología
                   </Link>
