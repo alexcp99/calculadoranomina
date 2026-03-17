@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import SiteFooter from "@/components/SiteFooter";
+import OpenCookieBannerButton from "@/components/OpenCookieBannerButton";
 
 export const metadata: Metadata = {
   title: "Política de Cookies",
@@ -90,7 +91,26 @@ export default function PoliticaCookiesPage() {
                 comportamiento general de los usuarios.
               </p>
 
-              <h2>4. Cómo gestionar o desactivar las cookies</h2>
+              <h2>4. Gestión del consentimiento</h2>
+              <p>
+                Al acceder a calculadoranomina.org por primera vez, aparece un banner informativo que te
+                permite <strong>aceptar o rechazar las cookies analíticas antes de que se instalen</strong> en
+                tu dispositivo.
+              </p>
+              <p>
+                Puedes cambiar tu decisión en cualquier momento haciendo clic en el icono 🍪 que aparece en
+                la esquina inferior izquierda de cualquier página, o borrando las cookies de tu navegador.
+              </p>
+              <p>
+                Tu preferencia se guarda localmente en tu dispositivo mediante{" "}
+                <code>localStorage</code> bajo la clave <code>cn_cookie_consent</code> y no expira
+                automáticamente.
+              </p>
+              <div className="not-prose mt-4 mb-2">
+                <OpenCookieBannerButton />
+              </div>
+
+              <h2>5. Cómo gestionar o desactivar las cookies</h2>
               <p>
                 El usuario puede gestionar, bloquear o eliminar las cookies desde la configuración de
                 su navegador. A continuación se indican los enlaces de ayuda de los principales navegadores:
@@ -128,7 +148,7 @@ export default function PoliticaCookiesPage() {
                 </a>.
               </p>
 
-              <h2>5. Más información</h2>
+              <h2>6. Más información</h2>
               <p>
                 Para más información sobre el tratamiento de datos personales, consulta nuestra{" "}
                 <Link href="/politica-privacidad">Política de privacidad</Link>. Para cualquier consulta
