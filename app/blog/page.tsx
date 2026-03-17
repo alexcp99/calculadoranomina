@@ -98,72 +98,81 @@ export default function BlogPage() {
         <section className="flex-1 px-4 pb-16">
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {posts.map((post) => (
+              {posts.map((post, i) => (
                 <Link
                   key={post.slug}
                   href={`/blog/${post.slug}`}
-                  className="group blog-card flex flex-col h-full rounded-2xl p-5 md:p-6"
+                  className="group blog-card flex flex-col h-full rounded-2xl p-6"
                 >
-                  {/* Top: keywords */}
-                  {post.keywords.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5 mb-4">
-                      {post.keywords.slice(0, 2).map((kw) => (
-                        <span
-                          key={kw}
-                          className="text-xs px-2 py-0.5 rounded-full font-medium"
-                          style={{
-                            background: "rgba(99,102,241,0.1)",
-                            border: "1px solid rgba(99,102,241,0.2)",
-                            color: "#818CF8",
-                          }}
-                        >
-                          {kw}
-                        </span>
-                      ))}
-                    </div>
-                  )}
+                  {/* Top row: index number + read time badge */}
+                  <div className="flex items-center justify-between mb-5">
+                    <span
+                      className="font-syne font-bold text-3xl select-none"
+                      style={{ color: "rgba(99,102,241,0.15)", lineHeight: 1 }}
+                      aria-hidden
+                    >
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span
+                      className="flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full"
+                      style={{
+                        background: "rgba(99,102,241,0.08)",
+                        border: "1px solid rgba(99,102,241,0.18)",
+                        color: "#818cf8",
+                      }}
+                    >
+                      <svg width="10" height="10" viewBox="0 0 12 12" fill="none" aria-hidden>
+                        <circle cx="6" cy="6" r="5" stroke="#818cf8" strokeWidth="1.3"/>
+                        <path d="M6 3.5V6l1.5 1.5" stroke="#818cf8" strokeWidth="1.3" strokeLinecap="round"/>
+                      </svg>
+                      {post.readTime}
+                    </span>
+                  </div>
 
                   {/* Title */}
                   <h2
-                    className="font-syne font-bold mb-2.5 leading-snug transition-colors"
+                    className="font-syne font-bold mb-3"
                     style={{
-                      fontSize: "clamp(1rem, 2.5vw, 1.15rem)",
-                      color: "#e8e8ff",
+                      fontSize: "clamp(1rem, 2.8vw, 1.2rem)",
+                      color: "#eeeeff",
+                      lineHeight: 1.45,
                     }}
                   >
                     {post.title}
                   </h2>
 
                   {/* Description */}
-                  <p className="text-sm leading-relaxed flex-1 mb-5" style={{ color: "#6e6e96" }}>
+                  <p
+                    className="text-sm leading-relaxed flex-1 mb-5"
+                    style={{ color: "#8a8ab0" }}
+                  >
                     {post.description}
                   </p>
 
                   {/* Footer */}
                   <div
                     className="flex items-center justify-between pt-4"
-                    style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
+                    style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
                   >
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs" style={{ color: "#4a4a6a" }}>
-                        {formatDate(post.date)}
-                      </span>
-                      <span style={{ color: "#2e2e50" }}>·</span>
-                      <span className="flex items-center gap-1 text-xs" style={{ color: "#4a4a6a" }}>
-                        <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden>
-                          <circle cx="6" cy="6" r="5" stroke="#4a4a6a" strokeWidth="1.2"/>
-                          <path d="M6 3.5V6l1.5 1.5" stroke="#4a4a6a" strokeWidth="1.2" strokeLinecap="round"/>
-                        </svg>
-                        {post.readTime}
-                      </span>
-                    </div>
+                    {/* Date */}
                     <span
-                      className="blog-card-arrow flex items-center gap-1 text-xs font-semibold"
-                      style={{ color: "#6366f1" }}
+                      className="text-xs font-medium"
+                      style={{ color: "#6060a0" }}
                     >
-                      Leer
-                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden>
-                        <path d="M2.5 6h7M6.5 3l3 3-3 3" stroke="#6366f1" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+                      {formatDate(post.date)}
+                    </span>
+
+                    {/* CTA */}
+                    <span
+                      className="blog-card-cta flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg"
+                      style={{
+                        background: "rgba(99,102,241,0.1)",
+                        color: "#818cf8",
+                      }}
+                    >
+                      Leer artículo
+                      <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden>
+                        <path d="M2.5 6h7M6.5 3l3 3-3 3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                     </span>
                   </div>
