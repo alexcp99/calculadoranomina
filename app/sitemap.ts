@@ -12,7 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }));
 
   const salarioEntries: MetadataRoute.Sitemap = [
-    "15000", "20000", "22000", "24000", "25000", "28000", "30000", "35000", "40000", "45000", "50000",
+    "15000", "20000", "22000", "24000", "25000", "28000", "30000", "35000", "40000", "45000", "50000", "70000",
   ].map((slug) => ({
     url: `https://calculadoranomina.org/cuanto-es-${slug}-euros-brutos-neto`,
     lastModified: new Date(),

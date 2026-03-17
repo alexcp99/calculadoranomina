@@ -17,6 +17,7 @@ const SALARY_CARDS = [
   { slug: "40000", bruto: "40.000 €", neto: "2.876 €", irpf: "22,1 %", accent: "#c084fc", accentSoft: "rgba(192,132,252,0.15)" },
   { slug: "45000", bruto: "45.000 €", neto: "3.145 €", irpf: "23,8 %", accent: "#d47dfd", accentSoft: "rgba(212,125,253,0.15)" },
   { slug: "50000", bruto: "50.000 €", neto: "3.414 €", irpf: "25,1 %", accent: "#e879f9", accentSoft: "rgba(232,121,249,0.15)" },
+  { slug: "70000", bruto: "70.000 €", neto: "4.289 €", irpf: "29,0 %", accent: "#f472b6", accentSoft: "rgba(244,114,182,0.15)" },
 ];
 
 // ─── FAQ JSON-LD ──────────────────────────────────────────────────────────────

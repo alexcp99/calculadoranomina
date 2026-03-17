@@ -16,6 +16,7 @@ const SALARY_LINKS = [
   { slug: "40000", label: "40.000€ brutos en neto", neto: "2.876€/mes" },
   { slug: "45000", label: "45.000€ brutos en neto", neto: "3.145€/mes" },
   { slug: "50000", label: "50.000€ brutos en neto", neto: "3.414€/mes" },
+  { slug: "70000", label: "70.000€ brutos en neto", neto: "4.289€/mes" },
 ];
 
 const NAV_LINKS = [
@@ -231,10 +232,11 @@ export default function Navbar() {
           })}
 
           {/* Salary sub-links */}
-          <div className="px-3 pt-3 pb-1">
+          <div className="px-3 pt-3 pb-2">
             <p className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "#4a4a6a" }}>
               Calculadoras por salario
             </p>
+            <div className="overflow-y-auto" style={{ maxHeight: "220px" }}>
             {SALARY_LINKS.map((s) => {
               const active = pathname === `/cuanto-es-${s.slug}-euros-brutos-neto`;
               return (
@@ -249,6 +251,7 @@ export default function Navbar() {
                 </Link>
               );
             })}
+            </div>
           </div>
         </nav>
       </div>

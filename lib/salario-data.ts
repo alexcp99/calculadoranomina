@@ -479,6 +479,48 @@ const ALL: SalarioData[] = [
       },
     ],
   },
+  {
+    bruto: 70000,
+    brutoLabel: "70.000",
+    slug: "70000",
+    netoMensual: 4289,
+    netoAnual: 51468,
+    irpfEf: "29,0",
+    costeEmpresa: 91336,
+    ssEuros: 4550,
+    irpfEuros: 20300,
+    ccaaTable: [
+      { ccaa: "Comunidad de Madrid",     neto: 4289, irpf: "29,0 %" },
+      { ccaa: "Andalucía",               neto: 4231, irpf: "30,0 %" },
+      { ccaa: "Castilla y León",         neto: 4242, irpf: "29,8 %" },
+      { ccaa: "Comunitat Valenciana",    neto: 4196, irpf: "30,6 %" },
+      { ccaa: "Cataluña",               neto: 4091, irpf: "32,4 %" },
+    ],
+    familyTable: [
+      { label: "Soltero/a sin hijos",                extra: 0 },
+      { label: "Con 1 hijo",                         extra: 55 },
+      { label: "Con 2 hijos",                        extra: 115 },
+      { label: "Casado/a, cónyuge sin ingresos",     extra: 80 },
+    ],
+    faq: [
+      {
+        q: "¿Cuánto es 70.000€ brutos en neto al mes?",
+        a: "Con 70.000€ brutos anuales cobras 4.289€ netos al mes en Madrid (2026). Es un salario alto que entra en los tramos superiores del IRPF, con una retención efectiva del 29,0% sobre la base imponible.",
+      },
+      {
+        q: "¿Cuánto IRPF se paga con 70.000€ brutos?",
+        a: "Con 70.000€ brutos, la retención IRPF anual en Madrid es de aproximadamente 20.300€ (tipo efectivo 29,0%). En Cataluña sube al 32,4%, lo que supone unos 198€/mes menos neto respecto a Madrid.",
+      },
+      {
+        q: "¿Cuánto cuesta a la empresa un empleado de 70.000€?",
+        a: "El coste empresa para un salario bruto de 70.000€ es de aproximadamente 91.336€ anuales, incluyendo las cotizaciones patronales a la Seguridad Social (≈30,5% adicional sobre el bruto).",
+      },
+      {
+        q: "¿Merece la pena negociar de 50.000€ a 70.000€?",
+        a: "Un aumento de 20.000€ brutos (de 50k a 70k) supone pasar de 3.414€ a 4.289€ netos mensuales, un incremento real de 875€/mes (10.500€/año). Aunque la tasa marginal es alta (~45%), el incremento neto sigue siendo muy significativo.",
+      },
+    ],
+  },
 ];
 
 export const SALARIO_DATA: Record<string, SalarioData> = Object.fromEntries(

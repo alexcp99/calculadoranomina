@@ -43,6 +43,7 @@ export default function SiteFooter({ year }: { year?: number }) {
                   { slug: "40000", label: "40.000€ brutos en neto" },
                   { slug: "45000", label: "45.000€ brutos en neto" },
                   { slug: "50000", label: "50.000€ brutos en neto" },
+                  { slug: "70000", label: "70.000€ brutos en neto" },
                 ].map(({ slug, label }) => (
                   <li key={slug}>
                     <Link
