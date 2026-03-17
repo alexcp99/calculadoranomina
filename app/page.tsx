@@ -2,6 +2,7 @@ import Link from "next/link";
 import Calculator from "@/components/Calculator";
 import SiteFooter from "@/components/SiteFooter";
 import SeoFaqAccordion from "@/components/SeoFaqAccordion";
+import { getAllPosts } from "@/lib/blog";
 
 // ─── Salary cards data ────────────────────────────────────────────────────────
 
@@ -113,6 +114,7 @@ function barColor(pct: number): string {
 
 export default function HomePage() {
   const currentYear = new Date().getFullYear();
+  const latestPosts = getAllPosts().slice(0, 3);
 
   return (
     <main className="min-h-screen" style={{ background: "#080810" }}>
@@ -232,6 +234,124 @@ export default function HomePage() {
             </div>
           </div>
         </section>
+
+        {/* ── Latest blog posts ── */}
+        <section className="px-4 pb-14 md:pb-16">
+              <div className="max-w-5xl mx-auto">
+                {/* Header */}
+                <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-8">
+                  <div>
+                    <h2
+                      className="font-syne font-bold mb-1"
+                      style={{ fontSize: "clamp(1.1rem, 3vw, 1.4rem)", color: "#e0e0ff" }}
+                    >
+                      Últimas guías sobre nóminas e IRPF
+                    </h2>
+                    <p className="text-sm" style={{ color: "#5a5a80" }}>
+                      Artículos prácticos para entender tu salario y pagar menos impuestos
+                    </p>
+                  </div>
+                  <Link
+                    href="/blog"
+                    className="shrink-0 text-xs font-semibold flex items-center gap-1.5 transition-colors"
+                    style={{ color: "#818cf8" }}
+                  >
+                    Ver todos
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden>
+                      <path d="M2.5 6h7M6.5 3l3 3-3 3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </Link>
+                </div>
+
+                {/* Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {latestPosts.map((post) => (
+                    <Link
+                      key={post.slug}
+                      href={`/blog/${post.slug}`}
+                      className="group flex flex-col rounded-2xl p-5 transition-all duration-200"
+                      style={{
+                        background: "rgba(99,102,241,0.05)",
+                        border: "1px solid rgba(255,255,255,0.08)",
+                      }}
+                      onMouseEnter={(e) => {
+                        (e.currentTarget as HTMLElement).style.borderColor = "rgba(99,102,241,0.35)";
+                        (e.currentTarget as HTMLElement).style.background = "rgba(99,102,241,0.09)";
+                      }}
+                      onMouseLeave={(e) => {
+                        (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.08)";
+                        (e.currentTarget as HTMLElement).style.background = "rgba(99,102,241,0.05)";
+                      }}
+                    >
+                      {/* Keywords */}
+                      {post.keywords.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5 mb-3">
+                          {post.keywords.slice(0, 2).map((kw) => (
+                            <span
+                              key={kw}
+                              className="text-xs px-2 py-0.5 rounded-full"
+                              style={{
+                                background: "rgba(99,102,241,0.1)",
+                                border: "1px solid rgba(99,102,241,0.2)",
+                                color: "#818cf8",
+                              }}
+                            >
+                              {kw}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Title */}
+                      <h3
+                        className="font-syne font-bold mb-2 flex-1 group-hover:text-indigo-300 transition-colors"
+                        style={{ fontSize: "0.95rem", color: "#e0e0ff", lineHeight: 1.45 }}
+                      >
+                        {post.title}
+                      </h3>
+
+                      {/* Description */}
+                      <p
+                        className="text-xs leading-relaxed mb-4 line-clamp-2"
+                        style={{ color: "#a0a0c0" }}
+                      >
+                        {post.description}
+                      </p>
+
+                      {/* Footer */}
+                      <div className="flex items-center justify-between mt-auto">
+                        <div className="flex items-center gap-2 text-xs" style={{ color: "#6060a0" }}>
+                          <span>{new Intl.DateTimeFormat("es-ES", { dateStyle: "medium" }).format(new Date(post.date))}</span>
+                          <span>·</span>
+                          <span>{post.readTime}</span>
+                        </div>
+                        <span
+                          className="text-xs font-semibold transition-transform duration-200 group-hover:translate-x-1"
+                          style={{ color: "#6366f1" }}
+                        >
+                          →
+                        </span>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+
+                {/* View all button */}
+                <div className="mt-6 text-center">
+                  <Link
+                    href="/blog"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150"
+                    style={{
+                      background: "rgba(99,102,241,0.1)",
+                      border: "1px solid rgba(99,102,241,0.22)",
+                      color: "#818cf8",
+                    }}
+                  >
+                    Ver todos los artículos →
+                  </Link>
+                </div>
+              </div>
+            </section>
 
         {/* ══════════════════════════════════════════════════════════════════
             SEO CONTENT BLOCK
