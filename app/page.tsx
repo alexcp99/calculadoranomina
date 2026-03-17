@@ -135,7 +135,7 @@ export default function HomePage() {
         {/* ── Header ── */}
         <header className="pt-8 pb-4 px-4 text-center md:pt-14 md:pb-10">
           <h1
-            className="font-syne font-extrabold tracking-tight leading-tight mb-3 md:mb-4"
+            className="font-syne font-extrabold tracking-tight leading-snug mb-3 md:mb-4"
             style={{ fontSize: "clamp(1.5rem, 7vw, 4rem)", color: "#f0f0ff" }}
           >
             Calculadora de{" "}

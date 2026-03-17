@@ -103,7 +103,7 @@ export default function SobreNosotros() {
               </div>
 
               <h1
-                className="font-syne font-extrabold tracking-tight leading-tight mb-4"
+                className="font-syne font-extrabold tracking-tight leading-snug mb-4"
                 style={{ fontSize: "clamp(1.8rem, 6vw, 2.8rem)", color: "#f0f0ff" }}
               >
                 Quiénes somos y{" "}

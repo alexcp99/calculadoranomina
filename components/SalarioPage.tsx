@@ -27,7 +27,7 @@ function StatCard({
         {label}
       </span>
       <span
-        className="font-syne font-extrabold leading-tight whitespace-nowrap"
+        className="font-syne font-extrabold leading-snug whitespace-nowrap"
         style={{
           fontSize: "clamp(0.9rem, 2.2vw, 1.25rem)",
           color: accent ? "#34d399" : "#e0e0ff",
@@ -143,7 +143,7 @@ export default function SalarioPage({ data }: { data: SalarioData }) {
               </div>
 
               <h1
-                className="font-syne font-extrabold tracking-tight leading-tight mb-4"
+                className="font-syne font-extrabold tracking-tight leading-snug mb-4"
                 style={{ fontSize: "clamp(1.6rem, 6vw, 2.8rem)", color: "#f0f0ff" }}
               >
                 Con {data.brutoLabel}€ brutos cobras{" "}

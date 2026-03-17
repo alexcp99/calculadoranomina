@@ -70,7 +70,7 @@ export default function BlogPage() {
             </div>
 
             <h1
-              className="font-syne font-extrabold tracking-tight leading-tight mb-3"
+              className="font-syne font-extrabold tracking-tight leading-snug mb-3"
               style={{ fontSize: "clamp(1.8rem, 6vw, 3rem)", color: "#f0f0ff" }}
             >
               Blog sobre{" "}
