@@ -205,7 +205,7 @@ export default function HomePage() {
                   <div style={{ height: "3px", background: `linear-gradient(90deg, ${c.accent}, transparent)` }} />
                   <div className="p-4 flex flex-col gap-2.5">
                     <span
-                      className="text-xs font-semibold px-2 py-0.5 rounded-full self-start"
+                      className="text-xs font-semibold px-2 py-0.5 rounded-full self-start whitespace-nowrap"
                       style={{ background: c.accentSoft, color: c.accent }}
                     >
                       {c.bruto} brutos

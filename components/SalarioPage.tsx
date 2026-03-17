@@ -81,7 +81,10 @@ function Td({ children, highlight }: { children: React.ReactNode; highlight?: bo
 // ─── Main component ────────────────────────────────────────────────────────────
 
 export default function SalarioPage({ data }: { data: SalarioData }) {
-  const otherSalarios = ALL_SALARIOS.filter((s) => s.slug !== data.slug);
+  const otherSalarios = ALL_SALARIOS
+    .filter((s) => s.slug !== data.slug)
+    .sort((a, b) => Math.abs(a.bruto - data.bruto) - Math.abs(b.bruto - data.bruto))
+    .slice(0, 3);
 
   const jsonLd = {
     "@context": "https://schema.org",
