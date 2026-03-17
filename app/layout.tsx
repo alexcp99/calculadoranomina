@@ -25,8 +25,8 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://calculadoranomina.org"),
 
   title: {
-    default: "Calculadora de Nómina 2026 | Salario Bruto a Neto · IRPF y Seguridad Social",
-    template: "%s | Calculadora de Nómina 2026",
+    default: "Calculadora de Nómina 2026 | Salario Bruto a Neto · IRPF y SS España",
+    template: "%s | CalculadoraNomina.org",
   },
   description:
     "Calcula tu salario neto desde el bruto o el bruto desde el neto en segundos. Aplica los tramos del IRPF 2026, cotizaciones a la Seguridad Social y mínimos personales. Situaciones familiares completas. Datos oficiales AEAT España.",

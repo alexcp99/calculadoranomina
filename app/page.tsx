@@ -165,8 +165,7 @@ export default function HomePage() {
             className="text-sm md:text-lg max-w-lg mx-auto leading-relaxed mb-3 md:mb-4"
             style={{ color: "#a0a0c0" }}
           >
-            Calcula tu salario neto desde el bruto, o el bruto que necesitas para un neto deseado.{" "}
-            <span className="inline">IRPF y Seguridad Social 2026 incluidos.</span>
+            Calcula tu <strong style={{ color: "#c0c0d8" }}>salario neto desde el bruto</strong> — o el bruto necesario para un neto deseado. <strong style={{ color: "#c0c0d8" }}>IRPF 2026</strong>, Seguridad Social y <strong style={{ color: "#c0c0d8" }}>19 comunidades autónomas</strong>. Gratis y sin registro.
           </p>
 
           <p
@@ -181,9 +180,32 @@ export default function HomePage() {
             <strong style={{ color: "#5a5a80", fontWeight: 600 }}>salario bruto anual o mensual</strong>{" "}
             y obtén el{" "}
             <strong style={{ color: "#5a5a80", fontWeight: 600 }}>salario neto</strong>{" "}
-            exacto según las tablas oficiales de la AEAT para España. También funciona al revés:
+            exacto según las tablas oficiales de la AEAT para España. Selecciona tu comunidad autónoma entre las{" "}
+            <strong style={{ color: "#5a5a80", fontWeight: 600 }}>19 CCAA disponibles</strong>{" "}
+            — porque el mismo bruto da distinto neto en Madrid que en Cataluña. También funciona al revés:
             indica el neto deseado y te calculamos el bruto necesario.
           </p>
+
+          <div className="flex flex-wrap justify-center gap-3 mt-4 mb-2">
+            <span
+              className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full"
+              style={{ background: "rgba(52,211,153,0.1)", color: "#34d399", border: "1px solid rgba(52,211,153,0.2)" }}
+            >
+              ✓ Datos oficiales AEAT 2026
+            </span>
+            <span
+              className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full"
+              style={{ background: "rgba(99,102,241,0.1)", color: "#818cf8", border: "1px solid rgba(99,102,241,0.2)" }}
+            >
+              ✓ 19 comunidades autónomas
+            </span>
+            <span
+              className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full"
+              style={{ background: "rgba(99,102,241,0.1)", color: "#818cf8", border: "1px solid rgba(99,102,241,0.2)" }}
+            >
+              ✓ Gratis · Sin registro
+            </span>
+          </div>
         </header>
 
         {/* ── Calculator ── */}
