@@ -28,6 +28,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1.0,
     },
     {
+      url: "https://calculadoranomina.org/calculadora-retencion-irpf",
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.9,
+    },
+    {
       url: "https://calculadoranomina.org/blog",
       lastModified: new Date(),
       changeFrequency: "weekly",

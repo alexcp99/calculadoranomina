@@ -73,6 +73,11 @@ export default function SiteFooter({ year }: { year?: number }) {
                   </Link>
                 </li>
                 <li>
+                  <Link href="/calculadora-retencion-irpf" className="text-xs hover:underline" style={{ color: "#a0a0c0" }}>
+                    Calculadora retención IRPF
+                  </Link>
+                </li>
+                <li>
                   <Link href="/blog" className="text-xs hover:underline" style={{ color: "#a0a0c0" }}>
                     Blog
                   </Link>

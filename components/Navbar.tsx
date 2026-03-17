@@ -165,6 +165,22 @@ export default function Navbar() {
                 }}
               >
               <div className="p-2 max-h-96 overflow-y-auto">
+                {/* Calculadora retención — primer item con badge */}
+                <div className="mb-1">
+                  <p className="text-xs font-semibold uppercase tracking-wider px-3 py-1.5" style={{ color: "#4a4a6a" }}>
+                    Herramientas
+                  </p>
+                  <Link
+                    href="/calculadora-retencion-irpf"
+                    className="flex items-center justify-between px-3 py-2 rounded-lg transition-colors"
+                    style={{ color: "#e0e0ff" }}
+                    onMouseEnter={(e) => (e.currentTarget as HTMLElement).style.background = "rgba(99,102,241,0.1)"}
+                    onMouseLeave={(e) => (e.currentTarget as HTMLElement).style.background = "transparent"}
+                  >
+                    <span className="text-sm whitespace-nowrap">Retención IRPF</span>
+                    <span className="text-xs font-semibold px-1.5 py-0.5 rounded" style={{ background: "rgba(99,102,241,0.25)", color: "#a5b4fc" }}>Nuevo</span>
+                  </Link>
+                </div>
                 {SALARY_GROUPS.map((group) => (
                   <div key={group.label} className="mb-1">
                     <p className="text-xs font-semibold uppercase tracking-wider px-3 py-1.5" style={{ color: "#4a4a6a" }}>
