@@ -4,6 +4,11 @@ import matter from "gray-matter";
 
 const BLOG_DIR = path.join(process.cwd(), "content/blog");
 
+export interface FaqItem {
+  q: string;
+  a: string;
+}
+
 export interface PostMeta {
   slug: string;
   title: string;
@@ -11,6 +16,7 @@ export interface PostMeta {
   date: string;
   keywords: string[];
   readTime: string;
+  faq?: FaqItem[];
 }
 
 export interface Post extends PostMeta {
@@ -32,6 +38,7 @@ export function getAllPosts(): PostMeta[] {
         date: data.date as string,
         keywords: (data.keywords as string[]) ?? [],
         readTime: data.readTime as string,
+        faq: data.faq,
       };
     })
     .sort((a, b) => (a.date < b.date ? 1 : -1));
@@ -51,6 +58,7 @@ export function getPostBySlug(slug: string): Post | null {
     date: data.date as string,
     keywords: (data.keywords as string[]) ?? [],
     readTime: data.readTime as string,
+    faq: data.faq,
     content,
   };
 }
