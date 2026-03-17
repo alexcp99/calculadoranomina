@@ -300,7 +300,7 @@ function Desglose({ r }: { r: CalcResult }) {
       >
         <span
           className="text-xs font-semibold uppercase tracking-widest"
-          style={{ color: "var(--text-muted)" }}
+          style={{ color: "#7070a0" }}
         >
           Desglose anual
         </span>
@@ -358,7 +358,7 @@ function Desglose({ r }: { r: CalcResult }) {
           {/* SS breakdown */}
           <p
             className="text-xs font-semibold uppercase tracking-widest py-2"
-            style={{ color: "var(--text-muted)" }}
+            style={{ color: "#6868a0" }}
           >
             Seguridad Social empleado
           </p>
@@ -396,7 +396,7 @@ function Desglose({ r }: { r: CalcResult }) {
           {/* IRPF paso a paso */}
           <p
             className="text-xs font-semibold uppercase tracking-widest py-2 pt-4"
-            style={{ color: "var(--text-muted)" }}
+            style={{ color: "#6868a0" }}
           >
             Cálculo IRPF paso a paso
           </p>
@@ -447,7 +447,7 @@ function Desglose({ r }: { r: CalcResult }) {
           {/* Empresa */}
           <p
             className="text-xs font-semibold uppercase tracking-widest py-2 pt-4"
-            style={{ color: "var(--text-muted)" }}
+            style={{ color: "#6868a0" }}
           >
             Coste empresa
           </p>
@@ -489,7 +489,7 @@ function CompactResult({ r, mode }: { r: CalcResult; mode: Mode }) {
       {/* Label */}
       <p
         className="text-xs font-semibold uppercase tracking-widest mb-2"
-        style={{ color: "var(--text-muted)" }}
+        style={{ color: "#8080a8" }}
       >
         {label}
       </p>
@@ -502,17 +502,17 @@ function CompactResult({ r, mode }: { r: CalcResult; mode: Mode }) {
         >
           {fmtEur(monthly)}
         </span>
-        <span className="text-xl font-bold" style={{ color: `${color}70` }}>
+        <span className="text-xl font-bold" style={{ color: `${color}90` }}>
           €
         </span>
-        <span className="text-xs ml-1" style={{ color: "var(--text-muted)" }}>
+        <span className="text-xs ml-1 font-medium" style={{ color: "#7070a0" }}>
           /mes
         </span>
       </div>
 
       {/* Anual */}
-      <p className="tabnum text-sm mb-4" style={{ color: `${color}80` }}>
-        {fmtEur(annual)} € al año
+      <p className="tabnum text-sm font-medium mb-4" style={{ color: "#9090b8" }}>
+        {fmtEur(annual)} <span style={{ color: "#6a6a8a" }}>€ al año</span>
       </p>
 
       {/* 3 chips */}
@@ -605,7 +605,7 @@ function FullResults({ r, mode }: { r: CalcResult; mode: Mode }) {
       <div>
         <p
           className="text-xs font-semibold uppercase tracking-widest mb-2"
-          style={{ color: "var(--text-muted)" }}
+          style={{ color: "#8080a8" }}
         >
           {label}
         </p>
@@ -620,12 +620,12 @@ function FullResults({ r, mode }: { r: CalcResult; mode: Mode }) {
           >
             {fmtEur(monthly)}
           </span>
-          <span className="text-xl font-semibold mb-1" style={{ color: `${color}60` }}>
+          <span className="text-xl font-semibold mb-1" style={{ color: `${color}80` }}>
             €
           </span>
         </div>
-        <p className="text-sm mt-1.5 tabnum" style={{ color: "var(--text-secondary)" }}>
-          {fmtEur(annual)} € al año
+        <p className="text-sm mt-1.5 tabnum font-medium" style={{ color: "#9090b8" }}>
+          {fmtEur(annual)} <span style={{ color: "#6a6a8a" }}>€ al año</span>
         </p>
       </div>
 
@@ -694,7 +694,7 @@ function FullResults({ r, mode }: { r: CalcResult; mode: Mode }) {
           border: "1px solid rgba(251,191,36,0.12)",
         }}
       >
-        <span className="text-xs" style={{ color: "var(--text-secondary)" }}>
+        <span className="text-xs font-medium" style={{ color: "#a09060" }}>
           Tipo marginal IRPF
         </span>
         <span className="tabnum font-bold text-sm" style={{ color: "#fbbf24" }}>
@@ -710,7 +710,7 @@ function FullResults({ r, mode }: { r: CalcResult; mode: Mode }) {
           border: "1px solid rgba(99,102,241,0.12)",
         }}
       >
-        <span className="text-xs" style={{ color: "var(--text-secondary)" }}>
+        <span className="text-xs font-medium" style={{ color: "#8080b8" }}>
           Coste total empresa
         </span>
         <span className="tabnum font-bold text-sm" style={{ color: "#a5b4fc" }}>
@@ -722,13 +722,14 @@ function FullResults({ r, mode }: { r: CalcResult; mode: Mode }) {
       <p
         className="text-xs leading-relaxed mt-auto pt-4"
         style={{
-          color: "var(--text-muted)",
+          color: "#585880",
           borderTop: "1px solid rgba(255,255,255,0.06)",
         }}
       >
-        Cálculo orientativo basado en la escala general estatal y autonómica 2026. El tipo
-        real puede variar según deducciones personales y situaciones específicas. Fuente:{" "}
-        <strong style={{ color: "#4a4a6a" }}>AEAT 2026</strong>. Consulta con un asesor fiscal.
+        <span style={{ color: "#6868a0" }}>Cálculo orientativo basado en la escala general estatal y autonómica 2026. El tipo
+        real puede variar según deducciones personales y situaciones específicas.</span>{" "}
+        Fuente: <strong style={{ color: "#8080b0" }}>AEAT 2026</strong>.{" "}
+        <span style={{ color: "#6868a0" }}>Consulta con un asesor fiscal.</span>
       </p>
     </div>
   );
@@ -1322,10 +1323,9 @@ export default function Calculator() {
                   className="text-xs leading-relaxed"
                   style={{ color: "var(--text-muted)" }}
                 >
-                  Cálculo orientativo. Escala estatal + autonómica 2026. El tipo real varía
-                  según deducciones personales.{" "}
-                  <strong style={{ color: "#4a4a6a" }}>AEAT 2026</strong>.
-                  Consulta con un asesor fiscal.
+                  <span style={{ color: "#6868a0" }}>Cálculo orientativo. Escala estatal + autonómica 2026. El tipo real varía según deducciones personales.</span>{" "}
+                  Fuente: <strong style={{ color: "#8080b0" }}>AEAT 2026</strong>.{" "}
+                  <span style={{ color: "#6868a0" }}>Consulta con un asesor fiscal.</span>
                 </p>
               </div>
             )}
