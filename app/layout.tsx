@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://calculadoranomina.org"),
 
   title: {
-    default: "Calculadora de Nómina 2026 — Salario Bruto y Neto | IRPF y Seguridad Social",
+    default: "Calculadora de Nómina 2026 | Salario Bruto a Neto · IRPF y Seguridad Social",
     template: "%s | Calculadora de Nómina 2026",
   },
   description:

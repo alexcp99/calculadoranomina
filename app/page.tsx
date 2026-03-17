@@ -8,17 +8,23 @@ import { getAllPosts } from "@/lib/blog";
 
 const SALARY_CARDS = [
   { slug: "15000", bruto: "15.000 €", neto: "1.221 €", irpf: "3,2 %",  accent: "#38bdf8", accentSoft: "rgba(56,189,248,0.15)"  },
+  { slug: "16000", bruto: "16.000 €", neto: "1.298 €", irpf: "5,1 %",  accent: "#4fb8f5", accentSoft: "rgba(79,184,245,0.15)"  },
+  { slug: "18000", bruto: "18.000 €", neto: "1.436 €", irpf: "7,4 %",  accent: "#5aa8f2", accentSoft: "rgba(90,168,242,0.15)"  },
   { slug: "20000", bruto: "20.000 €", neto: "1.575 €", irpf: "9,8 %",  accent: "#6366f1", accentSoft: "rgba(99,102,241,0.15)"  },
   { slug: "22000", bruto: "22.000 €", neto: "1.693 €", irpf: "11,8 %", accent: "#6d7cf4", accentSoft: "rgba(109,124,244,0.15)" },
   { slug: "24000", bruto: "24.000 €", neto: "1.820 €", irpf: "13,0 %", accent: "#7b87f6", accentSoft: "rgba(123,135,246,0.15)" },
   { slug: "25000", bruto: "25.000 €", neto: "1.911 €", irpf: "13,7 %", accent: "#818cf8", accentSoft: "rgba(129,140,248,0.15)" },
   { slug: "28000", bruto: "28.000 €", neto: "2.107 €", irpf: "16,1 %", accent: "#9a84fb", accentSoft: "rgba(154,132,251,0.15)" },
   { slug: "30000", bruto: "30.000 €", neto: "2.274 €", irpf: "17,7 %", accent: "#a78bfa", accentSoft: "rgba(167,139,250,0.15)" },
+  { slug: "32000", bruto: "32.000 €", neto: "2.388 €", irpf: "19,2 %", accent: "#ae8bfb", accentSoft: "rgba(174,139,251,0.15)" },
   { slug: "35000", bruto: "35.000 €", neto: "2.520 €", irpf: "20,5 %", accent: "#b48bfb", accentSoft: "rgba(180,139,251,0.15)" },
   { slug: "40000", bruto: "40.000 €", neto: "2.876 €", irpf: "22,1 %", accent: "#c084fc", accentSoft: "rgba(192,132,252,0.15)" },
   { slug: "45000", bruto: "45.000 €", neto: "3.145 €", irpf: "23,8 %", accent: "#d47dfd", accentSoft: "rgba(212,125,253,0.15)" },
   { slug: "50000", bruto: "50.000 €", neto: "3.414 €", irpf: "25,1 %", accent: "#e879f9", accentSoft: "rgba(232,121,249,0.15)" },
+  { slug: "60000", bruto: "60.000 €", neto: "3.795 €", irpf: "27,3 %", accent: "#f472d0", accentSoft: "rgba(244,114,208,0.15)" },
   { slug: "70000", bruto: "70.000 €", neto: "4.289 €", irpf: "29,0 %", accent: "#f472b6", accentSoft: "rgba(244,114,182,0.15)" },
+  { slug: "80000", bruto: "80.000 €", neto: "4.740 €", irpf: "30,5 %", accent: "#f86f9e", accentSoft: "rgba(248,111,158,0.15)" },
+  { slug: "100000", bruto: "100.000 €", neto: "5.631 €", irpf: "32,9 %", accent: "#fb7185", accentSoft: "rgba(251,113,133,0.15)" },
 ];
 
 // ─── FAQ JSON-LD ──────────────────────────────────────────────────────────────
@@ -538,11 +544,16 @@ export default function HomePage() {
                   </thead>
                   <tbody>
                     {[
+                      { bruto: "15.000 €", neto: "1.221 €/mes", slug: "15000" },
                       { bruto: "20.000 €", neto: "1.575 €/mes", slug: "20000" },
                       { bruto: "25.000 €", neto: "1.911 €/mes", slug: "25000" },
                       { bruto: "30.000 €", neto: "2.274 €/mes", slug: "30000" },
+                      { bruto: "35.000 €", neto: "2.520 €/mes", slug: "35000" },
                       { bruto: "40.000 €", neto: "2.876 €/mes", slug: "40000" },
                       { bruto: "50.000 €", neto: "3.414 €/mes", slug: "50000" },
+                      { bruto: "60.000 €", neto: "3.795 €/mes", slug: "60000" },
+                      { bruto: "80.000 €", neto: "4.740 €/mes", slug: "80000" },
+                      { bruto: "100.000 €", neto: "5.631 €/mes", slug: "100000" },
                     ].map((row) => (
                       <tr key={row.slug} className="seo-salary-row">
                         <SeoTd highlight>{row.bruto}</SeoTd>
@@ -602,6 +613,39 @@ export default function HomePage() {
                 ))}
               </div>
 
+              {/* Tabla CCAA para 30.000€ */}
+              <div className="overflow-x-auto rounded-xl mb-6" style={{ border: "1px solid rgba(99,102,241,0.18)" }}>
+                <table className="w-full text-sm border-collapse">
+                  <thead>
+                    <tr>
+                      <SeoTh>Comunidad autónoma</SeoTh>
+                      <SeoTh>Neto mensual (30.000 €)</SeoTh>
+                      <SeoTh>IRPF ef.</SeoTh>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      { ccaa: "Comunidad de Madrid ★", neto: "2.274 €", irpf: "17,7%", highlight: true },
+                      { ccaa: "Castilla y León",       neto: "2.262 €", irpf: "18,1%", highlight: false },
+                      { ccaa: "Andalucía",             neto: "2.259 €", irpf: "18,2%", highlight: false },
+                      { ccaa: "Comunitat Valenciana",  neto: "2.251 €", irpf: "18,5%", highlight: false },
+                      { ccaa: "Galicia",               neto: "2.248 €", irpf: "18,6%", highlight: false },
+                      { ccaa: "Cataluña",              neto: "2.218 €", irpf: "19,9%", highlight: false },
+                    ].map((row) => (
+                      <tr key={row.ccaa} style={{ background: row.highlight ? "rgba(99,102,241,0.05)" : "transparent" }}>
+                        <SeoTd highlight={row.highlight}>{row.ccaa}</SeoTd>
+                        <td className="px-4 py-3 text-sm font-semibold" style={{ color: row.highlight ? "#34d399" : "#a0c0a0", borderBottom: "1px solid rgba(255,255,255,0.04)" }}>{row.neto}</td>
+                        <SeoTd>{row.irpf}</SeoTd>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <p className="text-xs mb-6 flex items-center gap-1.5" style={{ color: "#6060a0" }}>
+                <span style={{ color: "#818cf8" }}>→</span>
+                Selecciona tu comunidad en la calculadora para ver tu resultado exacto
+              </p>
+
               <div className="flex flex-col gap-4 text-base leading-relaxed" style={{ color: "#c0c0d8" }}>
                 <p>
                   El IRPF en España se divide en dos mitades: una parte estatal, igual para todos los contribuyentes, y una parte autonómica, que cada comunidad fija de forma independiente. Esto significa que dos personas con exactamente el mismo salario bruto y la misma situación familiar pueden recibir netos distintos dependiendo de dónde vivan.
@@ -660,6 +704,30 @@ export default function HomePage() {
 
         <SiteFooter year={currentYear} />
       </div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebApplication",
+            "name": "Calculadora de Nómina 2026",
+            "url": "https://calculadoranomina.org",
+            "applicationCategory": "FinanceApplication",
+            "operatingSystem": "Web",
+            "description": "Calculadora de salario bruto a neto con IRPF y Seguridad Social 2026. Calcula tu nómina exacta por comunidad autónoma y situación familiar.",
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "EUR"
+            },
+            "inLanguage": "es-ES",
+            "author": {
+              "@type": "Person",
+              "name": "Alex Cebolla Pardo"
+            }
+          })
+        }}
+      />
     </main>
   );
 }
