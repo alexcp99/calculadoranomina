@@ -23,6 +23,7 @@ const NAV_LINKS = [
   { href: "/", label: "Calculadora" },
   { href: "/blog", label: "Blog" },
   { href: "/metodologia", label: "Metodología" },
+  { href: "/sobre-nosotros", label: "Sobre nosotros" },
 ];
 
 export default function Navbar() {
@@ -159,8 +160,8 @@ export default function Navbar() {
             </div>
           </div>
 
-          {/* Blog + Metodología */}
-          {[{ href: "/blog", label: "Blog" }, { href: "/metodologia", label: "Metodología" }].map(({ href, label }) => {
+          {/* Blog + Metodología + Sobre nosotros */}
+          {[{ href: "/blog", label: "Blog" }, { href: "/metodologia", label: "Metodología" }, { href: "/sobre-nosotros", label: "Sobre nosotros" }].map(({ href, label }) => {
             const active = isActive(href);
             return (
               <Link
