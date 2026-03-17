@@ -977,33 +977,54 @@ export default function Calculator() {
             </div>
 
             {/* ── Summary + personalizar — order-4 ── */}
-            <div className="order-4 flex flex-col gap-2">
-              <p className="text-xs" style={{ color: "#4a4a6a" }}>
-                Calculando para:{" "}
-                <span style={{ color: "#7c7ca0" }}>{summaryLine}</span>
-              </p>
-              <button
-                type="button"
-                onClick={() => setShowAdvanced((v) => !v)}
-                className="flex items-center gap-2 self-start text-xs font-medium rounded-lg px-3 py-2 transition-all duration-200"
+            <div className="order-4 flex flex-col gap-3">
+              {/* Summary line */}
+              <div
+                className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs"
                 style={{
-                  background: showAdvanced ? "rgba(99,102,241,0.12)" : "rgba(255,255,255,0.05)",
-                  border: `1px solid ${showAdvanced ? "rgba(99,102,241,0.35)" : "rgba(255,255,255,0.09)"}`,
-                  color: showAdvanced ? "#a5b4fc" : "#7c7ca0",
+                  background: "rgba(99,102,241,0.06)",
+                  border: "1px solid rgba(99,102,241,0.12)",
+                  color: "#7c7ca0",
                 }}
               >
-                {showAdvanced ? (
-                  <>
-                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M2 2l8 8M10 2l-8 8" /></svg>
-                    Ocultar opciones avanzadas
-                  </>
-                ) : (
-                  <>
-                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="6" cy="6" r="2.5"/><path d="M6 1v1.5M6 9.5V11M1 6h1.5M9.5 6H11M2.6 2.6l1.1 1.1M8.3 8.3l1.1 1.1M9.4 2.6L8.3 3.7M3.7 8.3L2.6 9.4" /></svg>
-                    Personalizar cálculo
-                  </>
-                )}
-              </button>
+                <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="#6366f1" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}><circle cx="6" cy="4.5" r="2"/><path d="M1.5 10.5c0-2.2 2-4 4.5-4s4.5 1.8 4.5 4"/></svg>
+                <span>Calculando para: <span style={{ color: "#a0a0c0" }}>{summaryLine}</span></span>
+              </div>
+
+              {/* Personalizar button */}
+              {!showAdvanced ? (
+                <button
+                  type="button"
+                  onClick={() => setShowAdvanced(true)}
+                  className="flex items-center justify-center gap-2 w-full rounded-xl text-sm font-semibold transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
+                  style={{
+                    padding: "10px 16px",
+                    background: "linear-gradient(135deg, rgba(99,102,241,0.22) 0%, rgba(129,140,248,0.15) 100%)",
+                    border: "1px solid rgba(99,102,241,0.45)",
+                    color: "#a5b4fc",
+                    boxShadow: "0 2px 12px rgba(99,102,241,0.15)",
+                  }}
+                >
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="7" cy="7" r="2.8"/><path d="M7 1v1.8M7 11.2V13M1 7h1.8M11.2 7H13M2.9 2.9l1.3 1.3M9.8 9.8l1.3 1.3M11.1 2.9L9.8 4.2M4.2 9.8L2.9 11.1" /></svg>
+                  Personalizar cálculo
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><path d="M3 6h6M7 4l2 2-2 2" /></svg>
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setShowAdvanced(false)}
+                  className="flex items-center justify-center gap-2 w-full rounded-xl text-xs font-medium transition-all duration-200 hover:opacity-80"
+                  style={{
+                    padding: "8px 14px",
+                    background: "rgba(255,255,255,0.04)",
+                    border: "1px solid rgba(255,255,255,0.08)",
+                    color: "#5a5a80",
+                  }}
+                >
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M2 5h6M5 2l3 3-3 3" style={{ transform: "rotate(90deg)", transformOrigin: "5px 5px" }} /></svg>
+                  Ocultar opciones avanzadas
+                </button>
+              )}
             </div>
 
             {/* ══════════ Advanced fields wrapper — order-5 ══════════ */}

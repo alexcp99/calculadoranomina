@@ -134,7 +134,7 @@ export default function HomePage() {
                     {/* Neto — número principal */}
                     <div>
                       <div
-                        className="font-syne font-extrabold leading-none"
+                        className="font-syne font-extrabold leading-none whitespace-nowrap"
                         style={{ fontSize: "clamp(1.4rem, 3.5vw, 1.75rem)", color: "#f0f0ff" }}
                       >
                         {c.neto}
