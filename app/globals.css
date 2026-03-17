@@ -195,6 +195,31 @@ input[type="number"] {
   display: inline-block;
 }
 
+/* ─── Blog card v2 (redesigned blog page) ───────────────────────────────────── */
+.blog-card-v2 {
+  background: rgba(15,15,30,0.8);
+  border: 1px solid rgba(99,102,241,0.15);
+  transition: border-color 0.22s, box-shadow 0.25s, transform 0.22s;
+}
+.blog-card-v2:hover {
+  border-color: rgba(99,102,241,0.45);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.45), 0 0 0 1px rgba(99,102,241,0.18), 0 0 40px rgba(99,102,241,0.06);
+  transform: translateY(-2px);
+}
+.blog-card-v2-arrow {
+  transition: transform 0.2s;
+}
+.blog-card-v2:hover .blog-card-v2-arrow {
+  transform: translateX(3px);
+}
+
+/* ─── Salary chip hover ──────────────────────────────────────────────────────── */
+.salary-chip:hover {
+  background: rgba(99,102,241,0.18) !important;
+  border-color: rgba(99,102,241,0.4) !important;
+  color: #a5b4fc !important;
+}
+
 /* ─── Blog prose ─────────────────────────────────────────────────────────────── */
 .blog-prose h2 {
   font-family: var(--font-syne), sans-serif;
