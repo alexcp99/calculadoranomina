@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { Syne, DM_Sans } from "next/font/google";
-import Script from "next/script";
 import StructuredData from "./structured-data";
 import Navbar from "@/components/Navbar";
+import CookieBanner from "@/components/CookieBanner";
+import CookieSettings from "@/components/CookieSettings";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 import "./globals.css";
 
 const syne = Syne({
@@ -96,22 +98,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="es" className={`${syne.variable} ${dmSans.variable}`}>
       <head>
         <StructuredData />
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-JXB1C0F6ET"
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-JXB1C0F6ET');
-          `}
-        </Script>
       </head>
       <body>
         <Navbar />
         {children}
+        <CookieBanner />
+        <CookieSettings />
+        <GoogleAnalytics />
       </body>
     </html>
   );
