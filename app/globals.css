@@ -115,6 +115,15 @@ input[type="number"] {
   background: rgba(99, 102, 241, 0.05);
 }
 
+/* ─── SEO table link ─────────────────────────────────────────────────────────── */
+.seo-table-link {
+  color: #818cf8;
+  transition: color 0.15s;
+}
+.seo-table-link:hover {
+  color: #a5b4fc;
+}
+
 /* ─── Salary quick card hover ───────────────────────────────────────────────── */
 .salary-quick-card:hover {
   border-color: rgba(99, 102, 241, 0.3);
