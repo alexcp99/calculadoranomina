@@ -5,10 +5,16 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 
 const SALARY_LINKS = [
+  { slug: "15000", label: "15.000€ brutos en neto", neto: "1.221€/mes" },
   { slug: "20000", label: "20.000€ brutos en neto", neto: "1.575€/mes" },
+  { slug: "22000", label: "22.000€ brutos en neto", neto: "1.693€/mes" },
+  { slug: "24000", label: "24.000€ brutos en neto", neto: "1.820€/mes" },
   { slug: "25000", label: "25.000€ brutos en neto", neto: "1.911€/mes" },
+  { slug: "28000", label: "28.000€ brutos en neto", neto: "2.107€/mes" },
   { slug: "30000", label: "30.000€ brutos en neto", neto: "2.274€/mes" },
+  { slug: "35000", label: "35.000€ brutos en neto", neto: "2.520€/mes" },
   { slug: "40000", label: "40.000€ brutos en neto", neto: "2.876€/mes" },
+  { slug: "45000", label: "45.000€ brutos en neto", neto: "3.145€/mes" },
   { slug: "50000", label: "50.000€ brutos en neto", neto: "3.414€/mes" },
 ];
 
@@ -133,7 +139,7 @@ export default function Navbar() {
                   boxShadow: "0 20px 40px rgba(0,0,0,0.6)",
                 }}
               >
-              <div className="p-1.5">
+              <div className="p-1.5 max-h-72 overflow-y-auto">
                 {SALARY_LINKS.map((s) => (
                   <Link
                     key={s.slug}

@@ -32,10 +32,16 @@ export default function SiteFooter({ year }: { year?: number }) {
               </p>
               <ul className="flex flex-col gap-2">
                 {[
+                  { slug: "15000", label: "15.000€ brutos en neto" },
                   { slug: "20000", label: "20.000€ brutos en neto" },
+                  { slug: "22000", label: "22.000€ brutos en neto" },
+                  { slug: "24000", label: "24.000€ brutos en neto" },
                   { slug: "25000", label: "25.000€ brutos en neto" },
+                  { slug: "28000", label: "28.000€ brutos en neto" },
                   { slug: "30000", label: "30.000€ brutos en neto" },
+                  { slug: "35000", label: "35.000€ brutos en neto" },
                   { slug: "40000", label: "40.000€ brutos en neto" },
+                  { slug: "45000", label: "45.000€ brutos en neto" },
                   { slug: "50000", label: "50.000€ brutos en neto" },
                 ].map(({ slug, label }) => (
                   <li key={slug}>

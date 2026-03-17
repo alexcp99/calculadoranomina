@@ -6,10 +6,16 @@ import SeoFaqAccordion from "@/components/SeoFaqAccordion";
 // ─── Salary cards data ────────────────────────────────────────────────────────
 
 const SALARY_CARDS = [
+  { slug: "15000", bruto: "15.000 €", neto: "1.221 €", irpf: "3,2 %",  accent: "#38bdf8", accentSoft: "rgba(56,189,248,0.15)"  },
   { slug: "20000", bruto: "20.000 €", neto: "1.575 €", irpf: "9,8 %",  accent: "#6366f1", accentSoft: "rgba(99,102,241,0.15)"  },
+  { slug: "22000", bruto: "22.000 €", neto: "1.693 €", irpf: "11,8 %", accent: "#6d7cf4", accentSoft: "rgba(109,124,244,0.15)" },
+  { slug: "24000", bruto: "24.000 €", neto: "1.820 €", irpf: "13,0 %", accent: "#7b87f6", accentSoft: "rgba(123,135,246,0.15)" },
   { slug: "25000", bruto: "25.000 €", neto: "1.911 €", irpf: "13,7 %", accent: "#818cf8", accentSoft: "rgba(129,140,248,0.15)" },
+  { slug: "28000", bruto: "28.000 €", neto: "2.107 €", irpf: "16,1 %", accent: "#9a84fb", accentSoft: "rgba(154,132,251,0.15)" },
   { slug: "30000", bruto: "30.000 €", neto: "2.274 €", irpf: "17,7 %", accent: "#a78bfa", accentSoft: "rgba(167,139,250,0.15)" },
+  { slug: "35000", bruto: "35.000 €", neto: "2.520 €", irpf: "20,5 %", accent: "#b48bfb", accentSoft: "rgba(180,139,251,0.15)" },
   { slug: "40000", bruto: "40.000 €", neto: "2.876 €", irpf: "22,1 %", accent: "#c084fc", accentSoft: "rgba(192,132,252,0.15)" },
+  { slug: "45000", bruto: "45.000 €", neto: "3.145 €", irpf: "23,8 %", accent: "#d47dfd", accentSoft: "rgba(212,125,253,0.15)" },
   { slug: "50000", bruto: "50.000 €", neto: "3.414 €", irpf: "25,1 %", accent: "#e879f9", accentSoft: "rgba(232,121,249,0.15)" },
 ];
 
@@ -188,7 +194,7 @@ export default function HomePage() {
                 Neto mensual en Madrid · Soltero/a sin hijos · 2026
               </p>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3">
               {SALARY_CARDS.map((c) => (
                 <Link
                   key={c.slug}
