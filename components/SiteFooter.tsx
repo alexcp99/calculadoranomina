@@ -98,12 +98,7 @@ export default function SiteFooter({ year }: { year?: number }) {
               <ul className="flex flex-col gap-2">
                 <li>
                   <Link href="/aviso-legal" className="text-xs hover:underline" style={{ color: "#a0a0c0" }}>
-                    Aviso legal
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/aviso-legal" className="text-xs hover:underline" style={{ color: "#a0a0c0" }}>
-                    Términos de uso
+                    Aviso legal y términos
                   </Link>
                 </li>
                 <li>

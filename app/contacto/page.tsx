@@ -7,6 +7,12 @@ export const metadata: Metadata = {
   description:
     "Contacta con el equipo de Calculadora de Nómina para reportar errores, sugerencias o consultas sobre metodología. Respondemos en 48–72 horas.",
   alternates: { canonical: "https://calculadoranomina.org/contacto" },
+  openGraph: {
+    title: "Contacto — Calculadora de Nómina",
+    description: "Reporta errores, envía sugerencias o consulta sobre la metodología de cálculo. Respondemos en 48–72 horas.",
+    url: "https://calculadoranomina.org/contacto",
+    type: "website",
+  },
 };
 
 export default function ContactoPage() {
@@ -25,11 +31,11 @@ export default function ContactoPage() {
           <div className="max-w-xl mx-auto">
 
             {/* Breadcrumb */}
-            <nav className="flex items-center gap-2 text-xs mb-8" style={{ color: "#4a4a6a" }}>
+            <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs mb-8" style={{ color: "#4a4a6a" }}>
               <Link href="/" className="hover:underline" style={{ color: "#818CF8" }}>
                 Inicio
               </Link>
-              <span>/</span>
+              <span aria-hidden="true">/</span>
               <span style={{ color: "#7c7ca0" }}>Contacto</span>
             </nav>
 
