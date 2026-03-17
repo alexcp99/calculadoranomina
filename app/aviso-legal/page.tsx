@@ -21,9 +21,9 @@ export default function AvisoLegalPage() {
           <div className="max-w-2xl mx-auto">
 
             {/* Breadcrumb */}
-            <nav className="flex items-center gap-2 text-xs mb-8" style={{ color: "#4a4a6a" }}>
+            <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs mb-8" style={{ color: "#4a4a6a" }}>
               <Link href="/" style={{ color: "#818CF8" }} className="hover:underline">Inicio</Link>
-              <span>/</span>
+              <span aria-hidden="true">/</span>
               <span style={{ color: "#7c7ca0" }}>Aviso legal</span>
             </nav>
 

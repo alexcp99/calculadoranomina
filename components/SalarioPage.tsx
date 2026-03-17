@@ -83,8 +83,22 @@ function Td({ children, highlight }: { children: React.ReactNode; highlight?: bo
 export default function SalarioPage({ data }: { data: SalarioData }) {
   const otherSalarios = ALL_SALARIOS.filter((s) => s.slug !== data.slug);
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: data.faq.map(({ q, a }) => ({
+      "@type": "Question",
+      name: q,
+      acceptedAnswer: { "@type": "Answer", text: a },
+    })),
+  };
+
   return (
     <main className="min-h-screen" style={{ background: "#080810" }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Gradient */}
       <div
         className="fixed inset-0 pointer-events-none"
@@ -100,11 +114,11 @@ export default function SalarioPage({ data }: { data: SalarioData }) {
           <div className="max-w-3xl mx-auto">
 
             {/* Breadcrumb */}
-            <nav className="flex items-center gap-2 text-xs mb-8 flex-wrap" style={{ color: "#4a4a6a" }}>
+            <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs mb-8 flex-wrap" style={{ color: "#4a4a6a" }}>
               <Link href="/" className="hover:underline" style={{ color: "#818CF8" }}>Inicio</Link>
-              <span>/</span>
+              <span aria-hidden="true">/</span>
               <Link href="/" className="hover:underline" style={{ color: "#818CF8" }}>Calculadora</Link>
-              <span>/</span>
+              <span aria-hidden="true">/</span>
               <span style={{ color: "#7c7ca0" }}>{data.brutoLabel}€ brutos en neto</span>
             </nav>
 

@@ -114,15 +114,15 @@ export default async function BlogPostPage({
           <div className="max-w-2xl mx-auto">
 
             {/* Breadcrumb */}
-            <nav className="flex items-center gap-2 text-xs mb-8 flex-wrap" style={{ color: "#4a4a6a" }}>
+            <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs mb-8 flex-wrap" style={{ color: "#4a4a6a" }}>
               <Link href="/" className="hover:underline" style={{ color: "#818CF8" }}>
                 Inicio
               </Link>
-              <span>/</span>
+              <span aria-hidden="true">/</span>
               <Link href="/blog" className="hover:underline" style={{ color: "#818CF8" }}>
                 Blog
               </Link>
-              <span>/</span>
+              <span aria-hidden="true">/</span>
               <span
                 className="truncate max-w-[180px]"
                 style={{ color: "#7c7ca0" }}

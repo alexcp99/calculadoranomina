@@ -72,6 +72,8 @@ export default function FaqAccordion() {
             <button
               type="button"
               onClick={() => setOpen(isOpen ? null : i)}
+              aria-expanded={isOpen}
+              aria-controls={`faq-answer-${i}`}
               className="w-full flex items-start justify-between gap-4 text-left px-5 py-4"
             >
               <span
@@ -89,6 +91,7 @@ export default function FaqAccordion() {
                 strokeWidth="2"
                 strokeLinecap="round"
                 className="shrink-0 mt-0.5"
+                aria-hidden="true"
                 style={{
                   color: "#818cf8",
                   transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
@@ -100,7 +103,7 @@ export default function FaqAccordion() {
             </button>
 
             {isOpen && (
-              <div className="px-5 pb-5">
+              <div id={`faq-answer-${i}`} className="px-5 pb-5">
                 <div
                   className="h-px mb-4"
                   style={{ background: "rgba(99,102,241,0.15)" }}
