@@ -214,7 +214,7 @@ export default function HomePage() {
                     <div>
                       <div
                         className="font-syne font-extrabold leading-none whitespace-nowrap"
-                        style={{ fontSize: "clamp(1.4rem, 3.5vw, 1.75rem)", color: "#f0f0ff" }}
+                        style={{ fontSize: "clamp(1rem, 2.5vw, 1.3rem)", color: "#f0f0ff" }}
                       >
                         {c.neto}
                       </div>

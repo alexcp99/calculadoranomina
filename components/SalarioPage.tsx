@@ -27,9 +27,9 @@ function StatCard({
         {label}
       </span>
       <span
-        className="font-syne font-extrabold leading-tight break-all"
+        className="font-syne font-extrabold leading-tight whitespace-nowrap"
         style={{
-          fontSize: "clamp(1.1rem, 2.8vw, 1.55rem)",
+          fontSize: "clamp(0.9rem, 2.2vw, 1.25rem)",
           color: accent ? "#34d399" : "#e0e0ff",
         }}
       >
