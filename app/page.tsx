@@ -269,19 +269,7 @@ export default function HomePage() {
                     <Link
                       key={post.slug}
                       href={`/blog/${post.slug}`}
-                      className="group flex flex-col rounded-2xl p-5 transition-all duration-200"
-                      style={{
-                        background: "rgba(99,102,241,0.05)",
-                        border: "1px solid rgba(255,255,255,0.08)",
-                      }}
-                      onMouseEnter={(e) => {
-                        (e.currentTarget as HTMLElement).style.borderColor = "rgba(99,102,241,0.35)";
-                        (e.currentTarget as HTMLElement).style.background = "rgba(99,102,241,0.09)";
-                      }}
-                      onMouseLeave={(e) => {
-                        (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.08)";
-                        (e.currentTarget as HTMLElement).style.background = "rgba(99,102,241,0.05)";
-                      }}
+                      className="group home-blog-card flex flex-col rounded-2xl p-5 transition-all duration-200"
                     >
                       {/* Keywords */}
                       {post.keywords.length > 0 && (

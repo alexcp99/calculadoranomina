@@ -145,6 +145,16 @@ input[type="number"] {
   transform: translateX(3px);
 }
 
+/* ─── Home blog card ─────────────────────────────────────────────────────────── */
+.home-blog-card {
+  background: rgba(99,102,241,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.home-blog-card:hover {
+  border-color: rgba(99,102,241,0.35);
+  background: rgba(99,102,241,0.09);
+}
+
 /* ─── SEO table link ─────────────────────────────────────────────────────────── */
 .seo-table-link {
   color: #818cf8;
