@@ -98,24 +98,26 @@ function SeoSectionDivider() {
 // ─── IRPF data with bar widths ────────────────────────────────────────────────
 
 const IRPF_TRAMOS = [
-  { rango: "Hasta 12.450 €",        tipo: "9,50%",  pct: 9.5,  bar: 39 },
-  { rango: "12.450 € – 20.200 €",   tipo: "12,00%", pct: 12.0, bar: 49 },
-  { rango: "20.200 € – 35.200 €",   tipo: "15,00%", pct: 15.0, bar: 61 },
-  { rango: "35.200 € – 60.000 €",   tipo: "18,50%", pct: 18.5, bar: 76 },
-  { rango: "60.000 € – 300.000 €",  tipo: "22,50%", pct: 22.5, bar: 92 },
-  { rango: "Más de 300.000 €",       tipo: "24,50%", pct: 24.5, bar: 100 },
+  { rango: "Hasta 12.450 €",        tipo: "9,50%",  bar: 39,  color: "#34d399" },
+  { rango: "12.450 € – 20.200 €",   tipo: "12,00%", bar: 49,  color: "#6ee7b7" },
+  { rango: "20.200 € – 35.200 €",   tipo: "15,00%", bar: 61,  color: "#818cf8" },
+  { rango: "35.200 € – 60.000 €",   tipo: "18,50%", bar: 76,  color: "#a78bfa" },
+  { rango: "60.000 € – 300.000 €",  tipo: "22,50%", bar: 92,  color: "#f87171" },
+  { rango: "Más de 300.000 €",       tipo: "24,50%", bar: 100, color: "#ef4444" },
 ];
 
-// Interpolates green→yellow→red based on 0–100
-function barColor(pct: number): string {
-  const t = pct / 100;
-  if (t < 0.5) {
-    const g = Math.round(52 + (211 - 52) * (1 - t * 2));
-    return `rgba(52,${g},153,0.7)`;
-  }
-  const r = Math.round(52 + (248 - 52) * ((t - 0.5) * 2));
-  return `rgba(${r},113,113,0.75)`;
-}
+const SEO_SALARY_TABLE = [
+  { bruto: "15.000 €",  neto: "1.221 €/mes", slug: "15000",  color: "#38bdf8" },
+  { bruto: "20.000 €",  neto: "1.575 €/mes", slug: "20000",  color: "#6366f1" },
+  { bruto: "25.000 €",  neto: "1.911 €/mes", slug: "25000",  color: "#818cf8" },
+  { bruto: "30.000 €",  neto: "2.274 €/mes", slug: "30000",  color: "#a78bfa" },
+  { bruto: "35.000 €",  neto: "2.520 €/mes", slug: "35000",  color: "#b48bfb" },
+  { bruto: "40.000 €",  neto: "2.876 €/mes", slug: "40000",  color: "#c084fc" },
+  { bruto: "50.000 €",  neto: "3.414 €/mes", slug: "50000",  color: "#e879f9" },
+  { bruto: "60.000 €",  neto: "3.795 €/mes", slug: "60000",  color: "#f472d0" },
+  { bruto: "80.000 €",  neto: "4.740 €/mes", slug: "80000",  color: "#f86f9e" },
+  { bruto: "100.000 €", neto: "5.631 €/mes", slug: "100000", color: "#fb7185" },
+];
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
@@ -171,18 +173,18 @@ export default function HomePage() {
 
           <p
             className="hidden md:block text-sm max-w-2xl mx-auto leading-relaxed"
-            style={{ color: "#4a4a6a" }}
+            style={{ color: "#9090b8" }}
           >
             Calcula al instante cuánto cobras en neto aplicando los{" "}
-            <strong style={{ color: "#5a5a80", fontWeight: 600 }}>tramos del IRPF 2026</strong>{" "}
+            <strong style={{ color: "#c0c0e0", fontWeight: 600 }}>tramos del IRPF 2026</strong>{" "}
             y las cotizaciones a la{" "}
-            <strong style={{ color: "#5a5a80", fontWeight: 600 }}>Seguridad Social</strong>.
+            <strong style={{ color: "#c0c0e0", fontWeight: 600 }}>Seguridad Social</strong>.
             Introduce tu{" "}
-            <strong style={{ color: "#5a5a80", fontWeight: 600 }}>salario bruto anual o mensual</strong>{" "}
+            <strong style={{ color: "#c0c0e0", fontWeight: 600 }}>salario bruto anual o mensual</strong>{" "}
             y obtén el{" "}
-            <strong style={{ color: "#5a5a80", fontWeight: 600 }}>salario neto</strong>{" "}
+            <strong style={{ color: "#c0c0e0", fontWeight: 600 }}>salario neto</strong>{" "}
             exacto según las tablas oficiales de la AEAT para España. Selecciona tu comunidad autónoma entre las{" "}
-            <strong style={{ color: "#5a5a80", fontWeight: 600 }}>19 CCAA disponibles</strong>{" "}
+            <strong style={{ color: "#c0c0e0", fontWeight: 600 }}>19 CCAA disponibles</strong>{" "}
             — porque el mismo bruto da distinto neto en Madrid que en Cataluña. También funciona al revés:
             indica el neto deseado y te calculamos el bruto necesario.
           </p>
@@ -510,13 +512,13 @@ export default function HomePage() {
                     {IRPF_TRAMOS.map((row, i) => (
                       <tr key={i}>
                         <SeoTd>{row.rango}</SeoTd>
-                        <td className="px-4 py-3 text-sm font-semibold" style={{ color: barColor(row.bar), borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+                        <td className="px-4 py-3 text-sm font-bold tabnum" style={{ color: row.color, borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
                           {row.tipo}
                         </td>
                         <td className="px-4 py-3" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)", minWidth: 100 }}>
                           <div className="flex items-center gap-2">
                             <div className="flex-1 rounded-full overflow-hidden" style={{ height: 6, background: "rgba(255,255,255,0.06)" }}>
-                              <div style={{ width: `${row.bar}%`, height: "100%", background: barColor(row.bar), borderRadius: 9999, transition: "width 0.3s" }} />
+                              <div style={{ width: `${row.bar}%`, height: "100%", background: row.color, borderRadius: 9999, opacity: 0.75 }} />
                             </div>
                           </div>
                         </td>
@@ -568,28 +570,17 @@ export default function HomePage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {[
-                      { bruto: "15.000 €", neto: "1.221 €/mes", slug: "15000" },
-                      { bruto: "20.000 €", neto: "1.575 €/mes", slug: "20000" },
-                      { bruto: "25.000 €", neto: "1.911 €/mes", slug: "25000" },
-                      { bruto: "30.000 €", neto: "2.274 €/mes", slug: "30000" },
-                      { bruto: "35.000 €", neto: "2.520 €/mes", slug: "35000" },
-                      { bruto: "40.000 €", neto: "2.876 €/mes", slug: "40000" },
-                      { bruto: "50.000 €", neto: "3.414 €/mes", slug: "50000" },
-                      { bruto: "60.000 €", neto: "3.795 €/mes", slug: "60000" },
-                      { bruto: "80.000 €", neto: "4.740 €/mes", slug: "80000" },
-                      { bruto: "100.000 €", neto: "5.631 €/mes", slug: "100000" },
-                    ].map((row) => (
+                    {SEO_SALARY_TABLE.map((row) => (
                       <tr key={row.slug} className="seo-salary-row">
                         <SeoTd highlight>{row.bruto}</SeoTd>
-                        <td className="px-4 py-3 text-sm font-bold" style={{ color: "#34d399", borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+                        <td className="px-4 py-3 text-sm font-bold tabnum" style={{ color: row.color, borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
                           {row.neto}
                         </td>
                         <td className="px-4 py-3" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
                           <Link
                             href={`/cuanto-es-${row.slug}-euros-brutos-neto`}
                             className="inline-flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-medium transition-all duration-150 seo-table-link"
-                            style={{ border: "1px solid rgba(99,102,241,0.35)", background: "rgba(99,102,241,0.08)" }}
+                            style={{ border: `1px solid ${row.color}40`, background: `${row.color}12`, color: row.color }}
                           >
                             Ver desglose →
                           </Link>

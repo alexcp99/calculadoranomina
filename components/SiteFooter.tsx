@@ -54,7 +54,7 @@ export default function SiteFooter({ year }: { year?: number }) {
                   <Link
                     key={slug}
                     href={`/cuanto-es-${slug}-euros-brutos-neto`}
-                    className="text-xs hover:underline"
+                    className="text-xs hover:underline block"
                     style={{ color: "#a0a0c0" }}
                   >
                     {label}
