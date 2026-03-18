@@ -86,6 +86,20 @@ const FAQ_JSON_LD = {
 
 // ─── Static data (defined before return to avoid build issues) ─────────────────
 
+const QUICK_REF = [
+  { salary: "20.000 €", pct: "9,8%",  color: "#34d399", bg: "rgba(52,211,153,0.08)"  },
+  { salary: "30.000 €", pct: "17,7%", color: "#818cf8", bg: "rgba(99,102,241,0.10)"  },
+  { salary: "40.000 €", pct: "22,1%", color: "#a78bfa", bg: "rgba(167,139,250,0.10)" },
+  { salary: "50.000 €", pct: "25,1%", color: "#f87171", bg: "rgba(248,113,113,0.08)" },
+];
+
+const FEATURE_CHIPS = [
+  { icon: "🗺️", text: "19 Comunidades Autónomas" },
+  { icon: "👨‍👩‍👦", text: "Situación familiar"       },
+  { icon: "♿",  text: "Discapacidad y edad"       },
+  { icon: "📋", text: "Datos AEAT 2026"            },
+];
+
 const IRPF_TRAMOS = [
   { tramo: "1º", desde: "0 €",        hasta: "12.450 €",   tipo: "19%", bar: 40,  color: "#34d399" },
   { tramo: "2º", desde: "12.450 €",   hasta: "20.200 €",   tipo: "24%", bar: 51,  color: "#6ee7b7" },
@@ -221,22 +235,76 @@ export default function CalculadoraRetencionPage() {
             <p className="text-sm md:text-base leading-relaxed" style={{ color: "#7c7ca0" }}>
               Descubre qué porcentaje te retiene Hacienda según tu salario, situación familiar y comunidad autónoma. Datos oficiales AEAT 2026.
             </p>
+
+            {/* Feature chips */}
+            <div className="flex flex-wrap gap-2 mt-5">
+              {FEATURE_CHIPS.map(({ icon, text }) => (
+                <span
+                  key={text}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium"
+                  style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.09)", color: "#9090b8" }}
+                >
+                  <span>{icon}</span>
+                  {text}
+                </span>
+              ))}
+            </div>
+
+            {/* Quick reference examples */}
+            <div className="mt-5">
+              <p className="text-xs font-medium mb-2" style={{ color: "#4a4a6a" }}>
+                Ejemplos orientativos · Madrid · soltero/a · indefinido
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {QUICK_REF.map(({ salary, pct, color, bg }) => (
+                  <div
+                    key={salary}
+                    className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl"
+                    style={{ background: bg, border: `1px solid ${color}30` }}
+                  >
+                    <span className="text-sm font-medium" style={{ color: "#b0b0c8" }}>{salary}</span>
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden>
+                      <path d="M2 5h6M6 3l2 2-2 2" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                    <span className="font-syne font-bold tabnum text-base leading-none" style={{ color }}>{pct}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </header>
 
         {/* ── Calculator ── */}
-        <section className="px-4 pb-12">
+        <section className="px-4 pb-14">
           <div className="max-w-4xl mx-auto">
+            <div className="flex items-center gap-3 mb-4">
+              <div
+                className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0"
+                style={{ background: "linear-gradient(135deg,#4f52d4,#6366f1)", boxShadow: "0 0 0 1px rgba(99,102,241,0.3)" }}
+              >
+                <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="white" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                  <circle cx="8" cy="8" r="6.5" />
+                  <path d="M5.5 10.5l5-5M6 6h.01M10 10h.01" />
+                </svg>
+              </div>
+              <div>
+                <p className="text-sm font-semibold" style={{ color: "#e0e0ff" }}>Calculadora interactiva</p>
+                <p className="text-xs" style={{ color: "#5a5a80" }}>Introduce tu salario y personaliza según tu situación</p>
+              </div>
+            </div>
             <RetencionCalculator />
           </div>
         </section>
 
         {/* ── C: Tabla tramos IRPF 2026 ── */}
-        <section className="px-4 pb-12 md:pb-14">
-          <div className="max-w-3xl mx-auto">
-            <h2 className="font-syne font-bold mb-2" style={{ fontSize: "clamp(1.2rem, 3vw, 1.5rem)", color: "#f0f0ff" }}>
-              Tramos del IRPF 2026
-            </h2>
+        <section className="px-4 pb-12 md:pb-14" style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}>
+          <div className="max-w-3xl mx-auto pt-10 md:pt-12">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="inline-flex items-center justify-center w-5 h-5 rounded-md text-xs font-bold" style={{ background: "rgba(99,102,241,0.2)", color: "#a5b4fc" }}>%</span>
+              <h2 className="font-syne font-bold" style={{ fontSize: "clamp(1.2rem, 3vw, 1.5rem)", color: "#f0f0ff" }}>
+                Tramos del IRPF 2026
+              </h2>
+            </div>
             <p className="text-sm mb-6" style={{ color: "#7c7ca0" }}>
               Escala general estatal + autonómica (tipo consolidado orientativo)
             </p>
@@ -278,8 +346,8 @@ export default function CalculadoraRetencionPage() {
         </section>
 
         {/* ── D: Dos pagadores ── */}
-        <section className="px-4 pb-12 md:pb-14">
-          <div className="max-w-3xl mx-auto">
+        <section className="px-4 pb-12 md:pb-14" style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}>
+          <div className="max-w-3xl mx-auto pt-10 md:pt-12">
             <div
               className="rounded-2xl p-5 md:p-6"
               style={{ background: "rgba(99,102,241,0.07)", border: "1px solid rgba(99,102,241,0.22)" }}
@@ -329,11 +397,14 @@ export default function CalculadoraRetencionPage() {
         </section>
 
         {/* ── E: Cómo calculamos (compact) ── */}
-        <section className="px-4 pb-12 md:pb-14">
-          <div className="max-w-3xl mx-auto">
-            <h2 className="font-syne font-bold mb-1.5" style={{ fontSize: "clamp(1.2rem, 3vw, 1.5rem)", color: "#f0f0ff" }}>
-              Cómo calculamos la retención
-            </h2>
+        <section className="px-4 pb-12 md:pb-14" style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}>
+          <div className="max-w-3xl mx-auto pt-10 md:pt-12">
+            <div className="flex items-center gap-2 mb-1.5">
+              <span className="inline-flex items-center justify-center w-5 h-5 rounded-md text-xs font-bold" style={{ background: "rgba(99,102,241,0.2)", color: "#a5b4fc" }}>∑</span>
+              <h2 className="font-syne font-bold" style={{ fontSize: "clamp(1.2rem, 3vw, 1.5rem)", color: "#f0f0ff" }}>
+                Cómo calculamos la retención
+              </h2>
+            </div>
             <p className="text-sm mb-6" style={{ color: "#7c7ca0" }}>
               Procedimiento oficial AEAT (Arts. 82–87 RIRPF):
             </p>

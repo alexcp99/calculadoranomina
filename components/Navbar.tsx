@@ -47,6 +47,12 @@ const SAL_COL2 = ALL_SALARIES.slice(6, 12);  // 25k – 40k
 const SAL_COL3 = ALL_SALARIES.slice(12, 18); // 45k – 100k
 const ALL_SALARY_SLUGS = ALL_SALARIES.map((s) => s.slug);
 
+const SAL_GROUPS = [
+  { label: "Bajos  ·  15k – 24k",  col: SAL_COL1 },
+  { label: "Medios  ·  25k – 40k", col: SAL_COL2 },
+  { label: "Altos  ·  45k – 100k", col: SAL_COL3 },
+];
+
 const NAV_SIMPLE = [
   { href: "/blog",           label: "Blog"          },
   { href: "/metodologia",    label: "Metodología"   },
@@ -250,12 +256,18 @@ export default function Navbar() {
             >
               <div className="rounded-xl overflow-hidden" style={dropPanel}>
                 <div className="p-3">
-                  <p className="text-xs font-semibold uppercase tracking-wider px-1 pb-2" style={{ color: "#4a4a6a" }}>
+                  <p className="text-xs font-semibold uppercase tracking-wider px-1 pb-2" style={{ color: "#5a5a80" }}>
                     ¿Cuánto cobro con...?
                   </p>
-                  <div className="grid grid-cols-3 gap-x-0.5">
-                    {[SAL_COL1, SAL_COL2, SAL_COL3].map((col, ci) => (
-                      <div key={ci}>
+                  <div className="grid grid-cols-3">
+                    {SAL_GROUPS.map(({ label, col }, ci) => (
+                      <div
+                        key={ci}
+                        style={{ borderLeft: ci > 0 ? "1px solid rgba(255,255,255,0.07)" : "none", paddingLeft: ci > 0 ? 4 : 0 }}
+                      >
+                        <p className="text-xs px-2 pt-1 pb-2 font-semibold uppercase tracking-wider leading-none" style={{ color: "#3d3d60" }}>
+                          {label}
+                        </p>
                         {col.map((s) => {
                           const active = pathname === `/cuanto-es-${s.slug}-euros-brutos-neto`;
                           return (
@@ -390,23 +402,30 @@ export default function Navbar() {
             style={{ maxHeight: mobileSalOpen ? "320px" : "0px", borderBottom: mobileSalOpen ? "1px solid rgba(255,255,255,0.05)" : "none" }}
           >
             <div className="overflow-y-auto" style={{ maxHeight: "320px" }}>
-              <p className="text-xs font-semibold uppercase tracking-wider pl-6 pr-3 pt-2 pb-1" style={{ color: "#4a4a6a" }}>
-                ¿Cuánto cobro con...?
-              </p>
-              {ALL_SALARIES.map((s) => {
-                const active = pathname === `/cuanto-es-${s.slug}-euros-brutos-neto`;
-                return (
-                  <Link
-                    key={s.slug}
-                    href={`/cuanto-es-${s.slug}-euros-brutos-neto`}
-                    className="flex items-center justify-between pl-6 pr-3 py-2.5 text-sm transition-colors"
-                    style={{ color: active ? "#e0e0ff" : "#7c7ca0", borderBottom: "1px solid rgba(255,255,255,0.03)" }}
+              {SAL_GROUPS.map(({ label, col }, gi) => (
+                <div key={gi}>
+                  <p
+                    className="text-xs font-semibold uppercase tracking-wider pl-6 pr-3 pt-3 pb-1"
+                    style={{ color: "#4a4a6a", borderTop: gi > 0 ? "1px solid rgba(255,255,255,0.05)" : "none" }}
                   >
-                    <span>{s.label} brutos</span>
-                    <span className="text-xs tabnum" style={{ color: "#34d399" }}>{s.neto}/mes</span>
-                  </Link>
-                );
-              })}
+                    {label}
+                  </p>
+                  {col.map((s) => {
+                    const active = pathname === `/cuanto-es-${s.slug}-euros-brutos-neto`;
+                    return (
+                      <Link
+                        key={s.slug}
+                        href={`/cuanto-es-${s.slug}-euros-brutos-neto`}
+                        className="flex items-center justify-between pl-6 pr-3 py-2.5 text-sm transition-colors"
+                        style={{ color: active ? "#e0e0ff" : "#7c7ca0", borderBottom: "1px solid rgba(255,255,255,0.03)" }}
+                      >
+                        <span>{s.label} brutos</span>
+                        <span className="text-xs tabnum" style={{ color: "#34d399" }}>{s.neto}/mes</span>
+                      </Link>
+                    );
+                  })}
+                </div>
+              ))}
             </div>
           </div>
 

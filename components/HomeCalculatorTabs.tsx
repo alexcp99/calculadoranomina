@@ -47,7 +47,7 @@ export default function HomeCalculatorTabs() {
 
       {/* ── Tool selector ── */}
       <div className="flex flex-col items-center gap-1.5">
-        <p className="text-xs font-medium" style={{ color: "#4a4a6a" }}>
+        <p className="text-xs font-medium" style={{ color: "#9090b8" }}>
           Selecciona calculadora
         </p>
         <div

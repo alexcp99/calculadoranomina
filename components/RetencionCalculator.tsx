@@ -11,6 +11,7 @@ import type {
   FamilySituation,
   NumPayments,
   ComunidadAutonoma,
+  Disability,
 } from "@/lib/calculator";
 
 // ─── Formatters ───────────────────────────────────────────────────────────────
@@ -383,6 +384,8 @@ export default function RetencionCalculator() {
   const [situation, setSituation] = useState<FamilySituation>("soltero");
   const [numChildren, setNumChildren] = useState(0);
   const [spouseNoIncome, setSpouseNoIncome] = useState(false);
+  const [ageGroup, setAgeGroup] = useState<35 | 65 | 75>(35);
+  const [disability, setDisability] = useState<Disability>("none");
   const [showAdvanced, setShowAdvanced] = useState(false);
 
   const result = useMemo(() => {
@@ -397,13 +400,13 @@ export default function RetencionCalculator() {
       numChildren,
       childrenUnder3: 0,
       spouseWithoutIncome: situation === "casado" && spouseNoIncome,
-      age: 35,
+      age: ageGroup,
       comunidad,
       numPayments,
-      disability: "none",
+      disability,
       geographicMobility: false,
     });
-  }, [rawInput, period, contract, situation, numChildren, spouseNoIncome, comunidad, numPayments]);
+  }, [rawInput, period, contract, situation, numChildren, spouseNoIncome, ageGroup, disability, comunidad, numPayments]);
 
   const placeholder = period === "anual" ? "30000" : "2500";
   const communityName = COMUNIDADES_LABEL[comunidad] ?? "Madrid";
@@ -624,6 +627,40 @@ export default function RetencionCalculator() {
                         { v: "temporal" as ContractType, l: "Temporal" },
                       ]).map(({ v, l }) => (
                         <Pill key={v} active={contract === v} onClick={() => setContract(v)}>{l}</Pill>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Otros factores */}
+                <div className="flex flex-col gap-4" style={{ borderTop: "1px solid rgba(255,255,255,0.07)", paddingTop: "1.25rem" }}>
+                  <p className="text-sm font-semibold uppercase tracking-wider pl-3" style={{ color: "#e0e0ff", borderLeft: "3px solid rgba(99,102,241,0.7)" }}>
+                    Otros factores
+                  </p>
+
+                  <div>
+                    <Label>Edad</Label>
+                    <div className="grid grid-cols-3 gap-2">
+                      {([
+                        { v: 35 as const, l: "< 65 años",  hint: "Mínimo 5.550 €"  },
+                        { v: 65 as const, l: "65–74 años", hint: "+1.150 €"         },
+                        { v: 75 as const, l: "75+ años",   hint: "+1.400 € más"    },
+                      ]).map(({ v, l }) => (
+                        <Pill key={v} small active={ageGroup === v} onClick={() => setAgeGroup(v)}>{l}</Pill>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <Label>Discapacidad reconocida</Label>
+                    <div className="grid grid-cols-2 gap-2">
+                      {([
+                        { v: "none"            as Disability, l: "Ninguna"       },
+                        { v: "33-65"           as Disability, l: "33–65%"        },
+                        { v: "65plus"          as Disability, l: "+65%"          },
+                        { v: "65plus-mobility" as Disability, l: "+65% movilidad"},
+                      ]).map(({ v, l }) => (
+                        <Pill key={v} small active={disability === v} onClick={() => setDisability(v)}>{l}</Pill>
                       ))}
                     </div>
                   </div>
