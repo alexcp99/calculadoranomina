@@ -1,5 +1,6 @@
+import { Suspense } from "react";
 import Link from "next/link";
-import Calculator from "@/components/Calculator";
+import HomeCalculatorTabs from "@/components/HomeCalculatorTabs";
 import SiteFooter from "@/components/SiteFooter";
 import SeoFaqAccordion from "@/components/SeoFaqAccordion";
 import { getAllPosts } from "@/lib/blog";
@@ -210,7 +211,9 @@ export default function HomePage() {
 
         {/* ── Calculator ── */}
         <section className="w-full flex-1 px-4 pb-8 md:pb-16" aria-label="Calculadora de nómina">
-          <Calculator />
+          <Suspense fallback={<div style={{ minHeight: 400 }} />}>
+            <HomeCalculatorTabs />
+          </Suspense>
         </section>
 
         {/* ── Salary quick links ── */}
@@ -228,29 +231,6 @@ export default function HomePage() {
               </p>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3">
-              {/* Card especial — Calculadora retención IRPF */}
-              <Link
-                href="/calculadora-retencion-irpf"
-                className="salary-quick-card group flex flex-col rounded-2xl overflow-hidden transition-all duration-200 col-span-2 sm:col-span-1"
-                style={{ background: "rgba(13,13,26,0.9)", border: "1px solid rgba(99,102,241,0.25)" }}
-              >
-                <div style={{ height: "3px", background: "linear-gradient(90deg, #6366f1, #818cf8)" }} />
-                <div className="p-4 flex flex-col gap-2.5">
-                  <span className="text-xs font-semibold px-2 py-0.5 rounded-full self-start" style={{ background: "rgba(99,102,241,0.15)", color: "#818cf8" }}>
-                    Nuevo
-                  </span>
-                  <div>
-                    <div className="font-syne font-extrabold leading-none" style={{ fontSize: "clamp(0.85rem, 2vw, 1rem)", color: "#f0f0ff" }}>
-                      Retención IRPF
-                    </div>
-                    <div className="text-xs mt-1 font-medium" style={{ color: "#7c7ca0" }}>¿cuánto te retienen?</div>
-                  </div>
-                  <div className="flex items-center justify-between pt-2" style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}>
-                    <span className="text-xs" style={{ color: "#4a4a6a" }}>calculadora</span>
-                    <span className="text-xs font-semibold" style={{ color: "#818cf8" }}>→</span>
-                  </div>
-                </div>
-              </Link>
               {SALARY_CARDS.map((c) => (
                 <Link
                   key={c.slug}

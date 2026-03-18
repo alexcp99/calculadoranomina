@@ -123,6 +123,62 @@ export default function CalculadoraRetencionPage() {
           </div>
         </section>
 
+        {/* ══ Cómo lo calculamos ══ */}
+        <section className="px-4 pb-14 md:pb-16">
+          <div className="max-w-3xl mx-auto">
+            <h2 className="font-syne font-bold mb-2" style={{ fontSize: "clamp(1.2rem, 3vw, 1.5rem)", color: "#f0f0ff" }}>
+              Cómo calculamos la retención
+            </h2>
+            <p className="text-sm mb-8" style={{ color: "#7c7ca0" }}>
+              El tipo de retención se obtiene siguiendo el procedimiento oficial de la AEAT (Art. 82–87 RIRPF):
+            </p>
+            <ol className="flex flex-col gap-4">
+              {[
+                { n: 1, text: "Salario bruto anual − Cotizaciones SS del trabajador (6,50% contingencias + 1,55% desempleo + 0,10% FP + 0,15% MEI)", sub: "= Rendimiento íntegro del trabajo" },
+                { n: 2, text: "− Gastos deducibles Art. 19 LIRPF (2.000 € fijos para asalariados, hasta 3.500–5.565 € con movilidad geográfica)", sub: "= Rendimiento neto del trabajo" },
+                { n: 3, text: "− Reducción Art. 20 LIRPF para rendimientos bajos (hasta 7.302 € de reducción para rentas ≤ 19.747,50 €)", sub: "= Rendimiento neto reducido" },
+                { n: 4, text: "− Mínimo personal (5.550 €, más por edad o discapacidad) y mínimo familiar (2.400 € primer hijo, etc.)", sub: "= Base de retención IRPF" },
+                { n: 5, text: "Aplicar escala progresiva estatal + autonómica de tu CCAA sobre la base de retención", sub: "= Cuota íntegra anual" },
+                { n: 6, text: "Cuota íntegra anual ÷ Salario bruto anual × 100", sub: "= Tipo de retención aplicable (%)" },
+              ].map(({ n, text, sub }) => (
+                <li key={n} className="flex gap-4">
+                  <div
+                    className="w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold shrink-0 mt-0.5"
+                    style={{ background: "rgba(99,102,241,0.18)", border: "1px solid rgba(99,102,241,0.35)", color: "#a5b4fc" }}
+                  >
+                    {n}
+                  </div>
+                  <div>
+                    <p className="text-sm leading-relaxed" style={{ color: "#c0c0d8" }}>{text}</p>
+                    <p className="text-xs mt-1 font-semibold" style={{ color: "#6366f1" }}>{sub}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+            <div
+              className="mt-8 rounded-xl px-5 py-4 flex items-start gap-3"
+              style={{ background: "rgba(99,102,241,0.06)", border: "1px solid rgba(99,102,241,0.15)" }}
+            >
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#818cf8" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2 }}>
+                <circle cx="8" cy="8" r="6.5" /><path d="M8 7v4M8 5.5v.5" />
+              </svg>
+              <p className="text-sm leading-relaxed" style={{ color: "#8080a8" }}>
+                Fuente oficial:{" "}
+                <a
+                  href="https://www.agenciatributaria.es"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline"
+                  style={{ color: "#818cf8" }}
+                >
+                  AEAT — Agencia Estatal de Administración Tributaria
+                </a>
+                {" "}· Reglamento IRPF Arts. 82–87 · Datos 2026.
+              </p>
+            </div>
+          </div>
+        </section>
+
         {/* ══ SEO Content ══ */}
         <div className="w-full" style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}>
 
