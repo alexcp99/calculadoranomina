@@ -3,17 +3,38 @@ import Link from "next/link";
 import RetencionCalculator from "@/components/RetencionCalculator";
 import SiteFooter from "@/components/SiteFooter";
 
+// ─── Metadata ─────────────────────────────────────────────────────────────────
+
 export const metadata: Metadata = {
-  title: "Calculadora Retención IRPF 2026 | Cuánto IRPF Me Retienen en Nómina",
+  title: "Calculadora Retención IRPF 2026 | Calcula tu % en segundos — Gratis",
   description:
-    "Calcula exactamente cuánto IRPF te retienen en tu nómina en 2026. Tipo efectivo, tipo marginal y retención mensual según tu salario y situación personal.",
+    "Calcula el porcentaje de retención IRPF que te aplican en la nómina en 2026. Datos oficiales AEAT, tramos actualizados, situación familiar y 19 CCAA. Gratis.",
   alternates: { canonical: "https://calculadoranomina.org/calculadora-retencion-irpf" },
   openGraph: {
-    title: "Calculadora Retención IRPF 2026",
-    description: "Calcula cuánto IRPF te retienen en nómina: tipo efectivo, tipo marginal y retención mensual. Datos oficiales AEAT 2026.",
+    title: "Calculadora Retención IRPF 2026 | Calcula tu % en segundos — Gratis",
+    description:
+      "Calcula el porcentaje de retención IRPF que te aplican en la nómina en 2026. Datos oficiales AEAT, tramos actualizados, situación familiar y 19 CCAA. Gratis.",
     url: "https://calculadoranomina.org/calculadora-retencion-irpf",
     type: "website",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Calculadora Retención IRPF 2026 | Calcula tu % en segundos",
+    description:
+      "Calcula el porcentaje de retención IRPF que te aplican en la nómina en 2026. Datos oficiales AEAT, 19 CCAA.",
+  },
+};
+
+// ─── JSON-LD schemas ───────────────────────────────────────────────────────────
+
+const BREADCRUMB_JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Inicio",       item: "https://calculadoranomina.org" },
+    { "@type": "ListItem", position: 2, name: "Calculadoras", item: "https://calculadoranomina.org" },
+    { "@type": "ListItem", position: 3, name: "Retención IRPF", item: "https://calculadoranomina.org/calculadora-retencion-irpf" },
+  ],
 };
 
 const FAQ_JSON_LD = {
@@ -22,31 +43,57 @@ const FAQ_JSON_LD = {
   mainEntity: [
     {
       "@type": "Question",
-      name: "¿Cuánto IRPF me tienen que retener?",
-      acceptedAnswer: { "@type": "Answer", text: "El porcentaje de retención del IRPF depende de tu salario bruto anual, tu comunidad autónoma, tu situación familiar y el número de hijos. Para un salario de 30.000€ en Madrid, soltero sin hijos, la retención ronda el 17,7% (unos 443€/mes). Cuanto mayor es el salario, mayor es el tipo efectivo." }
+      name: "¿Qué es la retención IRPF en la nómina?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "La retención del IRPF es el porcentaje que tu empresa descuenta de tu nómina cada mes como anticipo del impuesto sobre la renta. Al hacer la declaración anual, Hacienda regulariza la diferencia: si retuvieron de más, te devuelven; si retuvieron de menos, debes pagar la diferencia.",
+      },
     },
     {
       "@type": "Question",
-      name: "¿Puedo pedir que me retengan más o menos IRPF?",
-      acceptedAnswer: { "@type": "Answer", text: "Sí. Puedes comunicar a tu empresa tu situación personal mediante el Modelo 145 para que ajuste la retención a la baja si tienes hijos, pareja sin ingresos o discapacidad. También puedes solicitar voluntariamente una retención superior a la calculada, lo que puede ser conveniente si tienes varios pagadores o ingresos adicionales." }
+      name: "¿Cómo se calcula el porcentaje de retención IRPF?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "El porcentaje de retención se calcula restando al salario bruto las cotizaciones a la Seguridad Social, los gastos deducibles del Art. 19 LIRPF (2.000 €) y los mínimos personales y familiares. El resultado es la base de retención. Se aplica la escala progresiva estatal y autonómica y el resultado se divide entre el salario bruto. Sigue el algoritmo oficial de la AEAT (Arts. 82-87 RIRPF).",
+      },
     },
     {
       "@type": "Question",
-      name: "¿Por qué mi retención varía cada mes?",
-      acceptedAnswer: { "@type": "Answer", text: "La retención se recalcula cuando cambia tu situación personal (nacimiento de un hijo, matrimonio, separación), cuando recibes una subida de sueldo, cuando cobras ingresos extra (horas extraordinarias, bonus) o a inicio de año cuando la empresa revisa el cálculo anual. También puede variar si has cambiado de empresa en el año." }
+      name: "¿Puedo pedir a mi empresa que cambie mi retención IRPF?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Sí. Puedes entregar a tu empresa el Modelo 145 actualizado cuando cambie tu situación personal o familiar: matrimonio, nacimiento de un hijo, divorcio, reconocimiento de discapacidad o pareja sin ingresos. Cada cambio puede suponer entre 30 y 100 € más de neto mensual.",
+      },
     },
     {
       "@type": "Question",
-      name: "¿Qué pasa si la empresa me retiene mal el IRPF?",
-      acceptedAnswer: { "@type": "Answer", text: "Si la retención ha sido insuficiente (por error de la empresa o porque no comunicaste cambios en tu situación personal), la diferencia saldrá a pagar en la declaración de la renta. Si fue excesiva, saldrá a devolver. En cualquier caso, la obligación fiscal final se regulariza en la declaración anual. Si la empresa ha retenido de más por error, puedes reclamarle el exceso." }
+      name: "¿La retención IRPF tiene un mínimo?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Sí. El tipo mínimo de retención es del 2% para contratos de duración determinada (temporales) y del 15% para algunas actividades económicas. Para contratos indefinidos, si el resultado del cálculo es negativo o inferior al mínimo, se aplica el 2% como suelo mínimo de retención.",
+      },
     },
     {
       "@type": "Question",
-      name: "¿La retención es la misma en toda España?",
-      acceptedAnswer: { "@type": "Answer", text: "No. Aunque la escala estatal del IRPF es igual en todo el territorio, cada comunidad autónoma fija sus propios tramos autonómicos. Madrid tiene los tipos autonómicos más bajos del régimen común, lo que resulta en retenciones menores. Cataluña y Valencia aplican tipos más altos, especialmente a partir de 30.000€." }
+      name: "¿La retención IRPF es igual en todas las comunidades autónomas?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "No. El IRPF tiene una parte estatal (igual en toda España) y una parte autonómica que cada comunidad fija libremente. Madrid y el País Vasco suelen tener los tipos autonómicos más bajos, mientras que Cataluña y Valencia aplican tipos más altos, especialmente a partir de 30.000 € anuales.",
+      },
     },
   ],
 };
+
+// ─── Static data (defined before return to avoid build issues) ─────────────────
+
+const IRPF_TRAMOS = [
+  { tramo: "1º", desde: "0 €",        hasta: "12.450 €",   tipo: "19%", bar: 40,  color: "#34d399" },
+  { tramo: "2º", desde: "12.450 €",   hasta: "20.200 €",   tipo: "24%", bar: 51,  color: "#6ee7b7" },
+  { tramo: "3º", desde: "20.200 €",   hasta: "35.200 €",   tipo: "30%", bar: 64,  color: "#818cf8" },
+  { tramo: "4º", desde: "35.200 €",   hasta: "60.000 €",   tipo: "37%", bar: 79,  color: "#a78bfa" },
+  { tramo: "5º", desde: "60.000 €",   hasta: "300.000 €",  tipo: "45%", bar: 96,  color: "#f87171" },
+  { tramo: "6º", desde: "+300.000 €", hasta: "Sin límite",  tipo: "47%", bar: 100, color: "#ef4444" },
+];
 
 const SALARY_TABLE = [
   { bruto: "15.000 €", retencion: "40 €/mes",    tipo: "3,2%"  },
@@ -57,12 +104,72 @@ const SALARY_TABLE = [
   { bruto: "50.000 €", retencion: "1.046 €/mes", tipo: "25,1%" },
 ];
 
+const CALC_STEPS = [
+  {
+    n: 1,
+    text: "Bruto − Cotizaciones SS (6,50% contingencias + 1,55% desempleo + 0,10% FP + 0,15% MEI)",
+    result: "= Rendimiento íntegro del trabajo",
+  },
+  {
+    n: 2,
+    text: "− Gastos deducibles Art. 19 LIRPF (2.000 € fijos, hasta 5.565 € con movilidad geográfica)",
+    result: "= Rendimiento neto del trabajo",
+  },
+  {
+    n: 3,
+    text: "− Reducción Art. 20 (hasta 7.302 € para rentas ≤ 19.747,50 €, proporcional hasta 32.247,50 €)",
+    result: "= Rendimiento neto reducido",
+  },
+  {
+    n: 4,
+    text: "− Mínimo personal (5.550 €, +1.150 € si ≥ 65 años) y mínimo familiar (2.400 € primer hijo…)",
+    result: "= Base de retención IRPF",
+  },
+  {
+    n: 5,
+    text: "Escala progresiva estatal + autonómica de tu CCAA aplicada sobre la base de retención",
+    result: "= Cuota íntegra anual",
+  },
+  {
+    n: 6,
+    text: "Cuota íntegra anual ÷ Salario bruto anual × 100",
+    result: "= Tipo de retención aplicable (%)",
+  },
+];
+
+const DOS_PAGADORES_ITEMS = [
+  {
+    label: "Pagador A",
+    detail: "18.000 € · retención 12%",
+    value: "2.160 €/año retenidos",
+    color: "#818cf8",
+  },
+  {
+    label: "Pagador B",
+    detail: "10.000 € · retención 10%",
+    value: "1.000 €/año retenidos",
+    color: "#a78bfa",
+  },
+  {
+    label: "Resultado en renta",
+    detail: "Total 28.000 € · IRPF real ≈ 4.500 €",
+    value: "A pagar: ~1.340 €",
+    color: "#f87171",
+  },
+];
+
+// ─── Page ─────────────────────────────────────────────────────────────────────
+
 export default function CalculadoraRetencionPage() {
   return (
     <main className="min-h-screen" style={{ background: "#080810" }}>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_JSON_LD) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(BREADCRUMB_JSON_LD) }}
       />
       <div
         className="fixed inset-0 pointer-events-none"
@@ -75,17 +182,19 @@ export default function CalculadoraRetencionPage() {
         {/* ── Header ── */}
         <header className="px-4 pt-8 pb-6 md:pt-12 md:pb-8">
           <div className="max-w-4xl mx-auto">
-            <nav className="flex items-center gap-2 text-xs mb-6" style={{ color: "#4a4a6a" }}>
-              <Link href="/" className="hover:underline" style={{ color: "#818CF8" }}>Inicio</Link>
+
+            {/* Breadcrumb */}
+            <nav className="flex items-center gap-2 text-xs mb-6" style={{ color: "#4a4a6a" }} aria-label="Breadcrumb">
+              <Link href="/" className="hover:underline" style={{ color: "#818cf8" }}>Inicio</Link>
               <span>/</span>
-              <Link href="/" className="hover:underline" style={{ color: "#818CF8" }}>Calculadora</Link>
+              <Link href="/" className="hover:underline" style={{ color: "#818cf8" }}>Calculadoras</Link>
               <span>/</span>
               <span style={{ color: "#7c7ca0" }}>Retención IRPF</span>
             </nav>
 
             <div
               className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium mb-5"
-              style={{ background: "rgba(99,102,241,0.1)", border: "1px solid rgba(99,102,241,0.22)", color: "#818CF8" }}
+              style={{ background: "rgba(99,102,241,0.1)", border: "1px solid rgba(99,102,241,0.22)", color: "#818cf8" }}
             >
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" style={{ boxShadow: "0 0 6px rgba(52,211,153,0.7)" }} />
               Datos AEAT 2026 · 19 comunidades autónomas
@@ -110,67 +219,150 @@ export default function CalculadoraRetencionPage() {
               </span>
             </h1>
             <p className="text-sm md:text-base leading-relaxed" style={{ color: "#7c7ca0" }}>
-              Calcula el porcentaje exacto que tu empresa retiene en tu nómina para el IRPF.
-              Introduce tu salario, comunidad y situación familiar.
+              Descubre qué porcentaje te retiene Hacienda según tu salario, situación familiar y comunidad autónoma. Datos oficiales AEAT 2026.
             </p>
           </div>
         </header>
 
         {/* ── Calculator ── */}
-        <section className="px-4 pb-16">
+        <section className="px-4 pb-12">
           <div className="max-w-4xl mx-auto">
             <RetencionCalculator />
           </div>
         </section>
 
-        {/* ══ Cómo lo calculamos ══ */}
-        <section className="px-4 pb-14 md:pb-16">
+        {/* ── C: Tabla tramos IRPF 2026 ── */}
+        <section className="px-4 pb-12 md:pb-14">
           <div className="max-w-3xl mx-auto">
             <h2 className="font-syne font-bold mb-2" style={{ fontSize: "clamp(1.2rem, 3vw, 1.5rem)", color: "#f0f0ff" }}>
+              Tramos del IRPF 2026
+            </h2>
+            <p className="text-sm mb-6" style={{ color: "#7c7ca0" }}>
+              Escala general estatal + autonómica (tipo consolidado orientativo)
+            </p>
+            <div className="rounded-2xl overflow-hidden" style={{ border: "1px solid rgba(99,102,241,0.2)" }}>
+              <div
+                className="grid grid-cols-4 px-4 py-2.5"
+                style={{ background: "rgba(99,102,241,0.18)", borderBottom: "1px solid rgba(99,102,241,0.2)" }}
+              >
+                <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#9090c8" }}>Tramo</span>
+                <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#9090c8" }}>Desde</span>
+                <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#9090c8" }}>Hasta</span>
+                <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#9090c8" }}>Tipo</span>
+              </div>
+              {IRPF_TRAMOS.map((t, i) => (
+                <div
+                  key={t.tramo}
+                  className="grid grid-cols-4 px-4 py-3 items-center"
+                  style={{
+                    borderBottom: i < IRPF_TRAMOS.length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none",
+                    background: "rgba(13,13,26,0.6)",
+                  }}
+                >
+                  <span className="text-sm font-semibold" style={{ color: "#a0a0c0" }}>{t.tramo}</span>
+                  <span className="text-sm tabnum" style={{ color: "#7c7ca0" }}>{t.desde}</span>
+                  <span className="text-sm tabnum" style={{ color: "#7c7ca0" }}>{t.hasta}</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-bold tabnum" style={{ color: t.color }}>{t.tipo}</span>
+                    <div className="flex-1 h-1.5 rounded-full overflow-hidden hidden sm:block" style={{ background: "rgba(255,255,255,0.06)", maxWidth: 60 }}>
+                      <div style={{ width: `${t.bar}%`, height: "100%", background: t.color, borderRadius: 9999 }} />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <p className="text-xs mt-3" style={{ color: "#4a4a6a" }}>
+              Escala estatal (50%) + media autonómica orientativa. El tipo final depende de tu CCAA — usa la calculadora para el dato exacto.
+            </p>
+          </div>
+        </section>
+
+        {/* ── D: Dos pagadores ── */}
+        <section className="px-4 pb-12 md:pb-14">
+          <div className="max-w-3xl mx-auto">
+            <div
+              className="rounded-2xl p-5 md:p-6"
+              style={{ background: "rgba(99,102,241,0.07)", border: "1px solid rgba(99,102,241,0.22)" }}
+            >
+              <div className="flex items-start gap-3 mb-4">
+                <div
+                  className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
+                  style={{ background: "rgba(248,113,113,0.15)", border: "1px solid rgba(248,113,113,0.25)" }}
+                >
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#f87171" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M8 2L14 13H2L8 2z" />
+                    <path d="M8 6v3.5M8 11.5v.5" />
+                  </svg>
+                </div>
+                <div>
+                  <h2 className="font-syne font-bold text-base leading-snug" style={{ color: "#f0f0ff" }}>
+                    ¿Tienes dos empleos o pagadores? Cuidado con la renta
+                  </h2>
+                  <p className="text-sm mt-2 leading-relaxed" style={{ color: "#8080a8" }}>
+                    Cuando trabajas para dos empresas en el mismo año, cada una calcula tu retención por separado, sin saber lo que la otra retiene. Resultado: el tipo aplicado sobre cada salario es más bajo del que correspondería por el total combinado, y la declaración de la renta suele salir <strong style={{ color: "#f0f0ff" }}>a pagar</strong>.
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+                {DOS_PAGADORES_ITEMS.map((item) => (
+                  <div
+                    key={item.label}
+                    className="rounded-xl p-3.5"
+                    style={{ background: "rgba(0,0,0,0.25)", border: `1px solid ${item.color}30` }}
+                  >
+                    <p className="text-xs font-semibold mb-1" style={{ color: item.color }}>{item.label}</p>
+                    <p className="text-xs mb-1.5 leading-relaxed" style={{ color: "#6060a0" }}>{item.detail}</p>
+                    <p className="text-sm font-bold tabnum" style={{ color: item.color }}>{item.value}</p>
+                  </div>
+                ))}
+              </div>
+
+              <p className="text-xs leading-relaxed" style={{ color: "#6060a0" }}>
+                En este ejemplo, cada empresa retiene correctamente según su parte, pero el IRPF real sobre 28.000 € es mayor que la suma de retenciones individuales. La diferencia sale a pagar en la declaración de la renta.
+              </p>
+              <p className="text-xs mt-3 font-medium" style={{ color: "#818cf8" }}>
+                → Revisa tu retención con la calculadora de arriba para evitar sorpresas en la declaración.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* ── E: Cómo calculamos (compact) ── */}
+        <section className="px-4 pb-12 md:pb-14">
+          <div className="max-w-3xl mx-auto">
+            <h2 className="font-syne font-bold mb-1.5" style={{ fontSize: "clamp(1.2rem, 3vw, 1.5rem)", color: "#f0f0ff" }}>
               Cómo calculamos la retención
             </h2>
-            <p className="text-sm mb-8" style={{ color: "#7c7ca0" }}>
-              El tipo de retención se obtiene siguiendo el procedimiento oficial de la AEAT (Art. 82–87 RIRPF):
+            <p className="text-sm mb-6" style={{ color: "#7c7ca0" }}>
+              Procedimiento oficial AEAT (Arts. 82–87 RIRPF):
             </p>
-            <ol className="flex flex-col gap-4">
-              {[
-                { n: 1, text: "Salario bruto anual − Cotizaciones SS del trabajador (6,50% contingencias + 1,55% desempleo + 0,10% FP + 0,15% MEI)", sub: "= Rendimiento íntegro del trabajo" },
-                { n: 2, text: "− Gastos deducibles Art. 19 LIRPF (2.000 € fijos para asalariados, hasta 3.500–5.565 € con movilidad geográfica)", sub: "= Rendimiento neto del trabajo" },
-                { n: 3, text: "− Reducción Art. 20 LIRPF para rendimientos bajos (hasta 7.302 € de reducción para rentas ≤ 19.747,50 €)", sub: "= Rendimiento neto reducido" },
-                { n: 4, text: "− Mínimo personal (5.550 €, más por edad o discapacidad) y mínimo familiar (2.400 € primer hijo, etc.)", sub: "= Base de retención IRPF" },
-                { n: 5, text: "Aplicar escala progresiva estatal + autonómica de tu CCAA sobre la base de retención", sub: "= Cuota íntegra anual" },
-                { n: 6, text: "Cuota íntegra anual ÷ Salario bruto anual × 100", sub: "= Tipo de retención aplicable (%)" },
-              ].map(({ n, text, sub }) => (
-                <li key={n} className="flex gap-4">
+            <ol className="flex flex-col gap-3">
+              {CALC_STEPS.map(({ n, text, result }) => (
+                <li key={n} className="flex gap-3.5 items-start">
                   <div
-                    className="w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold shrink-0 mt-0.5"
+                    className="w-6 h-6 rounded-md flex items-center justify-center text-xs font-bold shrink-0 mt-0.5"
                     style={{ background: "rgba(99,102,241,0.18)", border: "1px solid rgba(99,102,241,0.35)", color: "#a5b4fc" }}
                   >
                     {n}
                   </div>
                   <div>
-                    <p className="text-sm leading-relaxed" style={{ color: "#c0c0d8" }}>{text}</p>
-                    <p className="text-xs mt-1 font-semibold" style={{ color: "#6366f1" }}>{sub}</p>
+                    <p className="text-sm leading-snug" style={{ color: "#b0b0c8" }}>{text}</p>
+                    <p className="text-xs mt-0.5 font-semibold" style={{ color: "#6366f1" }}>{result}</p>
                   </div>
                 </li>
               ))}
             </ol>
             <div
-              className="mt-8 rounded-xl px-5 py-4 flex items-start gap-3"
+              className="mt-6 rounded-xl px-4 py-3 flex items-center gap-3"
               style={{ background: "rgba(99,102,241,0.06)", border: "1px solid rgba(99,102,241,0.15)" }}
             >
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#818cf8" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2 }}>
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#818cf8" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
                 <circle cx="8" cy="8" r="6.5" /><path d="M8 7v4M8 5.5v.5" />
               </svg>
-              <p className="text-sm leading-relaxed" style={{ color: "#8080a8" }}>
-                Fuente oficial:{" "}
-                <a
-                  href="https://www.agenciatributaria.es"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline"
-                  style={{ color: "#818cf8" }}
-                >
+              <p className="text-xs leading-relaxed" style={{ color: "#7070a8" }}>
+                Fuente:{" "}
+                <a href="https://www.agenciatributaria.es" target="_blank" rel="noopener noreferrer" className="underline" style={{ color: "#818cf8" }}>
                   AEAT — Agencia Estatal de Administración Tributaria
                 </a>
                 {" "}· Reglamento IRPF Arts. 82–87 · Datos 2026.
@@ -207,7 +399,7 @@ export default function CalculadoraRetencionPage() {
 
           <div className="seo-divider" />
 
-          {/* Sección 2 — Tabla retenciones */}
+          {/* Sección 2 — Tabla retenciones por salario */}
           <section className="px-4 py-14 md:py-16" style={{ background: "rgba(255,255,255,0.02)" }}>
             <div className="max-w-3xl mx-auto">
               <h2 className="font-syne font-bold mb-2" style={{ fontSize: "clamp(1.2rem, 3vw, 1.5rem)", color: "#f0f0ff" }}>
@@ -228,9 +420,9 @@ export default function CalculadoraRetencionPage() {
                   <tbody>
                     {SALARY_TABLE.map((row) => (
                       <tr key={row.bruto} className="seo-salary-row">
-                        <td className="px-4 py-3 font-semibold" style={{ color: "#e0e0ff", borderBottom: "1px solid rgba(255,255,255,0.04)" }}>{row.bruto}</td>
-                        <td className="px-4 py-3 font-bold" style={{ color: "#f87171", borderBottom: "1px solid rgba(255,255,255,0.04)" }}>{row.retencion}</td>
-                        <td className="px-4 py-3 font-semibold" style={{ color: "#818cf8", borderBottom: "1px solid rgba(255,255,255,0.04)" }}>{row.tipo}</td>
+                        <td className="px-4 py-3 font-semibold" style={{ color: "#e0e0ff",  borderBottom: "1px solid rgba(255,255,255,0.04)" }}>{row.bruto}</td>
+                        <td className="px-4 py-3 font-bold"    style={{ color: "#f87171",  borderBottom: "1px solid rgba(255,255,255,0.04)" }}>{row.retencion}</td>
+                        <td className="px-4 py-3 font-semibold" style={{ color: "#818cf8",  borderBottom: "1px solid rgba(255,255,255,0.04)" }}>{row.tipo}</td>
                       </tr>
                     ))}
                   </tbody>
