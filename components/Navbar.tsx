@@ -18,6 +18,12 @@ const CALCULADORAS = [
     href: "/calculadora-retencion-irpf",
     label: "Retención IRPF",
     desc: "Porcentaje que te retiene Hacienda",
+    badge: undefined as string | undefined,
+  },
+  {
+    href: "/calculadora-cambio-trabajo",
+    label: "Cambio de trabajo",
+    desc: "¿Te compensa cambiar de empresa?",
     badge: "Nuevo",
   },
 ];
@@ -82,6 +88,15 @@ function IconPct() {
   );
 }
 
+function IconSwitch() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M2 4.5h10M9 2l3 2.5L9 7" />
+      <path d="M12 9.5H2M5 7l-3 2.5L5 12" />
+    </svg>
+  );
+}
+
 // ─── Navbar ───────────────────────────────────────────────────────────────────
 
 export default function Navbar() {
@@ -107,7 +122,7 @@ export default function Navbar() {
     setMobileSalOpen(false);
   }, [pathname]);
 
-  const isCalcActive    = pathname === "/" || pathname === "/calculadora-retencion-irpf";
+  const isCalcActive    = pathname === "/" || pathname === "/calculadora-retencion-irpf" || pathname === "/calculadora-cambio-trabajo";
   const isSalaryActive  = ALL_SALARY_SLUGS.some((slug) => pathname === `/cuanto-es-${slug}-euros-brutos-neto`);
   const isActive        = (href: string) => href === "/" ? pathname === "/" : pathname.startsWith(href);
 
@@ -187,7 +202,7 @@ export default function Navbar() {
                     Herramientas
                   </p>
                   {CALCULADORAS.map((c) => {
-                    const Icon = c.href === "/" ? IconCalc : IconPct;
+                    const Icon = c.href === "/" ? IconCalc : c.href === "/calculadora-cambio-trabajo" ? IconSwitch : IconPct;
                     const active = c.href === "/" ? pathname === "/" : pathname === c.href;
                     return (
                       <Link
@@ -355,7 +370,7 @@ export default function Navbar() {
             style={{ maxHeight: mobileCalcOpen ? "200px" : "0px", borderBottom: mobileCalcOpen ? "1px solid rgba(255,255,255,0.05)" : "none" }}
           >
             {CALCULADORAS.map((c) => {
-              const Icon = c.href === "/" ? IconCalc : IconPct;
+              const Icon = c.href === "/" ? IconCalc : c.href === "/calculadora-cambio-trabajo" ? IconSwitch : IconPct;
               const active = c.href === "/" ? pathname === "/" : pathname === c.href;
               return (
                 <Link

@@ -78,6 +78,11 @@ export default function SiteFooter({ year }: { year?: number }) {
                   </Link>
                 </li>
                 <li>
+                  <Link href="/calculadora-cambio-trabajo" className="text-xs hover:underline" style={{ color: "#a0a0c0" }}>
+                    Cambio de trabajo
+                  </Link>
+                </li>
+                <li>
                   <Link href="/blog" className="text-xs hover:underline" style={{ color: "#a0a0c0" }}>
                     Blog
                   </Link>

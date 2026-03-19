@@ -293,6 +293,71 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* ── Other tools ── */}
+        <section className="px-4 pb-12 md:pb-14">
+          <div className="max-w-5xl mx-auto">
+            <div className="mb-5">
+              <h2
+                className="font-syne font-bold mb-1"
+                style={{ fontSize: "clamp(1.1rem, 3vw, 1.35rem)", color: "#e0e0ff" }}
+              >
+                Más herramientas fiscales
+              </h2>
+              <p className="text-sm" style={{ color: "#5a5a80" }}>
+                Calculadoras especializadas para decisiones salariales
+              </p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Link
+                href="/calculadora-retencion-irpf"
+                className="group flex items-start gap-4 rounded-2xl p-5 transition-all duration-200"
+                style={{ background: "rgba(13,13,26,0.9)", border: "1px solid rgba(255,255,255,0.07)" }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(99,102,241,0.35)"; (e.currentTarget as HTMLElement).style.background = "rgba(99,102,241,0.06)"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.07)"; (e.currentTarget as HTMLElement).style.background = "rgba(13,13,26,0.9)"; }}
+              >
+                <div className="shrink-0 w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "rgba(99,102,241,0.15)", border: "1px solid rgba(99,102,241,0.25)" }}>
+                  <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="#818cf8" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="7" cy="7" r="5.5" /><path d="M4.5 9.5l5-5M5 5.5h.01M9 8.5h.01" />
+                  </svg>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-sm font-semibold" style={{ color: "#e0e0ff" }}>Retención IRPF</span>
+                  </div>
+                  <p className="text-xs leading-relaxed" style={{ color: "#7070a0" }}>Calcula el porcentaje exacto que Hacienda retiene en tu nómina según tu situación familiar.</p>
+                </div>
+                <svg className="shrink-0 mt-1 opacity-30 group-hover:opacity-60 transition-opacity" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden>
+                  <path d="M2.5 6h7M6.5 3l3 3-3 3" stroke="#818cf8" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </Link>
+
+              <Link
+                href="/calculadora-cambio-trabajo"
+                className="group flex items-start gap-4 rounded-2xl p-5 transition-all duration-200"
+                style={{ background: "rgba(13,13,26,0.9)", border: "1px solid rgba(255,255,255,0.07)" }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(52,211,153,0.35)"; (e.currentTarget as HTMLElement).style.background = "rgba(52,211,153,0.06)"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.07)"; (e.currentTarget as HTMLElement).style.background = "rgba(13,13,26,0.9)"; }}
+              >
+                <div className="shrink-0 w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "rgba(52,211,153,0.1)", border: "1px solid rgba(52,211,153,0.2)" }}>
+                  <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="#34d399" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M2 4.5h10M9 2l3 2.5L9 7" /><path d="M12 9.5H2M5 7l-3 2.5L5 12" />
+                  </svg>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-sm font-semibold" style={{ color: "#e0e0ff" }}>Cambio de trabajo</span>
+                    <span className="text-xs font-semibold px-1.5 py-0.5 rounded" style={{ background: "rgba(52,211,153,0.15)", color: "#34d399" }}>Nuevo</span>
+                  </div>
+                  <p className="text-xs leading-relaxed" style={{ color: "#7070a0" }}>¿Te compensa la nueva oferta? Compara neto real, bonus, vacaciones y teletrabajo en un solo clic.</p>
+                </div>
+                <svg className="shrink-0 mt-1 opacity-30 group-hover:opacity-60 transition-opacity" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden>
+                  <path d="M2.5 6h7M6.5 3l3 3-3 3" stroke="#34d399" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </Link>
+            </div>
+          </div>
+        </section>
+
         {/* ── Latest blog posts ── */}
         <section className="px-4 pb-14 md:pb-16">
               <div className="max-w-5xl mx-auto">
