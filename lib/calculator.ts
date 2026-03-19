@@ -3,7 +3,7 @@
  * Implementación del algoritmo oficial AEAT 2026 para el cálculo de
  * retenciones de IRPF y cuotas de Seguridad Social en España.
  *
- * Verificado: 36.000 € bruto · soltero · Madrid → ~2.274 €/mes neto (12 pagas)
+ * Verificado: 36.000 € bruto · soltero · Madrid → ~2.289 €/mes neto (12 pagas)
  */
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -160,16 +160,15 @@ interface CcaaConfig {
 
 const CCAA_CONFIG: Record<ComunidadAutonoma, CcaaConfig> = {
   madrid: {
+    // Escala autonómica consolidada Madrid 2026 (Ley 6/2024 CACM)
+    // Límites y tipos verificados contra norma consolidada oficial.
     isForal: false,
     brackets: [
-      { from: 0,        to: 12450,    rate: 0.09   },
-      { from: 12450,    to: 17707.2,  rate: 0.112  },
-      { from: 17707.2,  to: 33007.2,  rate: 0.133  },
-      { from: 33007.2,  to: 53407.2,  rate: 0.179  },
-      { from: 53407.2,  to: 120000,   rate: 0.21   },
-      { from: 120000,   to: 175000,   rate: 0.225  },
-      { from: 175000,   to: 300000,   rate: 0.225  },
-      { from: 300000,   to: Infinity, rate: 0.24   },
+      { from: 0,          to: 13362.22,  rate: 0.085  },
+      { from: 13362.22,   to: 19004.63,  rate: 0.107  },
+      { from: 19004.63,   to: 35425.68,  rate: 0.128  },
+      { from: 35425.68,   to: 57320.40,  rate: 0.174  },
+      { from: 57320.40,   to: Infinity,  rate: 0.205  },
     ],
   },
 
@@ -436,15 +435,16 @@ function getMarginalRate(base: number, brackets: Bracket[]): number {
 }
 
 /**
- * Reducción por rendimientos del trabajo (Art. 20 LIRPF 2026).
- * Verificado: 36.000 € bruto · soltero · Madrid → 0 reducción (rn > 19.747,50).
+ * Reducción por rendimientos del trabajo (Art. 20 LIRPF).
+ * Redacción vigente por Ley 22/2021 (PGE 2022), aplicable 2026:
+ *   – rn ≤ 14.047,50 €  →  6.498 €
+ *   – 14.047,50 < rn ≤ 19.747,50 €  →  6.498 − 1,14 × (rn − 14.047,50)
+ *   – rn > 19.747,50 €  →  0
+ * El coeficiente 1,14 hace que la reducción llegue exactamente a 0 en 19.747,50 €.
  */
 function calcReduccionArt20(rn: number): number {
-  if (rn <= 14852) return 6498;
-  if (rn <= 19747.5) {
-    const r = 6498 - 1.14286 * (rn - 14852);
-    return Math.max(r, 2364);
-  }
+  if (rn <= 14047.5) return 6498;
+  if (rn <= 19747.5) return Math.max(0, 6498 - 1.14 * (rn - 14047.5));
   return 0;
 }
 

@@ -84,11 +84,11 @@ for (const bruto of TEST_SALARIES) {
   );
 }
 
-// ─── FASE 1 extra: 36000 (comentario en calculator.ts verifica ~2274€) ────────
+// ─── FASE 1 extra: 36000 (comentario en calculator.ts verifica ~2289€) ────────
 
 console.log("\n── Referencia 36.000€ (verificación interna calculator.ts) ──");
 const r36 = computeCalc({ annualGross: 36000, ...CANONICAL });
-console.log(`  36.000€ → netoMensual=${Math.round(r36.monthlyNet)} (esperado ≈ 2274) ${Math.round(r36.monthlyNet) === 2274 ? "✓" : "✗ FALLA"}`);
+console.log(`  36.000€ → netoMensual=${Math.round(r36.monthlyNet)} (esperado ≈ 2289) ${Math.round(r36.monthlyNet) === 2289 ? "✓" : "✗ FALLA"}`);
 console.log(`           irpfEf=${fi(r36.irpfEfectivo)}% anuIRPF=${Math.round(r36.annualIRPF)}€`);
 
 // ─── FASE 2 — METADATA SIMULADA ───────────────────────────────────────────────
@@ -156,7 +156,7 @@ function test(name: string, actual: unknown, expected: unknown) {
 
 // Test 1: 36.000€ verifica el comentario del archivo
 const r36t = computeCalc({ annualGross: 36000, ...CANONICAL });
-test("36.000€ → netoMensual ≈ 2274", Math.round(r36t.monthlyNet), 2274);
+test("36.000€ → netoMensual ≈ 2289", Math.round(r36t.monthlyNet), 2289);
 
 // Test 2-6: SALARIO_DATA coincide con computeCalc para todos los salarios
 for (const slug of Object.keys(SALARIO_DATA)) {
