@@ -1,3 +1,10 @@
+/**
+ * @deprecated lib/tax.ts — Motor de cálculo LEGACY. No usar en código nuevo.
+ * Usar computeCalc() de lib/calculator.ts en su lugar.
+ * Algoritmo incompatible: no descuenta SS del rendimiento neto,
+ * usa umbral Art.20 distinto (14.047,50 vs 14.852) y tramos combinados.
+ */
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 export type ContractType = "indefinido" | "temporal";

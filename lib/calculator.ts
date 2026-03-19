@@ -708,11 +708,4 @@ export function computeNetToGrossCalc(
   return computeCalc({ annualGross: (lo + hi) / 2, ...options });
 }
 
-// ─── Legacy API (backward compat with old tax.ts imports) ─────────────────────
-
-export type { ContractType as ContractTypeLegacy };
-
-import type { TaxInput, TaxResult } from "./tax";
-
-export { computeTax, computeNetToGross } from "./tax";
-export type { TaxInput, TaxResult };
+// ─── (tax.ts es legacy; no se re-exporta desde aquí) ─────────────────────────

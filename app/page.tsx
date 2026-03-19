@@ -4,41 +4,68 @@ import HomeCalculatorTabs from "@/components/HomeCalculatorTabs";
 import SiteFooter from "@/components/SiteFooter";
 import SeoFaqAccordion from "@/components/SeoFaqAccordion";
 import { getAllPosts } from "@/lib/blog";
+import { SALARIO_DATA, fmt } from "@/lib/salario-data";
 
-// ─── Salary cards data ────────────────────────────────────────────────────────
+// ─── Salary cards (colores hardcoded, neto/irpf desde computeCalc) ────────────
 
-const SALARY_CARDS = [
-  { slug: "15000", bruto: "15.000 €", neto: "1.221 €", irpf: "3,2 %",  accent: "#38bdf8", accentSoft: "rgba(56,189,248,0.15)"  },
-  { slug: "16000", bruto: "16.000 €", neto: "1.298 €", irpf: "5,1 %",  accent: "#4fb8f5", accentSoft: "rgba(79,184,245,0.15)"  },
-  { slug: "18000", bruto: "18.000 €", neto: "1.436 €", irpf: "7,4 %",  accent: "#5aa8f2", accentSoft: "rgba(90,168,242,0.15)"  },
-  { slug: "20000", bruto: "20.000 €", neto: "1.575 €", irpf: "9,8 %",  accent: "#6366f1", accentSoft: "rgba(99,102,241,0.15)"  },
-  { slug: "22000", bruto: "22.000 €", neto: "1.693 €", irpf: "11,8 %", accent: "#6d7cf4", accentSoft: "rgba(109,124,244,0.15)" },
-  { slug: "24000", bruto: "24.000 €", neto: "1.820 €", irpf: "13,0 %", accent: "#7b87f6", accentSoft: "rgba(123,135,246,0.15)" },
-  { slug: "25000", bruto: "25.000 €", neto: "1.911 €", irpf: "13,7 %", accent: "#818cf8", accentSoft: "rgba(129,140,248,0.15)" },
-  { slug: "28000", bruto: "28.000 €", neto: "2.107 €", irpf: "16,1 %", accent: "#9a84fb", accentSoft: "rgba(154,132,251,0.15)" },
-  { slug: "30000", bruto: "30.000 €", neto: "2.274 €", irpf: "17,7 %", accent: "#a78bfa", accentSoft: "rgba(167,139,250,0.15)" },
-  { slug: "32000", bruto: "32.000 €", neto: "2.388 €", irpf: "19,2 %", accent: "#ae8bfb", accentSoft: "rgba(174,139,251,0.15)" },
-  { slug: "35000", bruto: "35.000 €", neto: "2.520 €", irpf: "20,5 %", accent: "#b48bfb", accentSoft: "rgba(180,139,251,0.15)" },
-  { slug: "40000", bruto: "40.000 €", neto: "2.876 €", irpf: "22,1 %", accent: "#c084fc", accentSoft: "rgba(192,132,252,0.15)" },
-  { slug: "45000", bruto: "45.000 €", neto: "3.145 €", irpf: "23,8 %", accent: "#d47dfd", accentSoft: "rgba(212,125,253,0.15)" },
-  { slug: "50000", bruto: "50.000 €", neto: "3.414 €", irpf: "25,1 %", accent: "#e879f9", accentSoft: "rgba(232,121,249,0.15)" },
-  { slug: "60000", bruto: "60.000 €", neto: "3.795 €", irpf: "27,3 %", accent: "#f472d0", accentSoft: "rgba(244,114,208,0.15)" },
-  { slug: "70000", bruto: "70.000 €", neto: "4.289 €", irpf: "29,0 %", accent: "#f472b6", accentSoft: "rgba(244,114,182,0.15)" },
-  { slug: "80000", bruto: "80.000 €", neto: "4.740 €", irpf: "30,5 %", accent: "#f86f9e", accentSoft: "rgba(248,111,158,0.15)" },
-  { slug: "100000", bruto: "100.000 €", neto: "5.631 €", irpf: "32,9 %", accent: "#fb7185", accentSoft: "rgba(251,113,133,0.15)" },
+const ACCENT_DATA = [
+  { slug: "15000",  accent: "#38bdf8", accentSoft: "rgba(56,189,248,0.15)"  },
+  { slug: "16000",  accent: "#4fb8f5", accentSoft: "rgba(79,184,245,0.15)"  },
+  { slug: "18000",  accent: "#5aa8f2", accentSoft: "rgba(90,168,242,0.15)"  },
+  { slug: "20000",  accent: "#6366f1", accentSoft: "rgba(99,102,241,0.15)"  },
+  { slug: "22000",  accent: "#6d7cf4", accentSoft: "rgba(109,124,244,0.15)" },
+  { slug: "24000",  accent: "#7b87f6", accentSoft: "rgba(123,135,246,0.15)" },
+  { slug: "25000",  accent: "#818cf8", accentSoft: "rgba(129,140,248,0.15)" },
+  { slug: "28000",  accent: "#9a84fb", accentSoft: "rgba(154,132,251,0.15)" },
+  { slug: "30000",  accent: "#a78bfa", accentSoft: "rgba(167,139,250,0.15)" },
+  { slug: "32000",  accent: "#ae8bfb", accentSoft: "rgba(174,139,251,0.15)" },
+  { slug: "35000",  accent: "#b48bfb", accentSoft: "rgba(180,139,251,0.15)" },
+  { slug: "40000",  accent: "#c084fc", accentSoft: "rgba(192,132,252,0.15)" },
+  { slug: "45000",  accent: "#d47dfd", accentSoft: "rgba(212,125,253,0.15)" },
+  { slug: "50000",  accent: "#e879f9", accentSoft: "rgba(232,121,249,0.15)" },
+  { slug: "60000",  accent: "#f472d0", accentSoft: "rgba(244,114,208,0.15)" },
+  { slug: "70000",  accent: "#f472b6", accentSoft: "rgba(244,114,182,0.15)" },
+  { slug: "80000",  accent: "#f86f9e", accentSoft: "rgba(248,111,158,0.15)" },
+  { slug: "100000", accent: "#fb7185", accentSoft: "rgba(251,113,133,0.15)" },
 ];
 
+const SALARY_CARDS = ACCENT_DATA.map(({ slug, accent, accentSoft }) => {
+  const d = SALARIO_DATA[slug];
+  return {
+    slug,
+    bruto:      `${d.brutoLabel} €`,
+    neto:       `${fmt(d.netoMensual)} €`,
+    irpf:       `${d.irpfEf} %`,
+    accent,
+    accentSoft,
+  };
+});
+
 // ─── FAQ JSON-LD ──────────────────────────────────────────────────────────────
+
+const d30 = SALARIO_DATA["30000"];
+
+// ─── CCAA mini-cards para 30.000 € (derivadas de computeCalc) ─────────────────
+
+const d30Mad = d30.ccaaTable.find((r) => r.ccaa === "Comunidad de Madrid")!;
+const d30Val = d30.ccaaTable.find((r) => r.ccaa === "Comunitat Valenciana")!;
+const d30Cat = d30.ccaaTable.find((r) => r.ccaa === "Cataluña")!;
+
+const CCAA_MINI_CARDS = [
+  { label: "Madrid",   emoji: "🏛️", neto: `${fmt(d30Mad.neto)} €/mes`, delta: "Menos impuestos",                                      color: "#34d399", bg: "rgba(52,211,153,0.07)",  border: "rgba(52,211,153,0.2)"  },
+  { label: "Valencia", emoji: "🌊", neto: `${fmt(d30Val.neto)} €/mes`, delta: `−${fmt(d30Mad.neto - d30Val.neto)} €/mes vs Madrid`,    color: "#818cf8", bg: "rgba(99,102,241,0.07)",  border: "rgba(99,102,241,0.2)"  },
+  { label: "Cataluña", emoji: "🏔️", neto: `${fmt(d30Cat.neto)} €/mes`, delta: `−${fmt(d30Mad.neto - d30Cat.neto)} €/mes vs Madrid`,   color: "#f87171", bg: "rgba(248,113,113,0.07)", border: "rgba(248,113,113,0.2)" },
+];
 
 const FAQ_JSON_LD = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
   mainEntity: [
-    { q: "¿Cuánto me queda neto de 30.000€ brutos?", a: "Con 30.000€ brutos anuales en Madrid, soltero/a y sin hijos, cobras aproximadamente 2.274€ netos al mes (27.292€ netos al año). De tu salario bruto se descuentan 1.950€ de cotización a la Seguridad Social (6,50%) y 4.967€ de retención IRPF (tipo efectivo 17,7%). El resultado varía según tu comunidad autónoma y situación familiar." },
-    { q: "¿Cómo afecta tener hijos al IRPF?", a: "Tener hijos reduce la base imponible del IRPF gracias a los mínimos familiares. Con un hijo menor de 25 años, el mínimo por descendiente es de 2.400€; con dos hijos, 2.700€ por el segundo. En la práctica, esto supone entre 30€ y 80€ más al mes en el salario neto dependiendo del nivel salarial." },
+    { q: "¿Cuánto me queda neto de 30.000€ brutos?", a: `Con 30.000€ brutos anuales en Madrid, soltero/a y sin hijos, cobras aproximadamente ${fmt(d30.netoMensual)}€ netos al mes (${fmt(d30.netoAnual)}€ netos al año). De tu salario bruto se descuentan ${fmt(d30.ssEuros)}€ de cotización a la Seguridad Social (6,50%) y ${fmt(d30.irpfEuros)}€ de retención IRPF (tipo efectivo ${d30.irpfEf}%). El resultado varía según tu comunidad autónoma y situación familiar.` },
+    { q: "¿Cómo afecta tener hijos al IRPF?", a: "Tener hijos reduce la base imponible del IRPF gracias a los mínimos familiares. Con un hijo menor de 25 años, el mínimo por descendiente es de 2.400€; con dos hijos, 2.700€ por el segundo. En la práctica, esto supone entre 20€ y 70€ más al mes en el salario neto dependiendo del nivel salarial." },
     { q: "¿El cálculo de nómina es el mismo en toda España?", a: "No. La cotización a la Seguridad Social (6,50%) sí es igual en todo el territorio. Sin embargo, el IRPF tiene una parte estatal y una parte autonómica, y cada comunidad fija sus propios tramos. Madrid tiene los tipos autonómicos más bajos del régimen común, mientras que Cataluña o Valencia aplican tipos más altos." },
     { q: "¿Qué diferencia hay entre cobrar en 12 o 14 pagas?", a: "La paga bruta anual es la misma, pero el IRPF retenido cambia. Con 14 pagas, dos mensualidades adicionales se cobran en meses concretos, lo que puede alterar el tipo de retención. El neto anual total es prácticamente idéntico; la diferencia está en cómo se distribuye a lo largo del año." },
-    { q: "¿Cuánto le cuesta un empleado a la empresa?", a: "Además del salario bruto, la empresa paga sus propias cotizaciones a la Seguridad Social (≈29,90% adicional). Para un empleado con 30.000€ brutos, el coste total para la empresa es de aproximadamente 39.144€ al año." },
+    { q: "¿Cuánto le cuesta un empleado a la empresa?", a: `Además del salario bruto, la empresa paga sus propias cotizaciones a la Seguridad Social (≈30,48% adicional). Para un empleado con 30.000€ brutos, el coste total para la empresa es de aproximadamente ${fmt(d30.costeEmpresa)}€ al año.` },
   ].map(({ q, a }) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })),
 };
 
@@ -106,18 +133,16 @@ const IRPF_TRAMOS = [
   { rango: "Más de 300.000 €",       tipo: "24,50%", bar: 100, color: "#ef4444" },
 ];
 
-const SEO_SALARY_TABLE = [
-  { bruto: "15.000 €",  neto: "1.221 €/mes", slug: "15000",  color: "#38bdf8" },
-  { bruto: "20.000 €",  neto: "1.575 €/mes", slug: "20000",  color: "#6366f1" },
-  { bruto: "25.000 €",  neto: "1.911 €/mes", slug: "25000",  color: "#818cf8" },
-  { bruto: "30.000 €",  neto: "2.274 €/mes", slug: "30000",  color: "#a78bfa" },
-  { bruto: "35.000 €",  neto: "2.520 €/mes", slug: "35000",  color: "#b48bfb" },
-  { bruto: "40.000 €",  neto: "2.876 €/mes", slug: "40000",  color: "#c084fc" },
-  { bruto: "50.000 €",  neto: "3.414 €/mes", slug: "50000",  color: "#e879f9" },
-  { bruto: "60.000 €",  neto: "3.795 €/mes", slug: "60000",  color: "#f472d0" },
-  { bruto: "80.000 €",  neto: "4.740 €/mes", slug: "80000",  color: "#f86f9e" },
-  { bruto: "100.000 €", neto: "5.631 €/mes", slug: "100000", color: "#fb7185" },
-];
+const SEO_SALARY_COLORS: Record<string, string> = {
+  "15000": "#38bdf8", "20000": "#6366f1", "25000": "#818cf8", "30000": "#a78bfa",
+  "35000": "#b48bfb", "40000": "#c084fc", "50000": "#e879f9", "60000": "#f472d0",
+  "80000": "#f86f9e", "100000": "#fb7185",
+};
+
+const SEO_SALARY_TABLE = ["15000","20000","25000","30000","35000","40000","50000","60000","80000","100000"].map((slug) => {
+  const d = SALARIO_DATA[slug];
+  return { bruto: `${d.brutoLabel} €`, neto: `${fmt(d.netoMensual)} €/mes`, slug, color: SEO_SALARY_COLORS[slug] };
+});
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
@@ -609,11 +634,7 @@ export default function HomePage() {
 
               {/* Mini-cards CCAA */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-8">
-                {[
-                  { label: "Madrid", emoji: "🏛️", neto: "2.274 €/mes", delta: "Menos impuestos", color: "#34d399", bg: "rgba(52,211,153,0.07)", border: "rgba(52,211,153,0.2)" },
-                  { label: "Valencia", emoji: "🌊", neto: "2.251 €/mes", delta: "−23 €/mes vs Madrid", color: "#818cf8", bg: "rgba(99,102,241,0.07)", border: "rgba(99,102,241,0.2)" },
-                  { label: "Cataluña", emoji: "🏔️", neto: "2.218 €/mes", delta: "−56 €/mes vs Madrid", color: "#f87171", bg: "rgba(248,113,113,0.07)", border: "rgba(248,113,113,0.2)" },
-                ].map((c) => (
+                {CCAA_MINI_CARDS.map((c) => (
                   <div
                     key={c.label}
                     className="rounded-xl p-4 flex flex-col gap-2"
@@ -640,20 +661,17 @@ export default function HomePage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {[
-                      { ccaa: "Comunidad de Madrid ★", neto: "2.274 €", irpf: "17,7%", highlight: true },
-                      { ccaa: "Castilla y León",       neto: "2.262 €", irpf: "18,1%", highlight: false },
-                      { ccaa: "Andalucía",             neto: "2.259 €", irpf: "18,2%", highlight: false },
-                      { ccaa: "Comunitat Valenciana",  neto: "2.251 €", irpf: "18,5%", highlight: false },
-                      { ccaa: "Galicia",               neto: "2.248 €", irpf: "18,6%", highlight: false },
-                      { ccaa: "Cataluña",              neto: "2.218 €", irpf: "19,9%", highlight: false },
-                    ].map((row) => (
-                      <tr key={row.ccaa} style={{ background: row.highlight ? "rgba(99,102,241,0.05)" : "transparent" }}>
-                        <SeoTd highlight={row.highlight}>{row.ccaa}</SeoTd>
-                        <td className="px-4 py-3 text-sm font-semibold" style={{ color: row.highlight ? "#34d399" : "#a0c0a0", borderBottom: "1px solid rgba(255,255,255,0.04)" }}>{row.neto}</td>
-                        <SeoTd>{row.irpf}</SeoTd>
-                      </tr>
-                    ))}
+                    {d30.ccaaTable.map((row, i) => {
+                      const highlight = i === 0;
+                      const label = highlight ? `${row.ccaa} ★` : row.ccaa;
+                      return (
+                        <tr key={row.ccaa} style={{ background: highlight ? "rgba(99,102,241,0.05)" : "transparent" }}>
+                          <SeoTd highlight={highlight}>{label}</SeoTd>
+                          <td className="px-4 py-3 text-sm font-semibold" style={{ color: highlight ? "#34d399" : "#a0c0a0", borderBottom: "1px solid rgba(255,255,255,0.04)" }}>{fmt(row.neto)} €</td>
+                          <SeoTd>{row.irpf}</SeoTd>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
@@ -670,7 +688,7 @@ export default function HomePage() {
                   <strong style={{ color: "#e0e0ff" }}>Madrid tiene los tipos autonómicos más bajos del régimen común</strong>, con bonificaciones que reducen significativamente la presión fiscal. En el extremo opuesto, <strong style={{ color: "#e0e0ff" }}>Cataluña aplica los tipos más altos</strong>, especialmente a partir de 33.007€. Valencia se sitúa en una posición intermedia pero con tramos relevantes desde los 27.000€.
                 </p>
                 <p>
-                  Con <strong style={{ color: "#e0e0ff" }}>30.000€ brutos anuales</strong>, la diferencia entre vivir en Madrid o Cataluña es de <strong style={{ color: "#34d399" }}>676€ al año</strong> — más de medio mes de neto extra, simplemente por la comunidad de residencia.
+                  Con <strong style={{ color: "#e0e0ff" }}>30.000€ brutos anuales</strong>, la diferencia entre vivir en Madrid o Cataluña es de <strong style={{ color: "#34d399" }}>{fmt((d30Mad.neto - d30Cat.neto) * 12)}€ al año</strong> — simplemente por la comunidad de residencia.
                 </p>
 
                 {/* CTA box */}
