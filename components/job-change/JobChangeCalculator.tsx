@@ -55,22 +55,33 @@ function fi(n: number): string {
   return n.toFixed(1).replace(".", ",");
 }
 
-// ─── Small UI primitives ────────────────────────────────────────────────────────
+// ─── Design tokens (matching Calculator.tsx) ────────────────────────────────────
 
-function FieldLabel({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="text-xs font-medium block mb-1.5" style={{ color: "#9090b8" }}>
-      {children}
-    </span>
-  );
-}
+const LABEL_STYLE: React.CSSProperties = {
+  color: "#b8b8d8",
+  fontSize: "0.72rem",
+  fontWeight: 600,
+  textTransform: "uppercase",
+  letterSpacing: "0.08em",
+  display: "block",
+  marginBottom: 7,
+};
 
-const INPUT_STYLE = {
+const INPUT_BASE: React.CSSProperties = {
   background: "rgba(255,255,255,0.04)",
   border: "1px solid rgba(255,255,255,0.1)",
   color: "#e0e0ff",
   caretColor: "#6366f1",
-} as const;
+  width: "100%",
+  borderRadius: 12,
+  padding: "11px 14px",
+  fontSize: "0.9rem",
+  fontWeight: 500,
+  outline: "none",
+  transition: "border-color 0.15s",
+};
+
+// ─── Field components ────────────────────────────────────────────────────────────
 
 function NumInput({
   label,
@@ -87,20 +98,19 @@ function NumInput({
 }) {
   return (
     <label className="flex flex-col">
-      <FieldLabel>
+      <span style={LABEL_STYLE}>
         {label}
         {required && <span style={{ color: "#f87171" }}> *</span>}
-      </FieldLabel>
+      </span>
       <input
         type="number"
         min="0"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full rounded-xl px-3.5 py-2.5 text-sm font-medium outline-none transition-all"
-        style={INPUT_STYLE}
+        style={INPUT_BASE}
         onFocus={(e) => { (e.currentTarget as HTMLInputElement).style.borderColor = "rgba(99,102,241,0.6)"; }}
-        onBlur={(e) => { (e.currentTarget as HTMLInputElement).style.borderColor = "rgba(255,255,255,0.1)"; }}
+        onBlur={(e)  => { (e.currentTarget as HTMLInputElement).style.borderColor = "rgba(255,255,255,0.1)"; }}
       />
     </label>
   );
@@ -119,14 +129,13 @@ function SelectInput<T extends string>({
 }) {
   return (
     <label className="flex flex-col">
-      <FieldLabel>{label}</FieldLabel>
+      <span style={LABEL_STYLE}>{label}</span>
       <select
         value={value}
         onChange={(e) => onChange(e.target.value as T)}
-        className="w-full rounded-xl px-3.5 py-2.5 text-sm font-medium outline-none transition-all"
-        style={{ ...INPUT_STYLE, appearance: "none" } as React.CSSProperties}
+        style={{ ...INPUT_BASE, appearance: "none" } as React.CSSProperties}
         onFocus={(e) => { (e.currentTarget as HTMLSelectElement).style.borderColor = "rgba(99,102,241,0.6)"; }}
-        onBlur={(e) => { (e.currentTarget as HTMLSelectElement).style.borderColor = "rgba(255,255,255,0.1)"; }}
+        onBlur={(e)  => { (e.currentTarget as HTMLSelectElement).style.borderColor = "rgba(255,255,255,0.1)"; }}
       >
         {options.map((o) => (
           <option key={o.value} value={o.value} style={{ background: "#0d0d1a", color: "#e0e0ff" }}>
@@ -158,14 +167,21 @@ function JobColumn({
   return (
     <div
       className="flex-1 rounded-2xl p-5 flex flex-col gap-4"
-      style={{ background: "rgba(13,13,26,0.85)", border: `1px solid ${accent}35` }}
+      style={{
+        background: "rgba(255,255,255,0.02)",
+        border: "1px solid rgba(255,255,255,0.08)",
+      }}
     >
-      <div className="flex items-center gap-2 mb-0.5">
+      {/* Column header — mismo patrón que SectionHeader en Calculator.tsx */}
+      <div className="flex items-center gap-3 pb-1" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
         <div
-          className="w-2 h-2 rounded-full shrink-0"
-          style={{ background: accent, boxShadow: `0 0 7px ${accent}` }}
+          className="w-1 h-6 rounded-full shrink-0"
+          style={{ background: accent, boxShadow: `0 0 8px ${accent}80` }}
         />
-        <span className="text-sm font-semibold" style={{ color: accent }}>
+        <span
+          className="font-syne font-bold text-sm tracking-widest uppercase"
+          style={{ color: accent }}
+        >
           {title}
         </span>
       </div>
@@ -186,7 +202,7 @@ function JobColumn({
       />
 
       <SelectInput<"12" | "14">
-        label="Pagas"
+        label="Número de pagas"
         value={state.pagas}
         onChange={(v) => onChange({ ...state, pagas: v })}
         options={[
@@ -196,7 +212,6 @@ function JobColumn({
       />
 
       <NumInput label="Bonus anual (€)" value={state.bonus} onChange={set("bonus")} placeholder="0" />
-
       <NumInput label="Días de vacaciones" value={state.vacaciones} onChange={set("vacaciones")} placeholder="22" />
 
       <SelectInput<TeletrabajoLevel>
@@ -204,15 +219,15 @@ function JobColumn({
         value={state.teletrabajo}
         onChange={(v) => onChange({ ...state, teletrabajo: v })}
         options={[
-          { value: "none", label: "Sin teletrabajo" },
+          { value: "none",    label: "Sin teletrabajo" },
           { value: "partial", label: "Parcial (algunos días)" },
-          { value: "full", label: "Completo (100%)" },
+          { value: "full",    label: "Completo (100%)" },
         ]}
       />
 
       {showAntiguedad && (
         <NumInput
-          label="Antigüedad en empresa (años)"
+          label="Antigüedad (años)"
           value={state.antiguedad}
           onChange={set("antiguedad")}
           placeholder="0"
@@ -236,9 +251,9 @@ function QualRow({
   sentiment: "positive" | "negative" | "neutral";
 }) {
   const colors = {
-    positive: { text: "#34d399", bg: "rgba(52,211,153,0.08)", border: "rgba(52,211,153,0.2)" },
-    negative: { text: "#f87171", bg: "rgba(248,113,113,0.08)", border: "rgba(248,113,113,0.2)" },
-    neutral:  { text: "#9090b8", bg: "rgba(255,255,255,0.03)", border: "rgba(255,255,255,0.08)" },
+    positive: { text: "#34d399", bg: "rgba(52,211,153,0.07)",  border: "rgba(52,211,153,0.18)" },
+    negative: { text: "#f87171", bg: "rgba(248,113,113,0.07)", border: "rgba(248,113,113,0.18)" },
+    neutral:  { text: "#9090b8", bg: "rgba(255,255,255,0.02)", border: "rgba(255,255,255,0.07)" },
   };
   const c = colors[sentiment];
   return (
@@ -246,11 +261,60 @@ function QualRow({
       className="flex items-center justify-between px-4 py-3 rounded-xl"
       style={{ background: c.bg, border: `1px solid ${c.border}` }}
     >
-      <div className="flex items-center gap-2.5">
+      <div className="flex items-center gap-3">
         <span className="text-base leading-none">{icon}</span>
-        <span className="text-sm" style={{ color: "#b0b0c8" }}>{label}</span>
+        <span className="text-sm font-medium" style={{ color: "#c0c0d8" }}>{label}</span>
       </div>
       <span className="text-sm font-semibold tabnum" style={{ color: c.text }}>{value}</span>
+    </div>
+  );
+}
+
+// ─── Metric card (resultado) ───────────────────────────────────────────────────
+
+function MetricCard({
+  label,
+  value,
+  sub,
+  color,
+  large,
+}: {
+  label: string;
+  value: string;
+  sub?: string;
+  color: string;
+  large?: boolean;
+}) {
+  return (
+    <div
+      className="flex flex-col gap-1"
+      style={{
+        background: "rgba(255,255,255,0.03)",
+        border: "1px solid rgba(255,255,255,0.07)",
+        borderRadius: 14,
+        padding: "14px 18px",
+      }}
+    >
+      <span
+        style={{
+          color: "#7070a0",
+          fontSize: "0.68rem",
+          fontWeight: 600,
+          textTransform: "uppercase",
+          letterSpacing: "0.09em",
+        }}
+      >
+        {label}
+      </span>
+      <span
+        className="font-syne font-bold tabnum leading-none"
+        style={{ color, fontSize: large ? "1.5rem" : "1.15rem", marginTop: 2 }}
+      >
+        {value}
+      </span>
+      {sub && (
+        <span style={{ color: "#5a5a80", fontSize: "0.72rem", marginTop: 2 }}>{sub}</span>
+      )}
     </div>
   );
 }
@@ -262,19 +326,16 @@ export default function JobChangeCalculator() {
   const [oferta, setOferta] = useState<JobState>(INIT_OFERTA);
   const [showAdvanced, setShowAdvanced] = useState(false);
 
-  // Personal profile (advanced)
-  const [familySituation, setFamilySituation] = useState<FamilySituation>("soltero");
-  const [numChildren, setNumChildren] = useState("0");
-  const [age, setAge] = useState("35");
-  const [contractType, setContractType] = useState<ContractType>("indefinido");
-  const [disability, setDisability] = useState<Disability>("none");
-  const [spouseWithoutIncome, setSpouseWithoutIncome] = useState(false);
+  const [familySituation,    setFamilySituation]    = useState<FamilySituation>("soltero");
+  const [numChildren,        setNumChildren]        = useState("0");
+  const [age,                setAge]                = useState("35");
+  const [contractType,       setContractType]       = useState<ContractType>("indefinido");
+  const [disability,         setDisability]         = useState<Disability>("none");
+  const [spouseWithoutIncome,setSpouseWithoutIncome]= useState(false);
 
-  const [hasCalculated, setHasCalculated] = useState(false);
+  const [hasCalculated,   setHasCalculated]   = useState(false);
   const [validationError, setValidationError] = useState("");
   const resultRef = useRef<HTMLDivElement>(null);
-
-  // ── Validation & calculation trigger ──────────────────────────────────────────
 
   function handleCompare() {
     const aB = parseFloat(actual.bruto);
@@ -286,7 +347,7 @@ export default function JobChangeCalculator() {
     setTimeout(() => resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 50);
   }
 
-  // ── Derived values (only when both brutos are valid) ────────────────────────
+  // ── Derived values ────────────────────────────────────────────────────────────
 
   const aB = parseFloat(actual.bruto) || 0;
   const oB = parseFloat(oferta.bruto) || 0;
@@ -295,10 +356,10 @@ export default function JobChangeCalculator() {
   const profile = {
     contractType,
     familySituation,
-    numChildren: parseInt(numChildren) || 0,
-    childrenUnder3: 0 as const,
+    numChildren:        parseInt(numChildren) || 0,
+    childrenUnder3:     0 as const,
     spouseWithoutIncome,
-    age: parseInt(age) || 35,
+    age:                parseInt(age) || 35,
     disability,
     geographicMobility: false as const,
   };
@@ -324,15 +385,13 @@ export default function JobChangeCalculator() {
   const difVac      = oVac - aVac;
   const difTeletrab = TELETRABAJO_SCORE[oferta.teletrabajo] - TELETRABAJO_SCORE[actual.teletrabajo];
 
-  // Qualitative score (for verdict)
   let qualScore = 0;
-  if (difVac >= 5)   qualScore += 1;
-  if (difVac <= -5)  qualScore -= 1;
-  if (difTeletrab > 0) qualScore += 1;
-  if (difTeletrab < 0) qualScore -= 1;
-  if (antiguedad > 3)  qualScore -= 1; // losing seniority is a negative factor
+  if (difVac >= 5)      qualScore += 1;
+  if (difVac <= -5)     qualScore -= 1;
+  if (difTeletrab > 0)  qualScore += 1;
+  if (difTeletrab < 0)  qualScore -= 1;
+  if (antiguedad > 3)   qualScore -= 1;
 
-  // Verdict
   const verdict: "green" | "yellow" | "red" =
     difTotal >= 3000 || (difTotal >= 1500 && qualScore >= 2)
       ? "green"
@@ -344,60 +403,33 @@ export default function JobChangeCalculator() {
 
   const insights: string[] = [];
   if (ready && aR && oR) {
-    // CCAA change
     if (actual.ccaa !== oferta.ccaa) {
       const aLabel = COMUNIDADES_LABEL[actual.ccaa];
       const oLabel = COMUNIDADES_LABEL[oferta.ccaa];
       if (oB > aB && difMensual < (oB - aB) / 12 * 0.5) {
-        insights.push(
-          `Aunque el bruto sube, el neto mejora menos de lo esperado por el cambio de comunidad autónoma (${aLabel} → ${oLabel}). Las diferencias en el tramo autonómico del IRPF reducen la ganancia real.`,
-        );
+        insights.push(`Aunque el bruto sube, el neto mejora menos de lo esperado por el cambio de comunidad (${aLabel} → ${oLabel}). Las diferencias en el tramo autonómico del IRPF reducen la ganancia real.`);
       } else {
-        insights.push(
-          `Al cambiar de comunidad (${aLabel} → ${oLabel}), el tramo autonómico del IRPF cambia. Asegúrate de comparar el neto neto, no solo el bruto.`,
-        );
+        insights.push(`Al cambiar de comunidad (${aLabel} → ${oLabel}) cambia el tramo autonómico del IRPF. Compara siempre el neto real, no solo el bruto.`);
       }
     }
-
-    // Pagas change
     if (actual.pagas !== oferta.pagas) {
-      insights.push(
-        `Con ${oferta.pagas} pagas no cobras más al año: el neto anual total es prácticamente el mismo. Lo que cambia es cómo se distribuye ese dinero a lo largo del año.`,
-      );
+      insights.push(`Con ${oferta.pagas} pagas no cobras más al año: el neto anual total es el mismo. Solo cambia cómo se distribuye ese dinero a lo largo del año.`);
     }
-
-    // Bruto sube pero neto no tanto
     const brutoDelta = oB - aB;
     if (brutoDelta > 5000 && difAnual < brutoDelta * 0.55) {
-      insights.push(
-        `La subida de bruto (${fmtN(brutoDelta)} €/año) se traduce en solo ${fmtN(difAnual)} € netos extra al año. La progresividad del IRPF absorbe entre el ${fi(((brutoDelta - difAnual) / brutoDelta) * 100)} % de la mejora.`,
-      );
+      insights.push(`La subida de bruto (${fmtN(brutoDelta)} €/año) se traduce en solo ${fmtN(difAnual)} € netos extra. La progresividad del IRPF absorbe el ${fi(((brutoDelta - difAnual) / brutoDelta) * 100)} % de la mejora.`);
     }
-
-    // Bonus es la clave
     if (difBonus > 0 && difBonus > difAnual) {
-      insights.push(
-        `La mejora principal no viene del salario fijo, sino del bonus (${fmtN(difBonus)} €/año más). Los bonus son variables y no siempre están garantizados. Pregunta si está garantizado contractualmente o depende de objetivos.`,
-      );
+      insights.push(`La mejora principal no viene del fijo sino del bonus (${fmtN(difBonus)} €/año más). Los bonus son variables. Pregunta si está garantizado contractualmente o depende de objetivos.`);
     }
-
-    // Antigüedad warning
     if (antiguedad >= 3) {
-      insights.push(
-        `Al cambiar de empresa pierdes ${antiguedad} año${antiguedad !== 1 ? "s" : ""} de antigüedad. Revisa si tu convenio actual incluye pluses por permanencia, mejoras de condiciones por tramos de antigüedad o indemnizaciones especiales.`,
-      );
+      insights.push(`Al cambiar pierdes ${antiguedad} año${antiguedad !== 1 ? "s" : ""} de antigüedad. Revisa si tu convenio actual incluye pluses por permanencia o mejoras por tramos.`);
     }
     if (antiguedad >= 6) {
-      insights.push(
-        `Con ${antiguedad} años en la empresa actual, tu indemnización legal ante un despido improcedente sería de ${fmtN(antiguedad * 33)} días de salario aproximadamente. En la nueva empresa empezarías desde cero.`,
-      );
+      insights.push(`Con ${antiguedad} años en la empresa actual, tu indemnización ante despido improcedente sería de ≈${fmtN(antiguedad * 33)} días de salario. En la nueva empresa empezarías desde cero.`);
     }
-
-    // Vacation negative
     if (difVac <= -5) {
-      insights.push(
-        `Perderías ${Math.abs(difVac)} días de vacaciones. A €/día equivale a renunciar a aproximadamente ${fmtN(Math.round((oR.annualGross / 220) * Math.abs(difVac)))} € brutos en tiempo libre al año.`,
-      );
+      insights.push(`Perderías ${Math.abs(difVac)} días de vacaciones, equivalente a renunciar a ≈${fmtN(Math.round((oR.annualGross / 220) * Math.abs(difVac)))} € brutos en tiempo libre al año.`);
     }
   }
 
@@ -406,11 +438,12 @@ export default function JobChangeCalculator() {
   const verdictConfig = {
     green: {
       icon: "✅",
-      title: "En principio, te conviene",
+      title: "En principio, te compensa",
       sub: "La mejora económica y los factores cualitativos apuntan a que el cambio es favorable.",
       color: "#34d399",
       bg: "rgba(52,211,153,0.06)",
-      border: "rgba(52,211,153,0.22)",
+      border: "rgba(52,211,153,0.25)",
+      glow: "rgba(52,211,153,0.12)",
     },
     yellow: {
       icon: "⚠️",
@@ -418,7 +451,8 @@ export default function JobChangeCalculator() {
       sub: "La diferencia económica es moderada. Los factores no salariales pueden ser determinantes.",
       color: "#fbbf24",
       bg: "rgba(251,191,36,0.06)",
-      border: "rgba(251,191,36,0.22)",
+      border: "rgba(251,191,36,0.25)",
+      glow: "rgba(251,191,36,0.1)",
     },
     red: {
       icon: "❌",
@@ -426,37 +460,36 @@ export default function JobChangeCalculator() {
       sub: "La compensación total empeora o la mejora es insuficiente dado lo que perderías.",
       color: "#f87171",
       bg: "rgba(248,113,113,0.06)",
-      border: "rgba(248,113,113,0.22)",
+      border: "rgba(248,113,113,0.25)",
+      glow: "rgba(248,113,113,0.1)",
     },
   };
 
   const vc = verdictConfig[verdict];
-
-  // ── Diff color ────────────────────────────────────────────────────────────────
-
   const diffColor = difTotal > 500 ? "#34d399" : difTotal < -200 ? "#f87171" : "#fbbf24";
 
   // ─── JSX ─────────────────────────────────────────────────────────────────────
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-6">
+
       {/* ── Advanced profile toggle ── */}
       <div
         className="rounded-2xl overflow-hidden"
-        style={{ border: "1px solid rgba(255,255,255,0.07)", background: "rgba(13,13,26,0.6)" }}
+        style={{ border: "1px solid rgba(255,255,255,0.07)", background: "rgba(255,255,255,0.02)" }}
       >
         <button
-          className="w-full flex items-center justify-between px-5 py-4 text-sm font-medium transition-colors"
+          className="w-full flex items-center justify-between px-5 py-4 transition-colors"
           style={{ color: showAdvanced ? "#a5b4fc" : "#7c7ca0" }}
           onClick={() => setShowAdvanced((v) => !v)}
         >
-          <span className="flex items-center gap-2.5">
+          <span className="flex items-center gap-2.5 text-sm font-semibold">
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
               <circle cx="7" cy="4.5" r="2" /><path d="M2 12c0-2.76 2.24-5 5-5s5 2.24 5 5" />
             </svg>
             Perfil personal
           </span>
-          <span className="flex items-center gap-2 text-xs" style={{ color: "#5a5a80" }}>
+          <span className="flex items-center gap-2" style={{ color: "#5a5a80", fontSize: "0.75rem" }}>
             {showAdvanced ? "Ocultar" : "Personalizar situación familiar, edad y contrato"}
             <svg width="10" height="10" viewBox="0 0 10 10" fill="none" className="transition-transform duration-200" style={{ transform: showAdvanced ? "rotate(180deg)" : "none" }}>
               <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -464,56 +497,43 @@ export default function JobChangeCalculator() {
           </span>
         </button>
 
-        <div
-          className="overflow-hidden transition-all duration-300"
-          style={{ maxHeight: showAdvanced ? "400px" : "0px" }}
-        >
+        <div className="overflow-hidden transition-all duration-300" style={{ maxHeight: showAdvanced ? "420px" : "0px" }}>
           <div
-            className="grid grid-cols-2 sm:grid-cols-3 gap-4 px-5 pb-5"
+            className="grid grid-cols-2 sm:grid-cols-3 gap-4 px-5 pb-5 pt-4"
             style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
           >
-            <div className="pt-4">
-              <SelectInput<FamilySituation>
-                label="Situación familiar"
-                value={familySituation}
-                onChange={setFamilySituation}
-                options={[
-                  { value: "soltero", label: "Soltero/a" },
-                  { value: "casado", label: "Casado/a" },
-                  { value: "monoparental", label: "Monoparental" },
-                ]}
-              />
-            </div>
-            <div className="pt-4">
-              <NumInput label="Hijos a cargo" value={numChildren} onChange={setNumChildren} placeholder="0" />
-            </div>
-            <div className="pt-4">
-              <NumInput label="Edad" value={age} onChange={setAge} placeholder="35" />
-            </div>
-            <div>
-              <SelectInput<ContractType>
-                label="Tipo de contrato"
-                value={contractType}
-                onChange={setContractType}
-                options={[
-                  { value: "indefinido", label: "Indefinido" },
-                  { value: "temporal", label: "Temporal" },
-                ]}
-              />
-            </div>
-            <div>
-              <SelectInput<Disability>
-                label="Discapacidad"
-                value={disability}
-                onChange={setDisability}
-                options={[
-                  { value: "none", label: "Sin discapacidad" },
-                  { value: "33-65", label: "33%–65%" },
-                  { value: "65plus", label: "> 65%" },
-                  { value: "65plus-mobility", label: "> 65% + movilidad" },
-                ]}
-              />
-            </div>
+            <SelectInput<FamilySituation>
+              label="Situación familiar"
+              value={familySituation}
+              onChange={setFamilySituation}
+              options={[
+                { value: "soltero",      label: "Soltero/a" },
+                { value: "casado",       label: "Casado/a" },
+                { value: "monoparental", label: "Monoparental" },
+              ]}
+            />
+            <NumInput label="Hijos a cargo" value={numChildren} onChange={setNumChildren} placeholder="0" />
+            <NumInput label="Edad" value={age} onChange={setAge} placeholder="35" />
+            <SelectInput<ContractType>
+              label="Tipo de contrato"
+              value={contractType}
+              onChange={setContractType}
+              options={[
+                { value: "indefinido", label: "Indefinido" },
+                { value: "temporal",   label: "Temporal" },
+              ]}
+            />
+            <SelectInput<Disability>
+              label="Discapacidad"
+              value={disability}
+              onChange={setDisability}
+              options={[
+                { value: "none",           label: "Sin discapacidad" },
+                { value: "33-65",          label: "33 %–65 %" },
+                { value: "65plus",         label: "> 65 %" },
+                { value: "65plus-mobility",label: "> 65 % + movilidad" },
+              ]}
+            />
             <div className="flex items-center gap-3 pt-5">
               <button
                 type="button"
@@ -530,13 +550,11 @@ export default function JobChangeCalculator() {
                   }}
                 />
               </button>
-              <span className="text-xs" style={{ color: "#9090b8" }}>
-                Cónyuge sin ingresos
-              </span>
+              <span style={{ color: "#9090b8", fontSize: "0.8rem" }}>Cónyuge sin ingresos</span>
             </div>
           </div>
-          <p className="px-5 pb-4 text-xs" style={{ color: "#4a4a6a" }}>
-            Por defecto: soltero/a · sin hijos · 35 años · indefinido. Estas opciones se aplican a ambos escenarios para que la comparativa sea justa.
+          <p className="px-5 pb-4" style={{ color: "#4a4a6a", fontSize: "0.72rem" }}>
+            Por defecto: soltero/a · sin hijos · 35 años · indefinido. Se aplica a ambos escenarios para que la comparativa sea justa.
           </p>
         </div>
       </div>
@@ -550,12 +568,26 @@ export default function JobChangeCalculator() {
           state={actual}
           onChange={setActual}
         />
-        <div
-          className="hidden md:flex items-center justify-center shrink-0"
-          style={{ width: 32 }}
-        >
-          <span className="text-xl font-bold" style={{ color: "#3d3d60" }}>vs</span>
+
+        {/* VS divider — desktop only */}
+        <div className="hidden md:flex flex-col items-center justify-center shrink-0 gap-2" style={{ width: 40 }}>
+          <div className="flex-1 w-px" style={{ background: "rgba(255,255,255,0.05)" }} />
+          <div
+            className="w-8 h-8 rounded-full flex items-center justify-center font-syne font-black text-xs shrink-0"
+            style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.09)", color: "#5a5a80" }}
+          >
+            VS
+          </div>
+          <div className="flex-1 w-px" style={{ background: "rgba(255,255,255,0.05)" }} />
         </div>
+
+        {/* VS divider — mobile only */}
+        <div className="md:hidden flex items-center gap-3">
+          <div className="flex-1 h-px" style={{ background: "rgba(255,255,255,0.05)" }} />
+          <span className="font-syne font-black text-xs" style={{ color: "#4a4a6a" }}>VS</span>
+          <div className="flex-1 h-px" style={{ background: "rgba(255,255,255,0.05)" }} />
+        </div>
+
         <JobColumn
           title="Nueva oferta"
           accent="#34d399"
@@ -574,222 +606,230 @@ export default function JobChangeCalculator() {
         </p>
       )}
 
-      {/* ── CTA ── */}
+      {/* ── CTA button ── */}
       <div className="flex justify-center">
         <button
           onClick={handleCompare}
-          className="flex items-center gap-2.5 px-8 py-3.5 rounded-2xl text-sm font-semibold transition-all duration-200"
+          className="relative overflow-hidden flex items-center gap-3 font-syne font-black tracking-widest uppercase"
           style={{
-            background: "linear-gradient(135deg, #6366f1 0%, #818cf8 100%)",
+            background: "linear-gradient(135deg, #4f52d4 0%, #6366f1 50%, #818cf8 100%)",
             color: "#fff",
-            boxShadow: "0 4px 20px rgba(99,102,241,0.4)",
+            borderRadius: 16,
+            padding: "16px 40px",
+            fontSize: "0.9rem",
+            letterSpacing: "0.12em",
+            boxShadow: "0 6px 30px rgba(99,102,241,0.5), 0 0 0 1px rgba(99,102,241,0.3)",
+            transition: "transform 0.15s, box-shadow 0.15s",
           }}
-          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 6px 28px rgba(99,102,241,0.55)"; }}
-          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 4px 20px rgba(99,102,241,0.4)"; }}
+          onMouseEnter={(e) => {
+            (e.currentTarget as HTMLButtonElement).style.transform = "translateY(-2px)";
+            (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 10px 40px rgba(99,102,241,0.65), 0 0 0 1px rgba(99,102,241,0.4)";
+          }}
+          onMouseLeave={(e) => {
+            (e.currentTarget as HTMLButtonElement).style.transform = "translateY(0)";
+            (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 6px 30px rgba(99,102,241,0.5), 0 0 0 1px rgba(99,102,241,0.3)";
+          }}
         >
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+          {/* Shine sweep */}
+          <span
+            className="pointer-events-none absolute inset-0"
+            style={{
+              background: "linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.12) 50%, transparent 60%)",
+              backgroundSize: "200% 100%",
+            }}
+          />
+          <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
             <path d="M2 8h4M10 8h4M8 2v4M8 10v4" />
             <circle cx="8" cy="8" r="2.5" />
           </svg>
           Comparar ofertas
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+            <path d="M2.5 7h9M8 3l4 4-4 4" />
+          </svg>
         </button>
       </div>
 
-      {/* ══ RESULTS ══ */}
+      {/* ══════════════════════ RESULTS ══════════════════════ */}
       {hasCalculated && ready && aR && oR && (
         <div ref={resultRef} className="flex flex-col gap-5 animate-scaleIn">
+
+          {/* ── Separador visual ── */}
+          <div className="flex items-center gap-4 py-2">
+            <div className="flex-1 h-px" style={{ background: "linear-gradient(90deg, transparent, rgba(99,102,241,0.3))" }} />
+            <span
+              className="font-syne font-bold text-xs tracking-widest uppercase shrink-0"
+              style={{ color: "#6366f1" }}
+            >
+              Resultado
+            </span>
+            <div className="flex-1 h-px" style={{ background: "linear-gradient(90deg, rgba(99,102,241,0.3), transparent)" }} />
+          </div>
 
           {/* ── Bloque 1: Summary cards ── */}
           <div className="flex flex-col md:flex-row gap-4">
             {[
-              {
-                label: "Trabajo actual",
-                r: aR,
-                bonus: aBonus,
-                vac: aVac,
-                tele: actual.teletrabajo,
-                ccaa: COMUNIDADES_LABEL[actual.ccaa],
-                pagas: actual.pagas,
-                accent: "#818cf8",
-              },
-              {
-                label: "Nueva oferta",
-                r: oR,
-                bonus: oBonus,
-                vac: oVac,
-                tele: oferta.teletrabajo,
-                ccaa: COMUNIDADES_LABEL[oferta.ccaa],
-                pagas: oferta.pagas,
-                accent: "#34d399",
-              },
+              { label: "Trabajo actual", r: aR, bonus: aBonus, vac: aVac, tele: actual.teletrabajo, ccaa: COMUNIDADES_LABEL[actual.ccaa], pagas: actual.pagas, accent: "#818cf8" },
+              { label: "Nueva oferta",   r: oR, bonus: oBonus, vac: oVac, tele: oferta.teletrabajo, ccaa: COMUNIDADES_LABEL[oferta.ccaa], pagas: oferta.pagas, accent: "#34d399" },
             ].map((card) => (
               <div
                 key={card.label}
-                className="flex-1 rounded-2xl p-5"
-                style={{ background: "rgba(13,13,26,0.85)", border: `1px solid ${card.accent}30` }}
+                className="flex-1 rounded-2xl overflow-hidden"
+                style={{ background: "rgba(13,13,26,0.9)", border: `1px solid ${card.accent}28` }}
               >
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="w-2 h-2 rounded-full" style={{ background: card.accent }} />
-                  <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: card.accent }}>
-                    {card.label}
-                  </span>
-                </div>
-
-                <div className="mb-4">
-                  <div
-                    className="font-syne font-extrabold leading-none tabnum"
-                    style={{ fontSize: "clamp(1.6rem, 4vw, 2.2rem)", color: "#f0f0ff" }}
-                  >
-                    {fmtN(Math.round(card.r.monthlyNet))} €
+                {/* Barra top con gradiente */}
+                <div style={{ height: 3, background: `linear-gradient(90deg, ${card.accent}, ${card.accent}30)` }} />
+                <div className="p-5">
+                  {/* Header */}
+                  <div className="flex items-center gap-2 mb-4">
+                    <div className="w-1.5 h-1.5 rounded-full" style={{ background: card.accent, boxShadow: `0 0 6px ${card.accent}` }} />
+                    <span
+                      className="font-syne font-bold tracking-widest uppercase"
+                      style={{ fontSize: "0.72rem", color: card.accent }}
+                    >
+                      {card.label}
+                    </span>
                   </div>
-                  <div className="text-xs mt-1" style={{ color: "#5a5a80" }}>
-                    neto mensual
-                  </div>
-                </div>
 
-                <div className="flex flex-col gap-2" style={{ borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: 12 }}>
-                  {[
-                    { label: "Neto anual",    val: `${fmtN(Math.round(card.r.annualNet))} €` },
-                    { label: "IRPF efectivo", val: `${fi(card.r.irpfEfectivo)} %`           },
-                    { label: "Bonus anual",   val: card.bonus > 0 ? `${fmtN(card.bonus)} €` : "—" },
-                    { label: "Pagas",         val: card.pagas },
-                    { label: "CCAA",          val: card.ccaa },
-                  ].map(({ label, val }) => (
-                    <div key={label} className="flex items-center justify-between">
-                      <span className="text-xs" style={{ color: "#5a5a80" }}>{label}</span>
-                      <span className="text-xs font-medium tabnum" style={{ color: "#a0a0c0" }}>{val}</span>
+                  {/* Neto mensual — número protagonista */}
+                  <div className="mb-5">
+                    <div
+                      className="font-syne font-extrabold tabnum leading-none"
+                      style={{ fontSize: "clamp(2rem, 5vw, 2.6rem)", color: "#f0f0ff" }}
+                    >
+                      {fmtN(Math.round(card.r.monthlyNet))} €
                     </div>
-                  ))}
+                    <div style={{ color: "#5a5a80", fontSize: "0.75rem", marginTop: 4 }}>neto mensual</div>
+                  </div>
+
+                  {/* Stats grid */}
+                  <div
+                    className="grid grid-cols-2 gap-2"
+                    style={{ borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: 14 }}
+                  >
+                    <MetricCard label="Neto/año"      value={`${fmtN(Math.round(card.r.annualNet))} €`} color="#e0e0ff" />
+                    <MetricCard label="IRPF efectivo" value={`${fi(card.r.irpfEfectivo)} %`}            color="#fbbf24" />
+                    <MetricCard label="Bonus anual"   value={card.bonus > 0 ? `${fmtN(card.bonus)} €` : "—"} color={card.bonus > 0 ? card.accent : "#4a4a6a"} />
+                    <MetricCard label="Vacaciones"    value={`${card.vac} días`}                         color="#e0e0ff" />
+                  </div>
+
+                  {/* CCAA + pagas footer */}
+                  <div className="flex items-center justify-between mt-3 pt-3" style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}>
+                    <span style={{ color: "#4a4a6a", fontSize: "0.72rem" }}>{card.ccaa}</span>
+                    <span style={{ color: "#4a4a6a", fontSize: "0.72rem" }}>{card.pagas} pagas · {TELETRABAJO_LABEL[card.tele]}</span>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
 
-          {/* ── Bloque 2: Diferencia real (protagonist) ── */}
+          {/* ── Bloque 2: Diferencia real — protagonista ── */}
           <div
-            className="rounded-2xl p-6 text-center"
+            className="rounded-2xl p-6 md:p-8 text-center relative overflow-hidden"
             style={{
-              background: `${diffColor}08`,
+              background: `radial-gradient(ellipse 80% 60% at 50% 100%, ${diffColor}10 0%, rgba(8,8,16,0.95) 70%)`,
               border: `1px solid ${diffColor}30`,
             }}
           >
-            <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: "#5a5a80" }}>
+            {/* Glow absoluto detrás del número */}
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background: `radial-gradient(circle 120px at 50% 60%, ${diffColor}15 0%, transparent 70%)`,
+              }}
+            />
+
+            <p className="font-syne font-bold text-xs tracking-widest uppercase mb-4" style={{ color: "#5a5a80" }}>
               Diferencia real
             </p>
+
+            {/* Número central */}
             <div
               className="font-syne font-extrabold tabnum leading-none mb-1"
-              style={{ fontSize: "clamp(2rem, 6vw, 3rem)", color: diffColor }}
+              style={{ fontSize: "clamp(2.8rem, 9vw, 4rem)", color: diffColor }}
             >
               {fmtSigned(Math.round(difMensual))}
             </div>
-            <div className="text-sm mb-4" style={{ color: "#7c7ca0" }}>al mes</div>
+            <div className="text-sm mb-6" style={{ color: "#6060a0" }}>al mes en neto</div>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            {/* Desglose anual */}
+            <div
+              className="inline-flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 px-6 py-4 rounded-2xl"
+              style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}
+            >
               <div className="text-center">
-                <div className="font-syne font-bold text-lg tabnum" style={{ color: difAnual >= 0 ? "#34d399" : "#f87171" }}>
+                <div className="font-syne font-bold tabnum" style={{ fontSize: "1.4rem", color: difAnual >= 0 ? "#34d399" : "#f87171" }}>
                   {fmtSigned(Math.round(difAnual))}
                 </div>
-                <div className="text-xs mt-0.5" style={{ color: "#5a5a80" }}>neto/año</div>
+                <div style={{ color: "#5a5a80", fontSize: "0.72rem", marginTop: 3 }}>neto/año</div>
               </div>
               {difBonus !== 0 && (
                 <>
-                  <span style={{ color: "#3d3d60" }}>+</span>
+                  <span style={{ color: "#3a3a60", fontSize: "1.2rem", fontWeight: 700 }}>+</span>
                   <div className="text-center">
-                    <div className="font-syne font-bold text-lg tabnum" style={{ color: difBonus >= 0 ? "#34d399" : "#f87171" }}>
+                    <div className="font-syne font-bold tabnum" style={{ fontSize: "1.4rem", color: difBonus >= 0 ? "#34d399" : "#f87171" }}>
                       {fmtSigned(difBonus)}
                     </div>
-                    <div className="text-xs mt-0.5" style={{ color: "#5a5a80" }}>bonus</div>
+                    <div style={{ color: "#5a5a80", fontSize: "0.72rem", marginTop: 3 }}>bonus/año</div>
                   </div>
-                  <span style={{ color: "#3d3d60" }}>=</span>
+                  <span style={{ color: "#3a3a60", fontSize: "1.2rem", fontWeight: 700 }}>=</span>
                   <div className="text-center">
-                    <div
-                      className="font-syne font-bold text-lg tabnum"
-                      style={{ color: difTotal >= 0 ? "#34d399" : "#f87171" }}
-                    >
+                    <div className="font-syne font-bold tabnum" style={{ fontSize: "1.4rem", color: difTotal >= 0 ? "#34d399" : "#f87171" }}>
                       {fmtSigned(Math.round(difTotal))}
                     </div>
-                    <div className="text-xs mt-0.5" style={{ color: "#5a5a80" }}>compensación total/año</div>
+                    <div style={{ color: "#5a5a80", fontSize: "0.72rem", marginTop: 3 }}>compensación total/año</div>
                   </div>
                 </>
               )}
             </div>
 
-            {/* Dynamic copy */}
-            <p className="text-sm mt-5 leading-relaxed" style={{ color: "#9090b8" }}>
+            {/* Texto dinámico */}
+            <p className="text-sm leading-relaxed mt-5 max-w-lg mx-auto" style={{ color: "#8080a8" }}>
               {difMensual >= 200
                 ? `Cobrarías ${fmtN(Math.round(difMensual))} € más al mes netos.${difTotal > difAnual ? ` Contando el bonus, la mejora total anual sería de ${fmtN(Math.round(difTotal))} €.` : ""}`
                 : difMensual <= -100
                 ? `Cobrarías ${fmtN(Math.round(Math.abs(difMensual)))} € menos al mes netos.${difTotal > difAnual ? ` El bonus compensa parcialmente: la pérdida total anual sería de ${fmtN(Math.round(Math.abs(difTotal)))} €.` : ""}`
-                : `La diferencia mensual en neto es pequeña (${fmtN(Math.round(Math.abs(difMensual)))} €). El peso de la decisión recae más en los factores no económicos.`}
+                : `La diferencia mensual en neto es pequeña (${fmtN(Math.round(Math.abs(difMensual)))} €). El peso de la decisión recae en los factores no económicos.`}
             </p>
           </div>
 
           {/* ── Bloque 3: Factores adicionales ── */}
-          <div>
+          <div
+            className="rounded-2xl p-5"
+            style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)" }}
+          >
             <p
-              className="text-xs font-semibold uppercase tracking-wider mb-3"
-              style={{ color: "#5a5a80" }}
+              className="font-syne font-bold tracking-widest uppercase mb-4"
+              style={{ fontSize: "0.72rem", color: "#5a5a80" }}
             >
               Factores adicionales
             </p>
             <div className="flex flex-col gap-2">
-              {/* Bonus */}
               <QualRow
                 icon="🎯"
                 label="Bonus anual"
-                value={
-                  difBonus === 0
-                    ? "Sin cambio"
-                    : difBonus > 0
-                    ? `+${fmtN(difBonus)} €/año con la nueva oferta`
-                    : `−${fmtN(Math.abs(difBonus))} €/año con la nueva oferta`
-                }
+                value={difBonus === 0 ? "Sin cambio" : difBonus > 0 ? `+${fmtN(difBonus)} €/año en la nueva oferta` : `−${fmtN(Math.abs(difBonus))} €/año en la nueva oferta`}
                 sentiment={difBonus > 0 ? "positive" : difBonus < 0 ? "negative" : "neutral"}
               />
-
-              {/* Vacaciones */}
               <QualRow
                 icon="🏖️"
                 label="Vacaciones"
-                value={
-                  difVac === 0
-                    ? `${oVac} días (sin cambio)`
-                    : difVac > 0
-                    ? `+${difVac} días más (${oVac} vs ${aVac})`
-                    : `${Math.abs(difVac)} días menos (${oVac} vs ${aVac})`
-                }
+                value={difVac === 0 ? `${oVac} días (sin cambio)` : difVac > 0 ? `+${difVac} días más (${oVac} vs ${aVac})` : `${Math.abs(difVac)} días menos (${oVac} vs ${aVac})`}
                 sentiment={difVac > 0 ? "positive" : difVac < 0 ? "negative" : "neutral"}
               />
-
-              {/* Teletrabajo */}
               <QualRow
                 icon="🏠"
                 label="Teletrabajo"
-                value={
-                  difTeletrab === 0
-                    ? TELETRABAJO_LABEL[oferta.teletrabajo]
-                    : difTeletrab > 0
-                    ? `Mejora: ${TELETRABAJO_LABEL[actual.teletrabajo]} → ${TELETRABAJO_LABEL[oferta.teletrabajo]}`
-                    : `Empeora: ${TELETRABAJO_LABEL[actual.teletrabajo]} → ${TELETRABAJO_LABEL[oferta.teletrabajo]}`
-                }
+                value={difTeletrab === 0 ? TELETRABAJO_LABEL[oferta.teletrabajo] : difTeletrab > 0 ? `Mejora: ${TELETRABAJO_LABEL[actual.teletrabajo]} → ${TELETRABAJO_LABEL[oferta.teletrabajo]}` : `Empeora: ${TELETRABAJO_LABEL[actual.teletrabajo]} → ${TELETRABAJO_LABEL[oferta.teletrabajo]}`}
                 sentiment={difTeletrab > 0 ? "positive" : difTeletrab < 0 ? "negative" : "neutral"}
               />
-
-              {/* Antigüedad */}
               {antiguedad > 0 && (
                 <QualRow
                   icon="📅"
                   label="Antigüedad"
-                  value={
-                    antiguedad === 1
-                      ? "Pierdes 1 año en la empresa actual"
-                      : `Pierdes ${antiguedad} años de antigüedad en la empresa actual`
-                  }
+                  value={`Pierdes ${antiguedad} año${antiguedad !== 1 ? "s" : ""} de antigüedad en la empresa actual`}
                   sentiment={antiguedad >= 3 ? "negative" : "neutral"}
                 />
               )}
-
-              {/* Pagas */}
               {actual.pagas !== oferta.pagas && (
                 <QualRow
                   icon="📋"
@@ -798,8 +838,6 @@ export default function JobChangeCalculator() {
                   sentiment="neutral"
                 />
               )}
-
-              {/* CCAA */}
               {actual.ccaa !== oferta.ccaa && (
                 <QualRow
                   icon="🗺️"
@@ -813,20 +851,25 @@ export default function JobChangeCalculator() {
 
           {/* ── Bloque 4: Veredicto ── */}
           <div
-            className="rounded-2xl p-5 md:p-6"
+            className="rounded-2xl p-6 md:p-7 relative overflow-hidden"
             style={{ background: vc.bg, border: `1px solid ${vc.border}` }}
           >
-            <div className="flex items-start gap-4">
-              <span className="text-2xl leading-none shrink-0">{vc.icon}</span>
+            {/* Glow background */}
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{ background: `radial-gradient(ellipse 60% 50% at 20% 50%, ${vc.glow} 0%, transparent 70%)` }}
+            />
+            <div className="relative flex items-start gap-5">
+              <span style={{ fontSize: "2rem", lineHeight: 1, flexShrink: 0 }}>{vc.icon}</span>
               <div>
-                <p className="font-syne font-bold text-base" style={{ color: vc.color }}>
+                <p className="font-syne font-extrabold" style={{ fontSize: "1.15rem", color: vc.color, lineHeight: 1.2 }}>
                   {vc.title}
                 </p>
-                <p className="text-sm mt-1.5 leading-relaxed" style={{ color: "#9090b8" }}>
+                <p className="text-sm mt-2 leading-relaxed" style={{ color: "#9090b8" }}>
                   {vc.sub}
                 </p>
-                <p className="text-xs mt-3 leading-relaxed" style={{ color: "#6060a0" }}>
-                  Este análisis es orientativo. La decisión de cambiar de trabajo depende también de factores que no se pueden medir: cultura de empresa, proyección profesional, estabilidad del sector, relación con el equipo, y tus prioridades vitales.
+                <p className="text-xs mt-3 leading-relaxed" style={{ color: "#5a5a80" }}>
+                  Este análisis es orientativo. La decisión de cambiar de trabajo depende también de factores que no se pueden medir: cultura de empresa, proyección profesional, estabilidad del sector, relación con el equipo y tus prioridades vitales.
                 </p>
               </div>
             </div>
@@ -834,10 +877,13 @@ export default function JobChangeCalculator() {
 
           {/* ── Bloque 5: Insights ── */}
           {insights.length > 0 && (
-            <div>
+            <div
+              className="rounded-2xl p-5"
+              style={{ background: "rgba(99,102,241,0.03)", border: "1px solid rgba(99,102,241,0.12)" }}
+            >
               <p
-                className="text-xs font-semibold uppercase tracking-wider mb-3"
-                style={{ color: "#5a5a80" }}
+                className="font-syne font-bold tracking-widest uppercase mb-4"
+                style={{ fontSize: "0.72rem", color: "#5a5a80" }}
               >
                 Análisis detallado
               </p>
@@ -849,44 +895,36 @@ export default function JobChangeCalculator() {
                     style={{ background: "rgba(99,102,241,0.06)", border: "1px solid rgba(99,102,241,0.14)" }}
                   >
                     <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 16 16"
-                      fill="none"
-                      stroke="#818cf8"
-                      strokeWidth="1.6"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
+                      width="15" height="15" viewBox="0 0 16 16" fill="none"
+                      stroke="#818cf8" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"
                       className="shrink-0 mt-0.5"
                     >
-                      <circle cx="8" cy="8" r="6.5" />
-                      <path d="M8 7v4M8 5v.5" />
+                      <circle cx="8" cy="8" r="6.5" /><path d="M8 7v4M8 5v.5" />
                     </svg>
-                    <p className="text-sm leading-relaxed" style={{ color: "#9090b8" }}>
-                      {insight}
-                    </p>
+                    <p className="text-sm leading-relaxed" style={{ color: "#9090b8" }}>{insight}</p>
                   </div>
                 ))}
               </div>
             </div>
           )}
 
-          {/* ── CTA to main calculator ── */}
+          {/* ── CTA calculadora completa ── */}
           <div
-            className="rounded-xl px-5 py-4 flex items-center justify-between gap-4"
-            style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}
+            className="rounded-xl px-5 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"
+            style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}
           >
             <p className="text-sm" style={{ color: "#7c7ca0" }}>
-              ¿Quieres ver el desglose completo de cotizaciones, IRPF y neto mensual de cualquiera de los dos empleos?
+              ¿Quieres el desglose completo de cotizaciones, IRPF y neto mensual de cualquiera de los dos empleos?
             </p>
             <a
               href="/"
               className="shrink-0 text-xs font-semibold px-4 py-2 rounded-xl transition-all"
-              style={{ background: "rgba(99,102,241,0.15)", color: "#a5b4fc", border: "1px solid rgba(99,102,241,0.25)" }}
+              style={{ background: "rgba(99,102,241,0.15)", color: "#a5b4fc", border: "1px solid rgba(99,102,241,0.25)", whiteSpace: "nowrap" }}
             >
               Calculadora completa →
             </a>
           </div>
+
         </div>
       )}
     </div>
