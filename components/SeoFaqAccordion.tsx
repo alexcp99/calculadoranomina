@@ -1,19 +1,24 @@
 "use client";
 
 import { useState } from "react";
+import { SALARIO_DATA, fmt } from "@/lib/salario-data";
+
+const d30 = SALARIO_DATA["30000"];
+const d30cat = d30.ccaaTable.find((r) => r.ccaa === "Cataluña")!;
+const difMadCat = d30.netoMensual - d30cat.neto;
 
 const FAQ_ITEMS = [
   {
     q: "¿Cuánto me queda neto de 30.000€ brutos?",
-    a: "Con 30.000€ brutos anuales en Madrid, soltero/a y sin hijos, cobras aproximadamente 2.274€ netos al mes (27.292€ netos al año). De tu salario bruto se descuentan 1.950€ de cotización a la Seguridad Social (6,50%) y 4.967€ de retención IRPF (tipo efectivo 17,7%). El resultado varía según tu comunidad autónoma y situación familiar.",
+    a: `Con 30.000€ brutos anuales en Madrid, soltero/a y sin hijos, cobras aproximadamente ${fmt(d30.netoMensual)}€ netos al mes (${fmt(d30.netoAnual)}€ netos al año). De tu salario bruto se descuentan ${fmt(d30.ssEuros)}€ de cotización a la Seguridad Social (6,50%) y ${fmt(d30.irpfEuros)}€ de retención IRPF (tipo efectivo ${d30.irpfEf}%). El resultado varía según tu comunidad autónoma y situación familiar.`,
   },
   {
     q: "¿Cómo afecta tener hijos al IRPF?",
-    a: "Tener hijos reduce la base imponible del IRPF gracias a los mínimos familiares. Con un hijo menor de 25 años, el mínimo por descendiente es de 2.400€; con dos hijos, 2.700€ por el segundo. En la práctica, esto supone entre 30€ y 80€ más al mes en el salario neto dependiendo del nivel salarial. Puedes calcularlo exactamente seleccionando tu número de hijos en la calculadora de arriba.",
+    a: "Tener hijos reduce la base imponible del IRPF gracias a los mínimos familiares. Con un hijo menor de 25 años, el mínimo por descendiente es de 2.400€; con dos hijos, 2.700€ por el segundo. En la práctica, esto supone entre 20€ y 70€ más al mes en el salario neto dependiendo del nivel salarial. Puedes calcularlo exactamente seleccionando tu número de hijos en la calculadora de arriba.",
   },
   {
     q: "¿El cálculo de nómina es el mismo en toda España?",
-    a: "No. La cotización a la Seguridad Social (6,50%) sí es igual en todo el territorio. Sin embargo, el IRPF tiene una parte estatal y una parte autonómica, y cada comunidad fija sus propios tramos. Madrid tiene los tipos autonómicos más bajos del régimen común, mientras que Cataluña o Valencia aplican tipos más altos. La diferencia puede superar los 50€ al mes para un salario de 30.000€.",
+    a: `No. La cotización a la Seguridad Social (6,50%) sí es igual en todo el territorio. Sin embargo, el IRPF tiene una parte estatal y una parte autonómica, y cada comunidad fija sus propios tramos. Madrid tiene los tipos autonómicos más bajos del régimen común, mientras que Cataluña o Valencia aplican tipos más altos. La diferencia es de ${fmt(difMadCat)}€ al mes para un salario de 30.000€.`,
   },
   {
     q: "¿Qué diferencia hay entre cobrar en 12 o 14 pagas?",
@@ -21,7 +26,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "¿Cuánto le cuesta un empleado a la empresa?",
-    a: "Además del salario bruto, la empresa paga sus propias cotizaciones a la Seguridad Social: contingencias comunes (23,60%), desempleo (5,50%), FOGASA (0,20%) y Formación Profesional (0,60%), lo que supone alrededor de un 29,90% adicional sobre el bruto. Para un empleado con 30.000€ brutos, el coste total para la empresa es de aproximadamente 39.144€ al año.",
+    a: `Además del salario bruto, la empresa paga sus propias cotizaciones a la Seguridad Social: contingencias comunes (23,60%), desempleo (5,50%), FOGASA (0,20%) y Formación Profesional (0,60%), lo que supone alrededor de un 30,48% adicional sobre el bruto. Para un empleado con 30.000€ brutos, el coste total para la empresa es de aproximadamente ${fmt(d30.costeEmpresa)}€ al año.`,
   },
 ];
 

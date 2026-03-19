@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
+import { SALARIO_DATA, fmt } from "@/lib/salario-data";
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
@@ -22,25 +23,13 @@ const CALCULADORAS = [
 ];
 
 const ALL_SALARIES = [
-  { slug: "15000",  label: "15.000€",  neto: "1.221€" },
-  { slug: "16000",  label: "16.000€",  neto: "1.298€" },
-  { slug: "18000",  label: "18.000€",  neto: "1.436€" },
-  { slug: "20000",  label: "20.000€",  neto: "1.575€" },
-  { slug: "22000",  label: "22.000€",  neto: "1.693€" },
-  { slug: "24000",  label: "24.000€",  neto: "1.820€" },
-  { slug: "25000",  label: "25.000€",  neto: "1.911€" },
-  { slug: "28000",  label: "28.000€",  neto: "2.107€" },
-  { slug: "30000",  label: "30.000€",  neto: "2.274€" },
-  { slug: "32000",  label: "32.000€",  neto: "2.388€" },
-  { slug: "35000",  label: "35.000€",  neto: "2.520€" },
-  { slug: "40000",  label: "40.000€",  neto: "2.876€" },
-  { slug: "45000",  label: "45.000€",  neto: "3.145€" },
-  { slug: "50000",  label: "50.000€",  neto: "3.414€" },
-  { slug: "60000",  label: "60.000€",  neto: "3.795€" },
-  { slug: "70000",  label: "70.000€",  neto: "4.289€" },
-  { slug: "80000",  label: "80.000€",  neto: "4.740€" },
-  { slug: "100000", label: "100.000€", neto: "5.631€" },
-];
+  "15000","16000","18000","20000","22000","24000",
+  "25000","28000","30000","32000","35000","40000",
+  "45000","50000","60000","70000","80000","100000",
+].map((slug) => {
+  const d = SALARIO_DATA[slug];
+  return { slug, label: `${d.brutoLabel}€`, neto: `${fmt(d.netoMensual)}€` };
+});
 
 const SAL_COL1 = ALL_SALARIES.slice(0, 6);   // 15k – 24k
 const SAL_COL2 = ALL_SALARIES.slice(6, 12);  // 25k – 40k
