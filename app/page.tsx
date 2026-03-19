@@ -310,10 +310,7 @@ export default function HomePage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Link
                 href="/calculadora-retencion-irpf"
-                className="group flex items-start gap-4 rounded-2xl p-5 transition-all duration-200"
-                style={{ background: "rgba(13,13,26,0.9)", border: "1px solid rgba(255,255,255,0.07)" }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(99,102,241,0.35)"; (e.currentTarget as HTMLElement).style.background = "rgba(99,102,241,0.06)"; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.07)"; (e.currentTarget as HTMLElement).style.background = "rgba(13,13,26,0.9)"; }}
+                className="tool-card-irpf group flex items-start gap-4 rounded-2xl p-5"
               >
                 <div className="shrink-0 w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "rgba(99,102,241,0.15)", border: "1px solid rgba(99,102,241,0.25)" }}>
                   <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="#818cf8" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
@@ -333,10 +330,7 @@ export default function HomePage() {
 
               <Link
                 href="/calculadora-cambio-trabajo"
-                className="group flex items-start gap-4 rounded-2xl p-5 transition-all duration-200"
-                style={{ background: "rgba(13,13,26,0.9)", border: "1px solid rgba(255,255,255,0.07)" }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(52,211,153,0.35)"; (e.currentTarget as HTMLElement).style.background = "rgba(52,211,153,0.06)"; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.07)"; (e.currentTarget as HTMLElement).style.background = "rgba(13,13,26,0.9)"; }}
+                className="tool-card-cambio group flex items-start gap-4 rounded-2xl p-5"
               >
                 <div className="shrink-0 w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "rgba(52,211,153,0.1)", border: "1px solid rgba(52,211,153,0.2)" }}>
                   <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="#34d399" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">

@@ -178,6 +178,27 @@ input[type="number"] {
   background: linear-gradient(90deg, transparent 0%, rgba(99,102,241,0.25) 30%, rgba(99,102,241,0.25) 70%, transparent 100%);
 }
 
+/* ─── Tool card hover (herramientas section in home) ────────────────────────── */
+.tool-card-irpf {
+  background: rgba(13,13,26,0.9);
+  border: 1px solid rgba(255,255,255,0.07);
+  transition: border-color 0.2s, background 0.2s;
+}
+.tool-card-irpf:hover {
+  border-color: rgba(99,102,241,0.35);
+  background: rgba(99,102,241,0.06);
+}
+
+.tool-card-cambio {
+  background: rgba(13,13,26,0.9);
+  border: 1px solid rgba(255,255,255,0.07);
+  transition: border-color 0.2s, background 0.2s;
+}
+.tool-card-cambio:hover {
+  border-color: rgba(52,211,153,0.35);
+  background: rgba(52,211,153,0.06);
+}
+
 /* ─── Salary quick card hover ───────────────────────────────────────────────── */
 .salary-quick-card:hover {
   border-color: rgba(99, 102, 241, 0.3);
