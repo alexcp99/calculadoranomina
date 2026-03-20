@@ -7,11 +7,11 @@ keywords: ["SMI 2026 neto", "salario mínimo neto 2026", "cuánto cobro con el s
 readTime: "7 min"
 faq:
   - q: "¿Cuánto es el SMI 2026 en neto mensual?"
-    a: "Con el SMI 2026 (1.221 € brutos/mes en 12 pagas) un trabajador soltero sin hijos en Madrid cobra aproximadamente 1.094 € netos al mes. La cuantía varía según comunidad autónoma y situación familiar."
+    a: "Con el SMI 2026 (1.221 € brutos/mes en 12 pagas) un trabajador soltero sin hijos cobra aproximadamente 1.142 € netos al mes, independientemente de la comunidad autónoma. La reducción por rendimientos del trabajo bajos (Art. 20 LIRPF) y el mínimo personal eliminan completamente la retención de IRPF a este nivel salarial."
   - q: "¿El salario mínimo paga IRPF en 2026?"
-    a: "Generalmente no, o muy poco. Con 14.652 € brutos anuales, la base liquidable del IRPF queda muy reducida gracias a la reducción por rendimientos del trabajo bajos (Art. 20 LIRPF) y al mínimo personal de 5.550 €. La retención efectiva suele ser inferior al 1%."
+    a: "No. Con 14.652 € brutos anuales, la reducción por rendimientos del trabajo bajos (Art. 20 LIRPF) y el mínimo personal de 5.550 € eliminan por completo la cuota íntegra del IRPF. La retención efectiva es exactamente 0 €."
   - q: "¿Cuánto descuenta la Seguridad Social del SMI?"
-    a: "El trabajador cotiza el 6,47 % del salario bruto a la Seguridad Social. Sobre el SMI 2026 (14.652 € brutos/año) eso equivale a unos 948 € al año, es decir, aproximadamente 79 € al mes."
+    a: "El trabajador cotiza el 6,50 % del salario bruto a la Seguridad Social. Sobre el SMI 2026 (14.652 € brutos/año) eso equivale a 952 € al año, es decir, aproximadamente 79 € al mes."
   - q: "¿Cuánto cobra en neto una persona con el SMI en Cataluña vs Madrid?"
     a: "En Madrid el IRPF autonómico es el más bajo de España, por lo que el neto es ligeramente superior. En Cataluña el tipo autonómico es mayor y el trabajador cobra unos 10–15 € menos al mes neto con el SMI."
   - q: "¿Puedo cobrar más de 14.652 € brutos y seguir pagando poco IRPF?"
@@ -54,8 +54,8 @@ El trabajador cotiza el **6,47 %** de su salario bruto mensual a la Seguridad So
 | Contingencias comunes | 4,70 % | 57,39 € |
 | Desempleo | 1,55 % | 18,93 € |
 | Formación profesional | 0,10 % | 1,22 € |
-| Mecanismo equidad intergeneracional | 0,12 % | 1,46 € |
-| **Total SS trabajador** | **6,47 %** | **79,00 €** |
+| Mecanismo equidad intergeneracional | 0,15 % | 1,83 € |
+| **Total SS trabajador** | **6,50 %** | **≈ 79 €** |
 
 *Fuente: [TGSS — Tipos de cotización 2026](https://www.seg-social.es)*
 
@@ -68,16 +68,21 @@ Aquí está la buena noticia para Carlos: con un salario de 14.652 € brutos al
 - **Mínimo personal**: 5.550 €
 
 ```
-Base imponible = 14.652 - 2.000 (gastos) - 6.498 (reducción rentas bajas)
-               = 6.154 €
+Rendimiento neto = 14.652 - 952 (SS) - 2.000 (gastos deducibles) = 11.700 €
 
-Cuota íntegra = 6.154 × 9,5 % (tramo estatal+autonómico Madrid) ≈ 585 €
-Mínimo personal aplicado = 5.550 × 9,5 % ≈ 527 €
+Reducción Art. 20 LIRPF (rentas bajas):
+  → como 11.700 € < 14.047,50 €, se aplica la reducción máxima: 6.498 €
 
-Retención anual ≈ 585 - 527 = 58 € → ~5 €/mes
+Base de retención = 11.700 - 6.498 = 5.202 €
+Mínimo personal  = 5.550 €
+
+Como la base de retención (5.202 €) es menor que el mínimo personal (5.550 €),
+la cuota íntegra es 0 € en todos los tramos, estatal y autonómico.
+
+Retención IRPF = 0 €
 ```
 
-Para Carlos, la retención práctica de IRPF **ronda los 5 € al mes** (menos del 0,5 % de retención efectiva).
+Para Carlos, la retención de IRPF es **0 € exactamente**. La combinación de la reducción por rendimientos bajos y el mínimo personal elimina por completo la cuota en el SMI.
 
 ---
 
@@ -86,11 +91,11 @@ Para Carlos, la retención práctica de IRPF **ronda los 5 € al mes** (menos d
 | Concepto | Mensual | Anual |
 |---|---|---|
 | Salario bruto | 1.221,00 € | 14.652,00 € |
-| − Seguridad Social | −79,00 € | −948,00 € |
-| − IRPF (retención) | −5,00 € | −60,00 € |
-| **= Salario neto** | **1.137,00 €** | **13.644,00 €** |
+| − Seguridad Social | −79,37 € | −952,00 € |
+| − IRPF (retención) | **0,00 €** | **0,00 €** |
+| **= Salario neto** | **1.141,63 €** | **13.700,00 €** |
 
-Carlos ingresará aproximadamente **1.137 € netos al mes** en su cuenta corriente.
+Carlos ingresará aproximadamente **1.142 € netos al mes** en su cuenta corriente.
 
 ---
 
@@ -98,16 +103,16 @@ Carlos ingresará aproximadamente **1.137 € netos al mes** en su cuenta corrie
 
 El IRPF tiene una parte estatal (igual en toda España) y una parte **autonómica** que varía. Con el SMI la diferencia es pequeña porque la retención total es mínima, pero existe:
 
-| Comunidad Autónoma | Neto mensual aprox. | Diferencia vs Madrid |
+| Comunidad Autónoma | Neto mensual | Diferencia vs Madrid |
 |---|---|---|
-| Madrid | 1.140 € | — |
-| País Vasco | 1.138 € | −2 € |
-| Andalucía | 1.137 € | −3 € |
-| Castilla y León | 1.136 € | −4 € |
-| Valencia | 1.135 € | −5 € |
-| Cataluña | 1.130 € | −10 € |
+| Madrid | 1.142 € | — |
+| País Vasco | 1.142 € | 0 € |
+| Andalucía | 1.142 € | 0 € |
+| Castilla y León | 1.142 € | 0 € |
+| Comunitat Valenciana | 1.142 € | 0 € |
+| Cataluña | 1.142 € | 0 € |
 
-> A salarios más bajos (como el SMI), las diferencias por CCAA son pequeñas porque la reducción por rendimientos del trabajo casi elimina la base imponible en todas las comunidades. Las diferencias se amplifican a partir de 20.000–25.000 € brutos.
+> Con el SMI 2026, la reducción Art. 20 LIRPF y el mínimo personal eliminan completamente la retención IRPF en **todas las comunidades autónomas**. El neto es idéntico independientemente de dónde residas. Las diferencias por CCAA se empiezan a notar a partir de 20.000–25.000 € brutos.
 
 ---
 
@@ -115,15 +120,15 @@ El IRPF tiene una parte estatal (igual en toda España) y una parte **autonómic
 
 La situación familiar afecta al mínimo personal y familiar del IRPF, lo que reduce aún más (o elimina completamente) la retención:
 
-| Situación | Neto mensual aprox. | IRPF retenido |
+| Situación | Neto mensual | IRPF retenido |
 |---|---|---|
-| Soltero sin hijos | 1.137 € | ~5 €/mes |
-| Casado, cónyuge sin ingresos | 1.141 € | ~0 €/mes |
-| 1 hijo menor de 3 años | 1.141 € | ~0 €/mes |
-| 2 hijos | 1.141 € | ~0 €/mes |
-| Familia numerosa (3+ hijos) | 1.141 € | 0 €/mes |
+| Soltero sin hijos | 1.142 € | 0 €/mes |
+| Casado, cónyuge sin ingresos | 1.142 € | 0 €/mes |
+| 1 hijo menor de 3 años | 1.142 € | 0 €/mes |
+| 2 hijos | 1.142 € | 0 €/mes |
+| Familia numerosa (3+ hijos) | 1.142 € | 0 €/mes |
 
-Con hijos o cónyuge a cargo, el mínimo familiar supera con creces la base liquidable del SMI y la retención desaparece por completo.
+Con el SMI 2026, la reducción Art. 20 LIRPF ya elimina completamente la retención incluso para solteros sin hijos. El mínimo familiar añade margen adicional pero no modifica el resultado neto porque la cuota ya es 0 €.
 
 ---
 
@@ -133,7 +138,7 @@ Para que Carlos lo visualice mejor, aquí tiene una comparativa con otros salari
 
 | Salario bruto/año | Neto mensual | % IRPF efectivo |
 |---|---|---|
-| 14.652 € (SMI) | ~1.137 € | < 1 % |
+| 14.652 € (SMI) | 1.142 € | 0 % |
 | 20.000 € | 1.442 € | 7,0 % |
 | 25.000 € | 1.670 € | 13,3 % |
 | 30.000 € | 1.952 € | 15,4 % |
@@ -147,7 +152,7 @@ Ganar el doble del SMI (≈ 29.000 €) no significa cobrar el doble en neto: po
 
 ## ¿El SMI cubre los gastos básicos en España?
 
-Esta es la pregunta que realmente importa. Con 1.137 € netos al mes:
+Esta es la pregunta que realmente importa. Con 1.142 € netos al mes:
 
 - **Alquiler medio en España (2026):** 900–1.200 € en grandes ciudades, 500–700 € en ciudades medianas
 - **Cesta de la compra básica:** 250–350 €/mes
@@ -159,7 +164,7 @@ En ciudades como Madrid o Barcelona, el SMI **no cubre el alquiler de mercado** 
 
 ## Conclusión: lo que Carlos realmente necesita saber
 
-Con el SMI 2026, Carlos recibirá alrededor de **1.137 € netos al mes**. La Seguridad Social descuenta unos 79 € y el IRPF apenas 5 €, gracias a las reducciones para rentas bajas.
+Con el SMI 2026, Carlos recibirá alrededor de **1.142 € netos al mes**. La Seguridad Social descuenta unos 79 € y el IRPF es **0 €**, gracias a la reducción por rendimientos del trabajo bajos (Art. 20 LIRPF) y al mínimo personal.
 
 Si su situación cambia —ascenso, pareja sin ingresos, hijos, cambio de CCAA— el neto variará. Para cualquier escenario, puede calcularlo exactamente en nuestra [calculadora de nómina gratuita](/), que incluye los tramos IRPF 2026, las cotizaciones actualizadas y las deducciones autonómicas.
 

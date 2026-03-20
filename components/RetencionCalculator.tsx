@@ -187,7 +187,10 @@ function BracketDesglose({ r }: { r: CalcResult }) {
       {open && (
         <div className="px-4 pb-4 pt-1 space-y-2" style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
           <p className="text-xs font-semibold uppercase tracking-widest py-2" style={{ color: "#6868a0" }}>
-            Tramos estatales (base {fmtEur(r.baseRetencion)} €)
+            Tramos IRPF estatal bruto (base {fmtEur(r.baseRetencion)} €)
+          </p>
+          <p className="text-xs pb-2" style={{ color: "#4a4a6a" }}>
+            Solo parte estatal antes del mínimo personal. La retención total ({fmtEur(r.annualIRPF)} €) incluye también el tramo autonómico, neto de mínimos.
           </p>
           {bracketRows.map((b) => (
             <div key={b.label} className="flex items-center gap-3">

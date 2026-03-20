@@ -580,6 +580,9 @@ export function computeCalc(input: CalcInput): CalcResult {
 
   // ── 7. Cuotas IRPF ─────────────────────────────────────────────────────────
   const ccaaConfig = CCAA_CONFIG[comunidad];
+  if (!ccaaConfig) {
+    throw new Error(`[computeCalc] Comunidad autónoma desconocida: "${comunidad}". Valores válidos: ${Object.keys(CCAA_CONFIG).join(", ")}`);
+  }
 
   let annualIRPF = 0;
   let irpfEstatual = 0;
