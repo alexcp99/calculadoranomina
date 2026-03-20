@@ -337,6 +337,27 @@ export default function JobChangeCalculator() {
   const [validationError, setValidationError] = useState("");
   const resultRef = useRef<HTMLDivElement>(null);
 
+  const handleDownloadPDF = async () => {
+    const { jsPDF } = await import('jspdf');
+    const html2canvas = (await import('html2canvas')).default;
+
+    const element = document.getElementById('resultado-comparativa');
+    if (!element) return;
+
+    const canvas = await html2canvas(element, {
+      backgroundColor: '#080810',
+      scale: 2,
+      useCORS: true,
+    });
+
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const imgWidth = 210;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+    pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, imgWidth, imgHeight);
+    pdf.save('comparativa-cambio-trabajo-2026.pdf');
+  };
+
   function handleCompare() {
     const aB = parseFloat(actual.bruto);
     const oB = parseFloat(oferta.bruto);
@@ -651,7 +672,28 @@ export default function JobChangeCalculator() {
 
       {/* ══════════════════════ RESULTS ══════════════════════ */}
       {hasCalculated && ready && aR && oR && (
-        <div ref={resultRef} className="flex flex-col gap-5 animate-scaleIn">
+        <div id="resultado-comparativa" ref={resultRef} className="flex flex-col gap-5 animate-scaleIn" style={{ padding: 4 }}>
+
+          {/* ── PDF header (logo + fecha) ── */}
+          <div
+            className="flex items-center justify-between px-5 py-4 rounded-2xl"
+            style={{ background: "rgba(99,102,241,0.08)", border: "1px solid rgba(99,102,241,0.18)" }}
+          >
+            <div className="flex items-center gap-3">
+              <div
+                className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0"
+                style={{ background: "linear-gradient(135deg, #4f52d4, #6366f1)", boxShadow: "0 0 0 1px rgba(99,102,241,0.3)" }}
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="white" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                  <path d="M2 8h4M10 8h4M8 2v4M8 10v4" /><circle cx="8" cy="8" r="2.5" />
+                </svg>
+              </div>
+              <span className="font-syne font-bold" style={{ fontSize: "0.9rem", color: "#e0e0ff" }}>CalculadoraNomina.org</span>
+            </div>
+            <span style={{ fontSize: "0.75rem", color: "#5a5a80" }}>
+              Comparativa generada el {new Date().toLocaleDateString("es-ES", { day: "numeric", month: "long", year: "numeric" })}
+            </span>
+          </div>
 
           {/* ── Separador visual ── */}
           <div className="flex items-center gap-4 py-2">
@@ -875,6 +917,25 @@ export default function JobChangeCalculator() {
             </div>
           </div>
 
+          {/* ── Botón descarga PDF ── */}
+          <div className="flex justify-center">
+            <button
+              onClick={handleDownloadPDF}
+              disabled={!hasCalculated}
+              className="flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all"
+              style={{
+                background: hasCalculated ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.05)',
+                border: '1px solid rgba(99,102,241,0.3)',
+                color: hasCalculated ? '#818cf8' : '#4040a0',
+                cursor: hasCalculated ? 'pointer' : 'not-allowed',
+                fontSize: '0.88rem',
+              }}
+            >
+              <span>📄</span>
+              Descargar comparativa en PDF
+            </button>
+          </div>
+
           {/* ── Bloque 5: Insights ── */}
           {insights.length > 0 && (
             <div
@@ -907,6 +968,16 @@ export default function JobChangeCalculator() {
               </div>
             </div>
           )}
+
+          {/* ── PDF footer ── */}
+          <div
+            className="text-center py-3 rounded-xl"
+            style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)" }}
+          >
+            <p style={{ fontSize: "0.7rem", color: "#3a3a60" }}>
+              Calculado en calculadoranomina.org · Datos AEAT 2026 · Cálculo orientativo
+            </p>
+          </div>
 
           {/* ── CTA calculadora completa ── */}
           <div
