@@ -338,24 +338,244 @@ export default function JobChangeCalculator() {
   const resultRef = useRef<HTMLDivElement>(null);
 
   const handleDownloadPDF = async () => {
+    if (!hasCalculated || !aR || !oR) return;
+    const ar = aR;
+    const or = oR;
+
     const { jsPDF } = await import('jspdf');
-    const html2canvas = (await import('html2canvas')).default;
+    const doc = new jsPDF('p', 'mm', 'a4');
 
-    const element = document.getElementById('resultado-comparativa');
-    if (!element) return;
+    const PW = 210, PH = 297, ML = 14, CW = PW - ML * 2;
+    const FOOTER_Y = PH - 13;
+    let y = 0;
 
-    const canvas = await html2canvas(element, {
-      backgroundColor: '#080810',
-      scale: 2,
-      useCORS: true,
+    const fc = (r: number, g: number, b: number) => doc.setFillColor(r, g, b);
+    const sc = (r: number, g: number, b: number) => doc.setDrawColor(r, g, b);
+    const tc = (r: number, g: number, b: number) => doc.setTextColor(r, g, b);
+    const B  = (sz: number) => { doc.setFontSize(sz); doc.setFont('helvetica', 'bold'); };
+    const N  = (sz: number) => { doc.setFontSize(sz); doc.setFont('helvetica', 'normal'); };
+
+    const isGreen = difTotal > 500;
+    const isRed   = difTotal < -200 && difMensual < 0;
+    const DC: [number, number, number] = isGreen ? [52,211,153] : isRed ? [248,113,113] : [251,191,36];
+
+    const dateStr = new Date().toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
+
+    const initPage = () => {
+      fc(8, 8, 16); doc.rect(0, 0, PW, PH, 'F');
+      fc(11, 11, 22); doc.rect(0, FOOTER_Y, PW, PH - FOOTER_Y, 'F');
+      fc(99, 102, 241); doc.rect(0, FOOTER_Y, PW, 0.4, 'F');
+      N(6.5); tc(55, 55, 95);
+      doc.text('calculadoranomina.org · Datos AEAT 2026 · Cálculo orientativo', ML, FOOTER_Y + 7);
+      doc.text(dateStr, PW - ML, FOOTER_Y + 7, { align: 'right' });
+    };
+
+    const addNewPage = () => {
+      doc.addPage(); initPage(); y = 20;
+    };
+
+    const guard = (h: number) => { if (y + h > FOOTER_Y - 8) addNewPage(); };
+
+    const sectionTitle = (title: string) => {
+      guard(14);
+      B(8); tc(160, 160, 210); doc.text(title, ML, y);
+      sc(40, 40, 75); doc.setLineWidth(0.25);
+      doc.line(ML, y + 2.5, PW - ML, y + 2.5);
+      y += 10;
+    };
+
+    // ── Page 1 ──────────────────────────────────
+    initPage();
+
+    // Header bar
+    fc(11, 11, 22); doc.rect(0, 0, PW, 38, 'F');
+    fc(99, 102, 241); doc.rect(0, 0, PW, 2.5, 'F');
+    fc(99, 102, 241); doc.roundedRect(ML, 8, 7, 7, 1, 1, 'F');
+    B(9); tc(240, 240, 255); doc.text('CalculadoraNomina.org', ML + 10, 13.5);
+    N(7); tc(65, 65, 105); doc.text('Comparativa de Cambio de Trabajo · 2026', ML + 10, 18.5);
+    N(7); tc(60, 60, 100); doc.text(dateStr, PW - ML, 13.5, { align: 'right' });
+    B(14.5); tc(240, 240, 255); doc.text('¿Te compensa cambiar de trabajo?', ML, 30);
+
+    y = 46;
+
+    // Diff hero
+    fc(14, 14, 28); doc.roundedRect(ML, y, CW, 30, 2, 2, 'F');
+    sc(DC[0], DC[1], DC[2]); doc.setLineWidth(0.4); doc.roundedRect(ML, y, CW, 30, 2, 2, 'S');
+    fc(DC[0], DC[1], DC[2]); doc.roundedRect(ML, y, 2.5, 30, 1, 1, 'F');
+
+    B(7); tc(80, 80, 130); doc.text('DIFERENCIA MENSUAL NETA', ML + 8, y + 8);
+    const signM = (difMensual >= 0 ? '+' : '−') + fmtN(Math.round(Math.abs(difMensual))) + ' €/mes';
+    B(22); tc(DC[0], DC[1], DC[2]); doc.text(signM, ML + 8, y + 20);
+    const annCtx = `${difAnual >= 0 ? '+' : '−'}${fmtN(Math.round(Math.abs(difAnual)))} €/año netos` +
+      (difBonus !== 0 ? `  ·  con bonus: ${difTotal >= 0 ? '+' : '−'}${fmtN(Math.round(Math.abs(difTotal)))} €/año` : '');
+    N(7); tc(120, 120, 170); doc.text(annCtx, PW - ML - 4, y + 20, { align: 'right' });
+    N(6.5); tc(65, 65, 105);
+    doc.text(`IRPF efectivo actual: ${fi(ar.irpfEfectivo)} %  ·  Nueva oferta: ${fi(or.irpfEfectivo)} %`, ML + 8, y + 27);
+
+    y += 38;
+
+    // Two job cards
+    const cW = (CW - 5) / 2;
+
+    const drawCard = (
+      cx: number, lbl: string,
+      r: typeof ar, bonus: number, vac: number, tele: TeletrabajoLevel,
+      ccaaLbl: string, bruto: number, pagas: string,
+      acR: number, acG: number, acB: number
+    ) => {
+      const CH = 77;
+      fc(13, 13, 26); doc.roundedRect(cx, y, cW, CH, 2, 2, 'F');
+      sc(acR, acG, acB); doc.setLineWidth(0.3); doc.roundedRect(cx, y, cW, CH, 2, 2, 'S');
+      fc(acR, acG, acB); doc.roundedRect(cx, y, cW, 2, 1, 1, 'F');
+
+      B(6.5); tc(acR, acG, acB); doc.text(lbl.toUpperCase(), cx + 5, y + 8);
+      B(16); tc(240, 240, 255); doc.text(`${fmtN(Math.round(r.monthlyNet))} €`, cx + 5, y + 17.5);
+      N(6.5); tc(65, 65, 105); doc.text('neto mensual', cx + 5, y + 22);
+
+      sc(30, 30, 55); doc.setLineWidth(0.2);
+      doc.line(cx + 4, y + 26, cx + cW - 4, y + 26);
+
+      const rows: [string, string][] = [
+        ['Bruto anual',    `${fmtN(bruto)} €`],
+        ['Neto anual',     `${fmtN(Math.round(r.annualNet))} €`],
+        ['SS trabajador',  `${fmtN(Math.round(r.annualSS))} €/año`],
+        ['IRPF pagado',    `${fmtN(Math.round(r.annualIRPF))} €/año`],
+        ['IRPF efectivo',  `${fi(r.irpfEfectivo)} %`],
+        ['Bonus',          bonus > 0 ? `${fmtN(bonus)} €` : '—'],
+        ['Vacaciones',     `${vac} días`],
+        ['Teletrabajo',    TELETRABAJO_LABEL[tele]],
+      ];
+      let ry = y + 32;
+      rows.forEach(([l, v]) => {
+        N(6.5); tc(75, 75, 125); doc.text(l, cx + 5, ry);
+        B(6.5); tc(150, 150, 195); doc.text(v, cx + cW - 5, ry, { align: 'right' });
+        ry += 4.7;
+      });
+      N(6); tc(45, 45, 85);
+      doc.text(`${ccaaLbl} · ${pagas} pagas`, cx + 5, y + CH - 4);
+    };
+
+    drawCard(ML,          'Trabajo actual', ar, aBonus, aVac, actual.teletrabajo,  COMUNIDADES_LABEL[actual.ccaa],  aB, actual.pagas,  129, 140, 248);
+    drawCard(ML + cW + 5, 'Nueva oferta',   or, oBonus, oVac, oferta.teletrabajo,  COMUNIDADES_LABEL[oferta.ccaa],  oB, oferta.pagas,  52,  211, 153);
+
+    y += 84;
+
+    // Financial table
+    sectionTitle('Desglose financiero');
+    fc(16, 16, 34); doc.rect(ML, y - 4, CW, 7, 'F');
+    const C1 = ML + 2, C2 = 118, C3 = 158, C4 = PW - ML;
+    B(6.5); tc(70, 70, 120);
+    doc.text('Concepto', C1, y);
+    doc.text('Trabajo actual', C2, y, { align: 'right' });
+    doc.text('Nueva oferta',   C3, y, { align: 'right' });
+    doc.text('Diferencia',     C4, y, { align: 'right' });
+    y += 5.5;
+
+    type TR = { lbl: string; a: string; o: string; diff: string; pos?: boolean; bold?: boolean };
+    const tableData: TR[] = [
+      { lbl: 'Salario bruto anual',    a: `${fmtN(aB)} €`,                          o: `${fmtN(oB)} €`,                          diff: `${oB-aB>=0?'+':'−'}${fmtN(Math.abs(oB-aB))} €`,                                          pos: oB>=aB },
+      { lbl: 'SS trabajador / año',    a: `${fmtN(Math.round(ar.annualSS))} €`,     o: `${fmtN(Math.round(or.annualSS))} €`,     diff: `${or.annualSS-ar.annualSS>=0?'+':'−'}${fmtN(Math.round(Math.abs(or.annualSS-ar.annualSS)))} €`, pos: or.annualSS<=ar.annualSS },
+      { lbl: 'IRPF retenido / año',    a: `${fmtN(Math.round(ar.annualIRPF))} €`,   o: `${fmtN(Math.round(or.annualIRPF))} €`,   diff: `${or.annualIRPF-ar.annualIRPF>=0?'+':'−'}${fmtN(Math.round(Math.abs(or.annualIRPF-ar.annualIRPF)))} €`, pos: or.annualIRPF<=ar.annualIRPF },
+      { lbl: 'IRPF efectivo',          a: `${fi(ar.irpfEfectivo)} %`,                o: `${fi(or.irpfEfectivo)} %`,                diff: `${or.irpfEfectivo-ar.irpfEfectivo>=0?'+':'−'}${fi(Math.abs(or.irpfEfectivo-ar.irpfEfectivo))} %`, pos: or.irpfEfectivo<=ar.irpfEfectivo },
+      { lbl: 'Neto mensual',           a: `${fmtN(Math.round(ar.monthlyNet))} €`,   o: `${fmtN(Math.round(or.monthlyNet))} €`,   diff: `${difMensual>=0?'+':'−'}${fmtN(Math.round(Math.abs(difMensual)))} €`,                     pos: difMensual>=0 },
+      { lbl: 'Neto anual',             a: `${fmtN(Math.round(ar.annualNet))} €`,    o: `${fmtN(Math.round(or.annualNet))} €`,    diff: `${difAnual>=0?'+':'−'}${fmtN(Math.round(Math.abs(difAnual)))} €`,                         pos: difAnual>=0 },
+      { lbl: 'Bonus anual',            a: aBonus>0?`${fmtN(aBonus)} €`:'—',         o: oBonus>0?`${fmtN(oBonus)} €`:'—',         diff: difBonus!==0?`${difBonus>=0?'+':'−'}${fmtN(Math.abs(difBonus))} €`:'—',                    pos: difBonus>=0 },
+      { lbl: 'Compensación total/año', a: `${fmtN(Math.round(ar.annualNet+aBonus))} €`, o: `${fmtN(Math.round(or.annualNet+oBonus))} €`, diff: `${difTotal>=0?'+':'−'}${fmtN(Math.round(Math.abs(difTotal)))} €`,               pos: difTotal>=0, bold: true },
+    ];
+
+    tableData.forEach((row, i) => {
+      guard(7);
+      if (i % 2 === 0) { fc(13, 13, 25); doc.rect(ML, y - 3.5, CW, 6.5, 'F'); }
+      if (row.bold) { B(7); tc(210, 210, 240); } else { N(7); tc(140, 140, 180); }
+      doc.text(row.lbl, C1, y);
+      if (row.bold) tc(220, 220, 250); else tc(155, 155, 195);
+      doc.text(row.a, C2, y, { align: 'right' });
+      doc.text(row.o, C3, y, { align: 'right' });
+      if (row.diff === '—') tc(60, 60, 100);
+      else if (row.pos) tc(52, 200, 130); else tc(220, 80, 80);
+      doc.text(row.diff, C4, y, { align: 'right' });
+      y += 6.5;
     });
 
-    const pdf = new jsPDF('p', 'mm', 'a4');
-    const imgWidth = 210;
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    y += 6;
 
-    pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, imgWidth, imgHeight);
-    pdf.save('comparativa-cambio-trabajo-2026.pdf');
+    // Qualitative factors
+    sectionTitle('Factores cualitativos');
+    type QR = { lbl: string; aVal: string; oVal: string; diff: string; pos: boolean | null };
+    const qualRows: QR[] = [
+      { lbl: 'Vacaciones',          aVal: `${aVac} días`,                       oVal: `${oVac} días`,                         diff: difVac===0?'Sin cambio':difVac>0?`+${difVac} días`:`${difVac} días`,  pos: difVac>=0 },
+      { lbl: 'Teletrabajo',         aVal: TELETRABAJO_LABEL[actual.teletrabajo], oVal: TELETRABAJO_LABEL[oferta.teletrabajo], diff: difTeletrab===0?'Sin cambio':difTeletrab>0?'Mejora':'Empeora',           pos: difTeletrab>=0 },
+      { lbl: 'Antigüedad',          aVal: `${antiguedad} años`,                 oVal: '0 (empresa nueva)',                    diff: antiguedad>0?`Pierdes ${antiguedad} año${antiguedad!==1?'s':''}`:'N/A', pos: antiguedad===0 },
+      { lbl: 'Comunidad autónoma',  aVal: COMUNIDADES_LABEL[actual.ccaa],       oVal: COMUNIDADES_LABEL[oferta.ccaa],         diff: actual.ccaa===oferta.ccaa?'Sin cambio':'Cambia CCAA (impacto IRPF)',    pos: null },
+    ];
+    qualRows.forEach((row) => {
+      guard(12);
+      fc(14, 14, 26); doc.roundedRect(ML, y - 3.5, CW, 10, 1, 1, 'F');
+      B(7); tc(140, 140, 185); doc.text(row.lbl, ML + 4, y);
+      N(7); tc(90, 90, 140); doc.text(`${row.aVal} → ${row.oVal}`, ML + 52, y);
+      B(7);
+      const dC: [number, number, number] = row.pos===null?[100,100,160]:row.pos?[52,200,130]:[220,80,80];
+      tc(dC[0], dC[1], dC[2]); doc.text(row.diff, PW - ML - 4, y, { align: 'right' });
+      y += 12;
+    });
+
+    y += 4;
+
+    // Insights
+    if (insights.length > 0) {
+      sectionTitle('Análisis detallado');
+      insights.forEach((ins) => {
+        const lines = doc.splitTextToSize(`• ${ins}`, CW - 10);
+        const bH = lines.length * 4.5 + 10;
+        guard(bH);
+        fc(14, 14, 30); doc.roundedRect(ML, y - 3, CW, bH, 1.5, 1.5, 'F');
+        sc(70, 70, 140); doc.setLineWidth(0.2); doc.roundedRect(ML, y - 3, CW, bH, 1.5, 1.5, 'S');
+        N(7); tc(140, 140, 190); doc.text(lines, ML + 5, y + 2);
+        y += bH + 4;
+      });
+      y += 2;
+    }
+
+    // Verdict
+    const vcPdf = {
+      green:  { lbl: 'SÍ TE COMPENSA',           r: 52,  g: 211, b: 153, bgR: 10, bgG: 28, bgB: 20 },
+      yellow: { lbl: 'VALÓRALO BIEN ANTES DE DECIDIR', r: 251, g: 191, b: 36,  bgR: 26, bgG: 20, bgB: 8  },
+      red:    { lbl: 'NO TE COMPENSA',            r: 248, g: 113, b: 113, bgR: 26, bgG: 10, bgB: 10 },
+    }[verdict];
+
+    const mAbs = fmtN(Math.round(Math.abs(difMensual)));
+    const aAbs = fmtN(Math.round(Math.abs(difAnual)));
+    const tAbs = fmtN(Math.round(Math.abs(difTotal)));
+    let pdfVerdictBody: string;
+    if (verdict === 'green') {
+      pdfVerdictBody = difBonus > 0
+        ? `Cobrarías ${mAbs} € más al mes netos, ${aAbs} € al año. Contando el bonus, la mejora total sube a ${tAbs} € al año. La economía apunta claramente al cambio.`
+        : `Cobrarías ${mAbs} € más al mes netos (${aAbs} € al año). Salvo factores personales que no se pueden medir, los números dicen que sí.`;
+    } else if (verdict === 'yellow') {
+      const m = Math.round(difMensual);
+      pdfVerdictBody = m >= 0
+        ? `La diferencia es solo +${mAbs} €/mes netos. En este rango, lo que no aparece en la nómina —flexibilidad, proyección, cultura de empresa— suele pesar más que el dinero.`
+        : `La diferencia es de −${mAbs} €/mes netos. Esa pérdida podría compensarse con condiciones no salariales significativamente mejores. Analiza bien qué ganas y qué pierdes.`;
+    } else {
+      pdfVerdictBody = difBonus > 0
+        ? `Perderías ${mAbs} €/mes netos. Aunque el bonus de la nueva oferta es mayor, la compensación total sigue siendo inferior (${tAbs} € menos/año). Los números no cuadran.`
+        : `Perderías ${mAbs} €/mes netos (${aAbs} €/año). Para que el cambio tenga sentido tiene que haber razones estratégicas de peso más allá del salario: mejor puesto, proyección profesional o salud laboral.`;
+    }
+    const disclText = 'Este análisis es orientativo. La decisión final depende de factores no cuantificables: cultura de empresa, proyección, relación con el equipo y prioridades personales. La última palabra siempre es tuya.';
+    const bodyL = doc.splitTextToSize(pdfVerdictBody, CW - 18);
+    const discL = doc.splitTextToSize(disclText, CW - 18);
+    const boxH = 14 + bodyL.length * 4.5 + 5 + discL.length * 4 + 8;
+
+    guard(boxH + 14);
+    sectionTitle('Recomendación');
+    fc(vcPdf.bgR, vcPdf.bgG, vcPdf.bgB); doc.roundedRect(ML, y, CW, boxH, 2, 2, 'F');
+    sc(vcPdf.r, vcPdf.g, vcPdf.b); doc.setLineWidth(0.5); doc.roundedRect(ML, y, CW, boxH, 2, 2, 'S');
+    fc(vcPdf.r, vcPdf.g, vcPdf.b); doc.roundedRect(ML, y, 3, boxH, 1, 1, 'F');
+    B(8.5); tc(vcPdf.r, vcPdf.g, vcPdf.b); doc.text(vcPdf.lbl, ML + 8, y + 9);
+    y += 13; N(7.5); tc(190, 190, 220); doc.text(bodyL, ML + 8, y);
+    y += bodyL.length * 4.5 + 4; N(6.5); tc(80, 80, 120); doc.text(discL, ML + 8, y);
+
+    doc.save('comparativa-cambio-trabajo-2026.pdf');
   };
 
   function handleCompare() {
@@ -710,54 +930,59 @@ export default function JobChangeCalculator() {
           {/* ── Bloque 1: Summary cards ── */}
           <div className="flex flex-col md:flex-row gap-4">
             {[
-              { label: "Trabajo actual", r: aR, bonus: aBonus, vac: aVac, tele: actual.teletrabajo, ccaa: COMUNIDADES_LABEL[actual.ccaa], pagas: actual.pagas, accent: "#818cf8" },
-              { label: "Nueva oferta",   r: oR, bonus: oBonus, vac: oVac, tele: oferta.teletrabajo, ccaa: COMUNIDADES_LABEL[oferta.ccaa], pagas: oferta.pagas, accent: "#34d399" },
+              { label: "Trabajo actual", r: aR, bonus: aBonus, vac: aVac, tele: actual.teletrabajo, ccaa: COMUNIDADES_LABEL[actual.ccaa], pagas: actual.pagas, bruto: aB, accent: "#818cf8" },
+              { label: "Nueva oferta",   r: oR, bonus: oBonus, vac: oVac, tele: oferta.teletrabajo, ccaa: COMUNIDADES_LABEL[oferta.ccaa], pagas: oferta.pagas, bruto: oB, accent: "#34d399" },
             ].map((card) => (
               <div
                 key={card.label}
                 className="flex-1 rounded-2xl overflow-hidden"
                 style={{ background: "rgba(13,13,26,0.9)", border: `1px solid ${card.accent}28` }}
               >
-                {/* Barra top con gradiente */}
-                <div style={{ height: 3, background: `linear-gradient(90deg, ${card.accent}, ${card.accent}30)` }} />
+                <div style={{ height: 3, background: `linear-gradient(90deg, ${card.accent}, ${card.accent}20)` }} />
                 <div className="p-5">
                   {/* Header */}
                   <div className="flex items-center gap-2 mb-4">
-                    <div className="w-1.5 h-1.5 rounded-full" style={{ background: card.accent, boxShadow: `0 0 6px ${card.accent}` }} />
-                    <span
-                      className="font-syne font-bold tracking-widest uppercase"
-                      style={{ fontSize: "0.72rem", color: card.accent }}
-                    >
+                    <div className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: card.accent, boxShadow: `0 0 6px ${card.accent}` }} />
+                    <span className="font-syne font-bold tracking-widest uppercase" style={{ fontSize: "0.72rem", color: card.accent }}>
                       {card.label}
                     </span>
                   </div>
 
-                  {/* Neto mensual — número protagonista */}
+                  {/* Neto mensual protagonista */}
                   <div className="mb-5">
-                    <div
-                      className="font-syne font-extrabold tabnum leading-none"
-                      style={{ fontSize: "clamp(2rem, 5vw, 2.6rem)", color: "#f0f0ff" }}
-                    >
+                    <div className="font-syne font-extrabold tabnum leading-none" style={{ fontSize: "clamp(2.2rem, 5vw, 2.8rem)", color: "#f0f0ff" }}>
                       {fmtN(Math.round(card.r.monthlyNet))} €
                     </div>
                     <div style={{ color: "#5a5a80", fontSize: "0.75rem", marginTop: 4 }}>neto mensual</div>
                   </div>
 
-                  {/* Stats grid */}
-                  <div
-                    className="grid grid-cols-2 gap-2"
-                    style={{ borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: 14 }}
-                  >
-                    <MetricCard label="Neto/año"      value={`${fmtN(Math.round(card.r.annualNet))} €`} color="#e0e0ff" />
-                    <MetricCard label="IRPF efectivo" value={`${fi(card.r.irpfEfectivo)} %`}            color="#fbbf24" />
-                    <MetricCard label="Bonus anual"   value={card.bonus > 0 ? `${fmtN(card.bonus)} €` : "—"} color={card.bonus > 0 ? card.accent : "#4a4a6a"} />
-                    <MetricCard label="Vacaciones"    value={`${card.vac} días`}                         color="#e0e0ff" />
+                  {/* Desglose completo */}
+                  <div className="flex flex-col" style={{ borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: 12 }}>
+                    {([
+                      { lbl: "Bruto anual",       val: `${fmtN(card.bruto)} €`,                              clr: "#7070a0" },
+                      { lbl: "Neto anual",        val: `${fmtN(Math.round(card.r.annualNet))} €`,             clr: "#e0e0ff", bold: true },
+                      { lbl: "SS trabajador/año", val: `${fmtN(Math.round(card.r.annualSS))} €`,              clr: "#7070a0" },
+                      { lbl: "IRPF pagado/año",   val: `${fmtN(Math.round(card.r.annualIRPF))} €`,            clr: "#7070a0" },
+                      { lbl: "IRPF efectivo",     val: `${fi(card.r.irpfEfectivo)} %`,                        clr: "#fbbf24" },
+                      ...(card.bonus > 0 ? [{ lbl: "Bonus anual", val: `${fmtN(card.bonus)} €`, clr: card.accent, bold: false }] : []),
+                      { lbl: "Vacaciones",        val: `${card.vac} días`,                                    clr: "#9090b8" },
+                      { lbl: "Teletrabajo",       val: TELETRABAJO_LABEL[card.tele],                          clr: "#9090b8" },
+                    ] as { lbl: string; val: string; clr: string; bold?: boolean }[]).map((row, ri) => (
+                      <div
+                        key={ri}
+                        className="flex items-center justify-between py-2"
+                        style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}
+                      >
+                        <span style={{ fontSize: "0.75rem", color: "#5a5a80" }}>{row.lbl}</span>
+                        <span className={row.bold ? "font-semibold" : ""} style={{ fontSize: "0.82rem", color: row.clr, tabularNums: true } as React.CSSProperties}>{row.val}</span>
+                      </div>
+                    ))}
                   </div>
 
-                  {/* CCAA + pagas footer */}
+                  {/* Footer CCAA */}
                   <div className="flex items-center justify-between mt-3 pt-3" style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}>
                     <span style={{ color: "#4a4a6a", fontSize: "0.72rem" }}>{card.ccaa}</span>
-                    <span style={{ color: "#4a4a6a", fontSize: "0.72rem" }}>{card.pagas} pagas · {TELETRABAJO_LABEL[card.tele]}</span>
+                    <span style={{ color: "#4a4a6a", fontSize: "0.72rem" }}>{card.pagas} pagas</span>
                   </div>
                 </div>
               </div>
@@ -892,47 +1117,97 @@ export default function JobChangeCalculator() {
           </div>
 
           {/* ── Bloque 4: Veredicto ── */}
-          <div
-            className="rounded-2xl p-6 md:p-7 relative overflow-hidden"
-            style={{ background: vc.bg, border: `1px solid ${vc.border}` }}
-          >
-            {/* Glow background */}
-            <div
-              className="absolute inset-0 pointer-events-none"
-              style={{ background: `radial-gradient(ellipse 60% 50% at 20% 50%, ${vc.glow} 0%, transparent 70%)` }}
-            />
-            <div className="relative flex items-start gap-5">
-              <span style={{ fontSize: "2rem", lineHeight: 1, flexShrink: 0 }}>{vc.icon}</span>
-              <div>
-                <p className="font-syne font-extrabold" style={{ fontSize: "1.15rem", color: vc.color, lineHeight: 1.2 }}>
-                  {vc.title}
-                </p>
-                <p className="text-sm mt-2 leading-relaxed" style={{ color: "#9090b8" }}>
-                  {vc.sub}
-                </p>
-                <p className="text-xs mt-3 leading-relaxed" style={{ color: "#5a5a80" }}>
-                  Este análisis es orientativo. La decisión de cambiar de trabajo depende también de factores que no se pueden medir: cultura de empresa, proyección profesional, estabilidad del sector, relación con el equipo y tus prioridades vitales.
-                </p>
+          {(() => {
+            const m = Math.round(difMensual);
+            const t = Math.round(difTotal);
+            const mAbs = fmtN(Math.abs(m));
+            const aAbs = fmtN(Math.round(Math.abs(difAnual)));
+            const tAbs = fmtN(Math.abs(t));
+            let body: string;
+            if (verdict === "green") {
+              body = difBonus > 0
+                ? `Cobrarías ${mAbs} € más cada mes netos. Con el bonus, la mejora total sube a ${tAbs} € al año. La parte económica apunta claramente al cambio.`
+                : `Cobrarías ${mAbs} € más al mes netos, ${aAbs} € al año. Los números dicen que sí. La última palabra es tuya.`;
+            } else if (verdict === "yellow") {
+              body = m >= 0
+                ? `La diferencia es solo +${mAbs} €/mes netos. En este rango, lo que no aparece en la nómina —flexibilidad, proyección, cultura de empresa— suele pesar más que el dinero. Analiza bien antes de decidir.`
+                : `La diferencia es de −${mAbs} €/mes netos. Esa pérdida podría compensarse si las condiciones no salariales de la nueva oferta son significativamente mejores. Tú decides.`;
+            } else {
+              body = difBonus > 0
+                ? `Perderías ${mAbs} €/mes netos. Aunque el bonus de la nueva oferta es mayor, la compensación total sigue siendo inferior (${tAbs} € menos al año). Para que el cambio tenga sentido, el argumento no puede ser económico.`
+                : `Perderías ${mAbs} €/mes netos (${aAbs} €/año). Para que compense, tiene que haber razones estratégicas de peso más allá del salario: mejor puesto, mayor proyección o mejores condiciones de trabajo.`;
+            }
+            return (
+              <div className="rounded-2xl p-6 md:p-7 relative overflow-hidden" style={{ background: vc.bg, border: `1px solid ${vc.border}` }}>
+                <div className="absolute inset-0 pointer-events-none" style={{ background: `radial-gradient(ellipse 60% 50% at 20% 50%, ${vc.glow} 0%, transparent 70%)` }} />
+                <div className="relative flex items-start gap-5">
+                  <span style={{ fontSize: "2rem", lineHeight: 1, flexShrink: 0 }}>{vc.icon}</span>
+                  <div>
+                    <p className="font-syne font-extrabold" style={{ fontSize: "1.15rem", color: vc.color, lineHeight: 1.2 }}>{vc.title}</p>
+                    <p className="text-sm mt-2 leading-relaxed font-medium" style={{ color: "#c0c0d8" }}>{body}</p>
+                    <p className="text-xs mt-3 leading-relaxed" style={{ color: "#5a5a80" }}>
+                      Este análisis es orientativo. La decisión depende también de factores que no se pueden medir: cultura de empresa, proyección profesional, estabilidad del sector y tus prioridades vitales.
+                    </p>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
+            );
+          })()}
 
           {/* ── Botón descarga PDF ── */}
           <div className="flex justify-center">
             <button
               onClick={handleDownloadPDF}
               disabled={!hasCalculated}
-              className="flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all"
+              className="group flex items-center gap-3 rounded-xl font-semibold transition-all"
               style={{
-                background: hasCalculated ? 'rgba(99,102,241,0.15)' : 'rgba(99,102,241,0.05)',
-                border: '1px solid rgba(99,102,241,0.3)',
-                color: hasCalculated ? '#818cf8' : '#4040a0',
+                background: hasCalculated
+                  ? 'linear-gradient(135deg, rgba(99,102,241,0.18) 0%, rgba(129,140,248,0.12) 100%)'
+                  : 'rgba(99,102,241,0.04)',
+                border: `1px solid ${hasCalculated ? 'rgba(129,140,248,0.4)' : 'rgba(99,102,241,0.1)'}`,
+                color: hasCalculated ? '#a5b4fc' : '#3a3a70',
                 cursor: hasCalculated ? 'pointer' : 'not-allowed',
-                fontSize: '0.88rem',
+                fontSize: '0.875rem',
+                padding: '12px 22px',
+                boxShadow: hasCalculated ? '0 2px 18px rgba(99,102,241,0.18), inset 0 1px 0 rgba(255,255,255,0.06)' : 'none',
+                letterSpacing: '0.02em',
+                transition: 'transform 0.15s, box-shadow 0.15s',
+              }}
+              onMouseEnter={(e) => {
+                if (hasCalculated) {
+                  (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-2px)';
+                  (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 6px 28px rgba(99,102,241,0.3), inset 0 1px 0 rgba(255,255,255,0.08)';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (hasCalculated) {
+                  (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(0)';
+                  (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 2px 18px rgba(99,102,241,0.18), inset 0 1px 0 rgba(255,255,255,0.06)';
+                }
               }}
             >
-              <span>📄</span>
+              <div
+                className="flex items-center justify-center rounded-lg shrink-0"
+                style={{
+                  width: 28, height: 28,
+                  background: hasCalculated ? 'rgba(99,102,241,0.25)' : 'rgba(99,102,241,0.08)',
+                  border: `1px solid ${hasCalculated ? 'rgba(129,140,248,0.4)' : 'rgba(99,102,241,0.15)'}`,
+                }}
+              >
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                  <path d="M6.5 1.5v7M4 6l2.5 2.5L9 6M1.5 10.5h10" />
+                </svg>
+              </div>
               Descargar comparativa en PDF
+              <span
+                style={{
+                  fontSize: '0.68rem', fontWeight: 700,
+                  padding: '2px 7px', borderRadius: 5,
+                  background: hasCalculated ? 'rgba(165,180,252,0.15)' : 'rgba(99,102,241,0.06)',
+                  color: hasCalculated ? '#818cf8' : '#3a3a70',
+                  letterSpacing: '0.04em', textTransform: 'uppercase',
+                }}
+              >PDF</span>
             </button>
           </div>
 
