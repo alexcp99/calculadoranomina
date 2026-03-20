@@ -1,5 +1,5 @@
 export default function StructuredData() {
-  const schema = {
+  const webApp = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     name: "Calculadora de Nómina 2026",
@@ -36,10 +36,37 @@ export default function StructuredData() {
     },
   };
 
+  const organization = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Calculadora Nómina",
+    url: "https://calculadoranomina.org",
+    logo: {
+      "@type": "ImageObject",
+      url: "https://calculadoranomina.org/apple-touch-icon.png",
+      width: 180,
+      height: 180,
+    },
+    sameAs: ["https://calculadoranomina.org"],
+  };
+
+  const webSite = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Calculadora Nómina",
+    url: "https://calculadoranomina.org",
+    potentialAction: {
+      "@type": "SearchAction",
+      target: "https://calculadoranomina.org/?q={search_term_string}",
+      "query-input": "required name=search_term_string",
+    },
+  };
+
   return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-    />
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webApp) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webSite) }} />
+    </>
   );
 }
