@@ -182,7 +182,7 @@ export default function ConvenioCalculator() {
   // ─── JSX ─────────────────────────────────────────────────────────────────────
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 w-full min-w-0">
 
       {/* ══ Step 1: Sector grid ══ */}
       <div>
@@ -190,7 +190,7 @@ export default function ConvenioCalculator() {
           1 · Selecciona tu sector
         </p>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3">
           {CONVENIOS.map((conv) => {
             const isSel      = selectedConvenioId === conv.id;
             const minSal     = Math.min(...conv.categorias.map((c) => c.salarioBase));
@@ -201,7 +201,7 @@ export default function ConvenioCalculator() {
               <button
                 key={conv.id}
                 onClick={() => selectConvenio(conv.id)}
-                className="relative flex flex-col rounded-2xl overflow-hidden text-left transition-all"
+                className="relative flex flex-col rounded-2xl overflow-hidden text-left transition-all min-w-0"
                 style={{
                   background:  isSel ? "rgba(99,102,241,0.1)" : "rgba(255,255,255,0.02)",
                   border:      `1.5px solid ${isSel ? "rgba(99,102,241,0.65)" : "rgba(255,255,255,0.08)"}`,
@@ -221,44 +221,45 @@ export default function ConvenioCalculator() {
                   }}
                 />
 
-                <div className="p-4 flex flex-col gap-3">
+                <div className="p-3 sm:p-4 flex flex-col gap-2 sm:gap-3">
                   {/* Emoji + Sector name */}
-                  <div className="flex items-center gap-3">
-                    <span style={{ fontSize: "1.7rem", lineHeight: 1 }}>{conv.icono}</span>
+                  <div className="flex items-center gap-2">
+                    <span style={{ fontSize: "1.4rem", lineHeight: 1, flexShrink: 0 }}>{conv.icono}</span>
                     <span
-                      className="font-syne font-bold leading-snug"
-                      style={{ fontSize: "0.85rem", color: isSel ? "#c4c4ff" : "#d0d0f0", lineHeight: 1.3 }}
+                      className="font-syne font-bold leading-snug min-w-0"
+                      style={{ fontSize: "0.82rem", color: isSel ? "#c4c4ff" : "#d0d0f0", lineHeight: 1.3, wordBreak: "break-word" }}
                     >
                       {conv.nombre}
                     </span>
                   </div>
 
                   {/* Salary range — the key info */}
-                  <div>
+                  <div className="min-w-0">
                     <span
                       className="font-syne font-bold tabnum"
-                      style={{ fontSize: "0.92rem", color: isSel ? "#6ee7b7" : "#34d399" }}
+                      style={{ fontSize: "0.82rem", color: isSel ? "#6ee7b7" : "#34d399" }}
                     >
-                      {fmtN(minSal)} – {fmtN(maxSal)} €
+                      {fmtN(minSal)}–{fmtN(maxSal)} €
                     </span>
-                    <span style={{ fontSize: "0.7rem", color: isSel ? "#9090b8" : "#6868a0", marginLeft: 3 }}>/mes</span>
+                    <span style={{ fontSize: "0.68rem", color: isSel ? "#9090b8" : "#6868a0", marginLeft: 2 }}>/mes</span>
                   </div>
 
                   {/* Meta row */}
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-wrap items-center gap-1">
                     <span
-                      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full"
+                      className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full"
                       style={{
                         background: isSel ? "rgba(99,102,241,0.15)" : "rgba(255,255,255,0.04)",
-                        fontSize:   "0.68rem",
+                        fontSize:   "0.65rem",
                         color:      isSel ? "#a5b4fc" : "#8888b0",
                         fontWeight: 600,
+                        whiteSpace: "nowrap",
                       }}
                     >
-                      {numCats} categorías
+                      {numCats} cat.
                     </span>
-                    <span style={{ fontSize: "0.68rem", color: isSel ? "#8888b0" : "#7070a0", fontWeight: 500 }}>
-                      {conv.trabajadores} trab.
+                    <span style={{ fontSize: "0.65rem", color: isSel ? "#8888b0" : "#7070a0", fontWeight: 500, whiteSpace: "nowrap" }}>
+                      {conv.trabajadores}
                     </span>
                   </div>
                 </div>
@@ -372,7 +373,7 @@ export default function ConvenioCalculator() {
 
       {/* ══ Results ══ */}
       {hasChecked && categoria && result && (
-        <div ref={resultRef} className="flex flex-col gap-4 animate-scaleIn" style={{ padding: 4 }}>
+        <div ref={resultRef} className="flex flex-col gap-4 animate-scaleIn w-full min-w-0" style={{ padding: 4 }}>
 
           {/* Separator */}
           <div className="flex items-center gap-4 py-1">
@@ -452,13 +453,13 @@ export default function ConvenioCalculator() {
               ].map((row, i) => (
                 <div
                   key={i}
-                  className="flex items-center justify-between py-2.5"
+                  className="flex items-center justify-between gap-2 py-2.5"
                   style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}
                 >
-                  <span style={{ fontSize: "0.87rem", color: "#b0b0cc" }}>{row.lbl}</span>
+                  <span style={{ fontSize: "0.83rem", color: "#b0b0cc", minWidth: 0, flexShrink: 1 }}>{row.lbl}</span>
                   <span
                     className={row.bold ? "font-syne font-bold tabnum" : "tabnum"}
-                    style={{ fontSize: row.bold ? "1rem" : "0.92rem", color: row.clr }}
+                    style={{ fontSize: row.bold ? "1rem" : "0.92rem", color: row.clr, flexShrink: 0, whiteSpace: "nowrap" }}
                   >
                     {row.val}
                   </span>

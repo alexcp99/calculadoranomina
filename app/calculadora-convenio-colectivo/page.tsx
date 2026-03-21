@@ -163,14 +163,14 @@ export default function CalculadoraConvenioPage() {
         aria-hidden
       />
 
-      <div className="relative z-10 flex flex-col min-h-screen">
+      <div className="relative z-10 flex flex-col min-h-screen w-full overflow-x-hidden">
 
         {/* ── Header ── */}
         <header className="px-4 pt-8 pb-6 md:pt-12 md:pb-8">
           <div className="max-w-4xl mx-auto">
 
             {/* Breadcrumb */}
-            <nav className="flex items-center gap-2 text-xs mb-6" style={{ color: "#4a4a6a" }} aria-label="Breadcrumb">
+            <nav className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs mb-6" style={{ color: "#4a4a6a" }} aria-label="Breadcrumb">
               <Link href="/" className="hover:underline" style={{ color: "#818cf8" }}>Inicio</Link>
               <span>/</span>
               <Link href="/" className="hover:underline" style={{ color: "#818cf8" }}>Calculadoras</Link>
@@ -287,7 +287,8 @@ export default function CalculadoraConvenioPage() {
                 className="rounded-2xl overflow-hidden"
                 style={{ border: "1px solid rgba(255,255,255,0.08)" }}
               >
-                <table className="w-full text-sm" style={{ borderCollapse: "collapse" }}>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm" style={{ borderCollapse: "collapse", minWidth: 320 }}>
                   <thead>
                     <tr style={{ background: "rgba(99,102,241,0.15)" }}>
                       <th className="text-left px-4 py-3 font-syne font-bold text-xs tracking-wider uppercase" style={{ color: "#a5b4fc" }}>Sector</th>
@@ -305,6 +306,7 @@ export default function CalculadoraConvenioPage() {
                     ))}
                   </tbody>
                 </table>
+              </div>
               </div>
               <p className="text-xs mt-3 leading-relaxed" style={{ color: "#5a5a80" }}>
                 Fuente: convenios colectivos estatales publicados en el BOE 2025-2026. Los salarios son orientativos y pueden variar por comunidad autónoma o convenio provincial específico.
