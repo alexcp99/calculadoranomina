@@ -163,7 +163,7 @@ export default function CalculadoraConvenioPage() {
         aria-hidden
       />
 
-      <div className="relative z-10 flex flex-col min-h-screen w-full overflow-x-hidden">
+      <div className="relative z-10 flex flex-col min-h-screen w-full">
 
         {/* ── Header ── */}
         <header className="px-4 pt-8 pb-6 md:pt-12 md:pb-8">
@@ -180,10 +180,11 @@ export default function CalculadoraConvenioPage() {
 
             <div
               className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium mb-5"
-              style={{ background: "rgba(99,102,241,0.1)", border: "1px solid rgba(99,102,241,0.22)", color: "#818cf8" }}
+              style={{ background: "rgba(99,102,241,0.1)", border: "1px solid rgba(99,102,241,0.22)", color: "#818cf8", maxWidth: "100%" }}
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" style={{ boxShadow: "0 0 6px rgba(52,211,153,0.7)" }} />
-              Datos oficiales 2026 · 8 convenios sectoriales
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" style={{ boxShadow: "0 0 6px rgba(52,211,153,0.7)" }} />
+              <span className="hidden sm:inline">Datos oficiales 2026 · 8 convenios sectoriales</span>
+              <span className="sm:hidden">Datos AEAT 2026 · 8 convenios</span>
             </div>
 
             <h1
