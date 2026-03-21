@@ -83,6 +83,11 @@ export default function SiteFooter({ year }: { year?: number }) {
                   </Link>
                 </li>
                 <li>
+                  <Link href="/calculadora-convenio-colectivo" className="text-xs hover:underline" style={{ color: "#a0a0c0" }}>
+                    Convenio colectivo
+                  </Link>
+                </li>
+                <li>
                   <Link href="/blog" className="text-xs hover:underline" style={{ color: "#a0a0c0" }}>
                     Blog
                   </Link>

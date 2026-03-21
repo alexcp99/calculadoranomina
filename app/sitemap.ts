@@ -40,6 +40,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
+      url: "https://calculadoranomina.org/calculadora-convenio-colectivo",
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
       url: "https://calculadoranomina.org/blog",
       lastModified: new Date(),
       changeFrequency: "weekly",

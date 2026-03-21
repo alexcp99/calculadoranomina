@@ -24,6 +24,12 @@ const CALCULADORAS = [
     href: "/calculadora-cambio-trabajo",
     label: "Cambio de trabajo",
     desc: "¿Te compensa cambiar de empresa?",
+    badge: undefined as string | undefined,
+  },
+  {
+    href: "/calculadora-convenio-colectivo",
+    label: "Convenio colectivo",
+    desc: "¿Cobras lo que te corresponde?",
     badge: "Nuevo",
   },
 ];
@@ -97,6 +103,15 @@ function IconSwitch() {
   );
 }
 
+function IconDoc() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="1.5" width="10" height="11" rx="1.5" />
+      <path d="M4.5 5h5M4.5 7.5h5M4.5 10h3" />
+    </svg>
+  );
+}
+
 // ─── Navbar ───────────────────────────────────────────────────────────────────
 
 export default function Navbar() {
@@ -122,7 +137,7 @@ export default function Navbar() {
     setMobileSalOpen(false);
   }, [pathname]);
 
-  const isCalcActive    = pathname === "/" || pathname === "/calculadora-retencion-irpf" || pathname === "/calculadora-cambio-trabajo";
+  const isCalcActive    = pathname === "/" || pathname === "/calculadora-retencion-irpf" || pathname === "/calculadora-cambio-trabajo" || pathname === "/calculadora-convenio-colectivo";
   const isSalaryActive  = ALL_SALARY_SLUGS.some((slug) => pathname === `/cuanto-es-${slug}-euros-brutos-neto`);
   const isActive        = (href: string) => href === "/" ? pathname === "/" : pathname.startsWith(href);
 
@@ -202,7 +217,7 @@ export default function Navbar() {
                     Herramientas
                   </p>
                   {CALCULADORAS.map((c) => {
-                    const Icon = c.href === "/" ? IconCalc : c.href === "/calculadora-cambio-trabajo" ? IconSwitch : IconPct;
+                    const Icon = c.href === "/" ? IconCalc : c.href === "/calculadora-cambio-trabajo" ? IconSwitch : c.href === "/calculadora-convenio-colectivo" ? IconDoc : IconPct;
                     const active = c.href === "/" ? pathname === "/" : pathname === c.href;
                     return (
                       <Link
@@ -367,7 +382,7 @@ export default function Navbar() {
           </button>
           <div
             className="overflow-hidden transition-all duration-300"
-            style={{ maxHeight: mobileCalcOpen ? "200px" : "0px", borderBottom: mobileCalcOpen ? "1px solid rgba(255,255,255,0.05)" : "none" }}
+            style={{ maxHeight: mobileCalcOpen ? "280px" : "0px", borderBottom: mobileCalcOpen ? "1px solid rgba(255,255,255,0.05)" : "none" }}
           >
             {CALCULADORAS.map((c) => {
               const Icon = c.href === "/" ? IconCalc : c.href === "/calculadora-cambio-trabajo" ? IconSwitch : IconPct;
