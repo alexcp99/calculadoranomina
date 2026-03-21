@@ -376,28 +376,29 @@ export default function JobChangeCalculator() {
     }
 
     // ── HTML row helpers ──
+    // All font sizes are large (20-22px minimum) so they render readable in A4 PDF
     const dataRow = (label: string, val: string, diff?: string, pos?: boolean): string => `
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid #f3f4f6;">
-        <span style="font-size:11px;color:#6b7280;">${label}</span>
-        <div style="display:flex;align-items:center;gap:6px;">
-          <span style="font-size:11px;font-weight:600;color:#111827;">${val}</span>
-          ${diff !== undefined ? `<span style="font-size:10px;font-weight:700;color:${pos ? '#16a34a' : '#dc2626'};">${diff}</span>` : ''}
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #f3f4f6;">
+        <span style="font-size:14px;color:#6b7280;">${label}</span>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:15px;font-weight:600;color:#111827;">${val}</span>
+          ${diff !== undefined ? `<span style="font-size:13px;font-weight:700;color:${pos ? '#16a34a' : '#dc2626'};">${diff}</span>` : ''}
         </div>
       </div>`;
 
     const tRow = (lbl: string, av: string, ov: string, diff: string, pos: boolean | null, alt: boolean, bold: boolean): string => `
       <tr style="background:${alt ? '#f9fafb' : '#ffffff'};">
-        <td style="padding:8px 12px;font-size:11px;${bold ? 'font-weight:700;color:#111827;' : 'color:#374151;'}">${lbl}</td>
-        <td style="padding:8px 12px;font-size:11px;text-align:right;${bold ? 'font-weight:700;color:#111827;' : 'color:#374151;'}">${av}</td>
-        <td style="padding:8px 12px;font-size:11px;text-align:right;${bold ? 'font-weight:700;color:#111827;' : 'color:#374151;'}">${ov}</td>
-        <td style="padding:8px 12px;font-size:11px;text-align:right;font-weight:700;color:${pos === null ? '#6b7280' : pos ? '#16a34a' : '#dc2626'};">${diff}</td>
+        <td style="padding:10px 14px;font-size:14px;${bold ? 'font-weight:700;color:#111827;' : 'color:#374151;'}">${lbl}</td>
+        <td style="padding:10px 14px;font-size:14px;text-align:right;${bold ? 'font-weight:700;color:#111827;' : 'color:#374151;'}">${av}</td>
+        <td style="padding:10px 14px;font-size:14px;text-align:right;${bold ? 'font-weight:700;color:#111827;' : 'color:#374151;'}">${ov}</td>
+        <td style="padding:10px 14px;font-size:14px;text-align:right;font-weight:700;color:${pos === null ? '#6b7280' : pos ? '#16a34a' : '#dc2626'};">${diff}</td>
       </tr>`;
 
     const pill = (label: string, val: string, state: 'positive' | 'negative' | 'neutral'): string => {
-      const pc = { positive: { bg: '#dcfce7', border: '#86efac', text: '#15803d' }, negative: { bg: '#fee2e2', border: '#fca5a5', text: '#dc2626' }, neutral: { bg: '#f3f4f6', border: '#d1d5db', text: '#6b7280' } }[state];
-      return `<div style="display:inline-flex;align-items:center;gap:5px;padding:5px 10px;background:${pc.bg};border:1px solid ${pc.border};border-radius:6px;margin:0 4px 4px 0;">
-        <span style="font-size:10px;font-weight:700;color:${pc.text};text-transform:uppercase;letter-spacing:0.04em;">${label}</span>
-        <span style="font-size:11px;color:${pc.text};">${val}</span>
+      const pc = { positive: { bg: '#dcfce7', border: '#86efac', text: '#15803d' }, negative: { bg: '#fee2e2', border: '#fca5a5', text: '#dc2626' }, neutral: { bg: '#f3f4f6', border: '#d1d5db', text: '#4b5563' } }[state];
+      return `<div style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:${pc.bg};border:1.5px solid ${pc.border};border-radius:8px;margin:0 6px 6px 0;">
+        <span style="font-size:12px;font-weight:700;color:${pc.text};text-transform:uppercase;letter-spacing:0.05em;">${label}:</span>
+        <span style="font-size:13px;font-weight:500;color:${pc.text};">${val}</span>
       </div>`;
     };
 
@@ -406,103 +407,103 @@ export default function JobChangeCalculator() {
 <div style="width:794px;background:#ffffff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">
 
   <!-- HEADER -->
-  <div style="background:#6366f1;padding:20px 28px;display:flex;justify-content:space-between;align-items:center;">
+  <div style="background:#6366f1;padding:22px 32px;display:flex;justify-content:space-between;align-items:center;">
     <div>
-      <div style="font-size:21px;font-weight:800;color:#ffffff;letter-spacing:-0.3px;">CalculadoraNomina.org</div>
-      <div style="font-size:12px;color:rgba(255,255,255,0.75);margin-top:3px;">Comparativa de Cambio de Trabajo · 2026</div>
+      <div style="font-size:26px;font-weight:800;color:#ffffff;letter-spacing:-0.5px;">CalculadoraNomina.org</div>
+      <div style="font-size:15px;color:rgba(255,255,255,0.82);margin-top:4px;">Comparativa de Cambio de Trabajo · 2026</div>
     </div>
-    <div style="text-align:right;font-size:11px;color:rgba(255,255,255,0.65);">${dateStr}</div>
+    <div style="text-align:right;font-size:14px;color:rgba(255,255,255,0.72);line-height:1.5;">${dateStr}</div>
   </div>
 
   <!-- CONTENT -->
-  <div style="padding:16px 24px 0;">
+  <div style="padding:20px 28px 4px;">
 
     <!-- HERO -->
-    <div style="background:${vBg};border:2px solid ${vBorder};border-radius:10px;padding:16px 20px;text-align:center;margin-bottom:14px;">
-      <div style="font-size:11px;font-weight:700;color:#6366f1;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:6px;">¿Te compensa cambiar de trabajo?</div>
-      <div style="font-size:42px;font-weight:900;color:${vColor};line-height:1;letter-spacing:-0.5px;">${vText}</div>
-      <div style="font-size:17px;font-weight:700;color:#1f2937;margin-top:8px;">${mSign}${mAbs} €/mes &nbsp;·&nbsp; ${aSign}${aAbs} €/año netos${difBonus !== 0 ? ` <span style="font-size:13px;font-weight:500;color:#6b7280;">(con bonus: ${difTotal >= 0 ? '+' : '−'}${tAbs} €/año)</span>` : ''}</div>
-      <div style="font-size:11px;color:#9ca3af;margin-top:5px;">${verdictBody}</div>
+    <div style="background:${vBg};border:2.5px solid ${vBorder};border-radius:12px;padding:20px 24px;text-align:center;margin-bottom:16px;">
+      <div style="font-size:14px;font-weight:700;color:#6366f1;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">¿Te compensa cambiar de trabajo?</div>
+      <div style="font-size:46px;font-weight:900;color:${vColor};line-height:1;letter-spacing:-1px;">${vText}</div>
+      <div style="font-size:22px;font-weight:700;color:#1f2937;margin-top:10px;">${mSign}${mAbs} €/mes &nbsp;·&nbsp; ${aSign}${aAbs} €/año netos${difBonus !== 0 ? ` &nbsp;·&nbsp; con bonus: ${difTotal >= 0 ? '+' : '−'}${tAbs} €/año` : ''}</div>
+      <div style="font-size:14px;color:#6b7280;margin-top:8px;line-height:1.55;max-width:600px;margin-left:auto;margin-right:auto;">${verdictBody}</div>
     </div>
 
     <!-- TWO CARDS -->
-    <div style="display:flex;gap:12px;margin-bottom:14px;">
+    <div style="display:flex;gap:16px;margin-bottom:18px;">
 
       <!-- ACTUAL -->
-      <div style="flex:1;border:1.5px solid #d1d5db;border-radius:10px;overflow:hidden;">
-        <div style="background:#f9fafb;padding:8px 14px;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;gap:8px;">
-          <span style="background:#6b7280;color:#fff;font-size:9px;font-weight:800;padding:2px 7px;border-radius:3px;text-transform:uppercase;letter-spacing:0.06em;">ACTUAL</span>
-          <span style="font-size:11px;color:#9ca3af;">${COMUNIDADES_LABEL[actual.ccaa]} · ${actual.pagas} pagas</span>
+      <div style="flex:1;border:2px solid #d1d5db;border-radius:12px;overflow:hidden;">
+        <div style="background:#f3f4f6;padding:11px 18px;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;gap:10px;">
+          <span style="background:#6b7280;color:#fff;font-size:12px;font-weight:800;padding:3px 10px;border-radius:4px;text-transform:uppercase;letter-spacing:0.07em;white-space:nowrap;">ACTUAL</span>
+          <span style="font-size:13px;color:#6b7280;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${COMUNIDADES_LABEL[actual.ccaa]} · ${actual.pagas} pagas</span>
         </div>
-        <div style="padding:12px 14px;">
-          <div style="font-size:34px;font-weight:800;color:#111827;letter-spacing:-0.5px;line-height:1;">${fmtN(Math.round(ar.monthlyNet))} €</div>
-          <div style="font-size:11px;color:#9ca3af;margin-bottom:10px;">neto mensual</div>
+        <div style="padding:14px 18px;">
+          <div style="font-size:40px;font-weight:800;color:#111827;letter-spacing:-0.5px;line-height:1;">${fmtN(Math.round(ar.monthlyNet))} €</div>
+          <div style="font-size:14px;color:#9ca3af;margin-bottom:12px;">neto mensual</div>
           ${dataRow('Bruto anual', `${fmtN(aB)} €`)}
           ${dataRow('Neto anual', `${fmtN(Math.round(ar.annualNet))} €`)}
-          ${dataRow('SS pagado / año', `${fmtN(Math.round(ar.annualSS))} €`)}
+          ${dataRow('SS trabajador / año', `${fmtN(Math.round(ar.annualSS))} €`)}
+          ${dataRow('IRPF retenido / año', `${fmtN(Math.round(ar.annualIRPF))} €`)}
           ${dataRow('IRPF efectivo', `${fi(ar.irpfEfectivo)} %`)}
           ${dataRow('Bonus anual', aBonus > 0 ? `${fmtN(aBonus)} €` : '—')}
           ${dataRow('Vacaciones', `${aVac} días`)}
-          ${dataRow('Teletrabajo', TELETRABAJO_LABEL[actual.teletrabajo])}
         </div>
       </div>
 
       <!-- OFERTA -->
-      <div style="flex:1;border:2px solid #6366f1;border-radius:10px;overflow:hidden;">
-        <div style="background:#eef2ff;padding:8px 14px;border-bottom:1px solid #c7d2fe;display:flex;align-items:center;gap:8px;">
-          <span style="background:#6366f1;color:#fff;font-size:9px;font-weight:800;padding:2px 7px;border-radius:3px;text-transform:uppercase;letter-spacing:0.06em;">OFERTA</span>
-          <span style="font-size:11px;color:#818cf8;">${COMUNIDADES_LABEL[oferta.ccaa]} · ${oferta.pagas} pagas</span>
+      <div style="flex:1;border:2.5px solid #6366f1;border-radius:12px;overflow:hidden;">
+        <div style="background:#eef2ff;padding:11px 18px;border-bottom:1.5px solid #c7d2fe;display:flex;align-items:center;gap:10px;">
+          <span style="background:#6366f1;color:#fff;font-size:12px;font-weight:800;padding:3px 10px;border-radius:4px;text-transform:uppercase;letter-spacing:0.07em;white-space:nowrap;">OFERTA</span>
+          <span style="font-size:13px;color:#6366f1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${COMUNIDADES_LABEL[oferta.ccaa]} · ${oferta.pagas} pagas</span>
         </div>
-        <div style="padding:12px 14px;">
-          <div style="font-size:34px;font-weight:800;color:#6366f1;letter-spacing:-0.5px;line-height:1;">${fmtN(Math.round(or.monthlyNet))} €</div>
-          <div style="font-size:11px;color:#818cf8;margin-bottom:10px;">neto mensual</div>
+        <div style="padding:14px 18px;">
+          <div style="font-size:40px;font-weight:800;color:#6366f1;letter-spacing:-0.5px;line-height:1;">${fmtN(Math.round(or.monthlyNet))} €</div>
+          <div style="font-size:14px;color:#818cf8;margin-bottom:12px;">neto mensual</div>
           ${dataRow('Bruto anual', `${fmtN(oB)} €`, `${oB - aB >= 0 ? '+' : '−'}${fmtN(Math.round(Math.abs(oB - aB)))} €`, oB >= aB)}
           ${dataRow('Neto anual', `${fmtN(Math.round(or.annualNet))} €`, `${difAnual >= 0 ? '+' : '−'}${fmtN(Math.round(Math.abs(difAnual)))} €`, difAnual >= 0)}
-          ${dataRow('SS pagado / año', `${fmtN(Math.round(or.annualSS))} €`, `${or.annualSS - ar.annualSS >= 0 ? '+' : '−'}${fmtN(Math.round(Math.abs(or.annualSS - ar.annualSS)))} €`, or.annualSS <= ar.annualSS)}
+          ${dataRow('SS trabajador / año', `${fmtN(Math.round(or.annualSS))} €`, `${or.annualSS - ar.annualSS >= 0 ? '+' : '−'}${fmtN(Math.round(Math.abs(or.annualSS - ar.annualSS)))} €`, or.annualSS <= ar.annualSS)}
+          ${dataRow('IRPF retenido / año', `${fmtN(Math.round(or.annualIRPF))} €`, `${or.annualIRPF - ar.annualIRPF >= 0 ? '+' : '−'}${fmtN(Math.round(Math.abs(or.annualIRPF - ar.annualIRPF)))} €`, or.annualIRPF <= ar.annualIRPF)}
           ${dataRow('IRPF efectivo', `${fi(or.irpfEfectivo)} %`, `${or.irpfEfectivo - ar.irpfEfectivo >= 0 ? '+' : '−'}${fi(Math.abs(or.irpfEfectivo - ar.irpfEfectivo))} %`, or.irpfEfectivo <= ar.irpfEfectivo)}
           ${dataRow('Bonus anual', oBonus > 0 ? `${fmtN(oBonus)} €` : '—', bonusDiff !== 0 ? `${bonusDiff >= 0 ? '+' : '−'}${fmtN(Math.abs(bonusDiff))} €` : undefined, bonusDiff >= 0)}
           ${dataRow('Vacaciones', `${oVac} días`, difVac !== 0 ? `${difVac >= 0 ? '+' : ''}${difVac} días` : undefined, difVac >= 0)}
-          ${dataRow('Teletrabajo', TELETRABAJO_LABEL[oferta.teletrabajo])}
         </div>
       </div>
     </div>
 
     <!-- FINANCIAL TABLE -->
-    <div style="margin-bottom:12px;">
-      <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:#9ca3af;letter-spacing:0.06em;margin-bottom:6px;">Desglose financiero</div>
-      <table style="width:100%;border-collapse:collapse;font-size:11px;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;">
+    <div style="margin-bottom:16px;">
+      <div style="font-size:13px;font-weight:700;text-transform:uppercase;color:#9ca3af;letter-spacing:0.07em;margin-bottom:8px;">Resumen financiero comparado</div>
+      <table style="width:100%;border-collapse:collapse;border:1.5px solid #e5e7eb;border-radius:10px;overflow:hidden;">
         <thead>
           <tr style="background:#6366f1;">
-            <th style="text-align:left;padding:9px 12px;color:#fff;font-weight:700;font-size:11px;">Concepto</th>
-            <th style="text-align:right;padding:9px 12px;color:#fff;font-weight:700;font-size:11px;">Trabajo actual</th>
-            <th style="text-align:right;padding:9px 12px;color:#fff;font-weight:700;font-size:11px;">Nueva oferta</th>
-            <th style="text-align:right;padding:9px 12px;color:#fff;font-weight:700;font-size:11px;">Diferencia</th>
+            <th style="text-align:left;padding:11px 15px;color:#fff;font-weight:700;font-size:14px;">Concepto</th>
+            <th style="text-align:right;padding:11px 15px;color:#fff;font-weight:700;font-size:14px;">Trabajo actual</th>
+            <th style="text-align:right;padding:11px 15px;color:#fff;font-weight:700;font-size:14px;">Nueva oferta</th>
+            <th style="text-align:right;padding:11px 15px;color:#fff;font-weight:700;font-size:14px;">Diferencia</th>
           </tr>
         </thead>
         <tbody>
-          ${tRow('Salario bruto anual',     `${fmtN(aB)} €`,                              `${fmtN(oB)} €`,                              `${oB-aB>=0?'+':'−'}${fmtN(Math.round(Math.abs(oB-aB)))} €`,                                                    oB>=aB,                               false, false)}
-          ${tRow('SS trabajador / año',     `${fmtN(Math.round(ar.annualSS))} €`,         `${fmtN(Math.round(or.annualSS))} €`,         `${or.annualSS-ar.annualSS>=0?'+':'−'}${fmtN(Math.round(Math.abs(or.annualSS-ar.annualSS)))} €`,               or.annualSS<=ar.annualSS,             true,  false)}
-          ${tRow('IRPF retenido / año',     `${fmtN(Math.round(ar.annualIRPF))} €`,       `${fmtN(Math.round(or.annualIRPF))} €`,       `${or.annualIRPF-ar.annualIRPF>=0?'+':'−'}${fmtN(Math.round(Math.abs(or.annualIRPF-ar.annualIRPF)))} €`,         or.annualIRPF<=ar.annualIRPF,         false, false)}
-          ${tRow('Neto mensual',            `${fmtN(Math.round(ar.monthlyNet))} €`,       `${fmtN(Math.round(or.monthlyNet))} €`,       `${difMensual>=0?'+':'−'}${fmtN(Math.round(Math.abs(difMensual)))} €`,                                          difMensual>=0,                        true,  false)}
-          ${tRow('Neto anual',              `${fmtN(Math.round(ar.annualNet))} €`,        `${fmtN(Math.round(or.annualNet))} €`,        `${difAnual>=0?'+':'−'}${fmtN(Math.round(Math.abs(difAnual)))} €`,                                              difAnual>=0,                          false, false)}
-          ${tRow('Compensación total / año',`${fmtN(Math.round(ar.annualNet+aBonus))} €`, `${fmtN(Math.round(or.annualNet+oBonus))} €`, `${difTotal>=0?'+':'−'}${fmtN(Math.round(Math.abs(difTotal)))} €`,                                              difTotal>=0,                          true,  true)}
+          ${tRow('Salario bruto / año',      `${fmtN(aB)} €`,                              `${fmtN(oB)} €`,                              `${oB-aB>=0?'+':'−'}${fmtN(Math.round(Math.abs(oB-aB)))} €`,                                                oB>=aB,               false, false)}
+          ${tRow('SS trabajador / año',      `${fmtN(Math.round(ar.annualSS))} €`,         `${fmtN(Math.round(or.annualSS))} €`,         `${or.annualSS-ar.annualSS>=0?'+':'−'}${fmtN(Math.round(Math.abs(or.annualSS-ar.annualSS)))} €`,           or.annualSS<=ar.annualSS, true, false)}
+          ${tRow('IRPF retenido / año',      `${fmtN(Math.round(ar.annualIRPF))} €`,       `${fmtN(Math.round(or.annualIRPF))} €`,       `${or.annualIRPF-ar.annualIRPF>=0?'+':'−'}${fmtN(Math.round(Math.abs(or.annualIRPF-ar.annualIRPF)))} €`,   or.annualIRPF<=ar.annualIRPF, false, false)}
+          ${tRow('Neto mensual',             `${fmtN(Math.round(ar.monthlyNet))} €`,       `${fmtN(Math.round(or.monthlyNet))} €`,       `${difMensual>=0?'+':'−'}${fmtN(Math.round(Math.abs(difMensual)))} €`,                                    difMensual>=0,        true,  false)}
+          ${tRow('Neto anual',               `${fmtN(Math.round(ar.annualNet))} €`,        `${fmtN(Math.round(or.annualNet))} €`,        `${difAnual>=0?'+':'−'}${fmtN(Math.round(Math.abs(difAnual)))} €`,                                        difAnual>=0,          false, false)}
+          ${tRow('Compensación total / año', `${fmtN(Math.round(ar.annualNet+aBonus))} €`, `${fmtN(Math.round(or.annualNet+oBonus))} €`, `${difTotal>=0?'+':'−'}${fmtN(Math.round(Math.abs(difTotal)))} €`,                                        difTotal>=0,          true,  true)}
         </tbody>
       </table>
     </div>
 
     <!-- QUALITATIVE PILLS -->
-    <div style="display:flex;flex-wrap:wrap;margin-bottom:14px;">
-      ${pill('Vacaciones',    difVac===0?`${aVac} días (sin cambio)`:difVac>0?`+${difVac} días (${oVac} vs ${aVac})`:` ${difVac} días (${oVac} vs ${aVac})`, difVac>0?'positive':difVac<0?'negative':'neutral')}
-      ${pill('Teletrabajo',   difTeletrab===0?TELETRABAJO_LABEL[oferta.teletrabajo]:difTeletrab>0?`Mejora → ${TELETRABAJO_LABEL[oferta.teletrabajo]}`:`Empeora → ${TELETRABAJO_LABEL[oferta.teletrabajo]}`, difTeletrab>0?'positive':difTeletrab<0?'negative':'neutral')}
-      ${pill('Antigüedad',    antiguedad>0?`Pierdes ${antiguedad} año${antiguedad!==1?'s':''}`:'-', antiguedad>0?'negative':'neutral')}
-      ${pill('Comunidad',     actual.ccaa===oferta.ccaa?COMUNIDADES_LABEL[actual.ccaa]:`${COMUNIDADES_LABEL[actual.ccaa]} → ${COMUNIDADES_LABEL[oferta.ccaa]}`, 'neutral')}
+    <div style="display:flex;flex-wrap:wrap;margin-bottom:16px;">
+      ${pill('Vacaciones',  difVac===0?`${aVac} días (sin cambio)`:difVac>0?`+${difVac} días (${oVac} vs ${aVac})`:` ${difVac} días (${oVac} vs ${aVac})`, difVac>0?'positive':difVac<0?'negative':'neutral')}
+      ${pill('Teletrabajo', difTeletrab===0?TELETRABAJO_LABEL[oferta.teletrabajo]:difTeletrab>0?`Mejora → ${TELETRABAJO_LABEL[oferta.teletrabajo]}`:`Empeora → ${TELETRABAJO_LABEL[oferta.teletrabajo]}`, difTeletrab>0?'positive':difTeletrab<0?'negative':'neutral')}
+      ${antiguedad > 0 ? pill('Antigüedad', `Pierdes ${antiguedad} año${antiguedad!==1?'s':''}`, 'negative') : ''}
+      ${actual.ccaa !== oferta.ccaa ? pill('Comunidad', `${COMUNIDADES_LABEL[actual.ccaa]} → ${COMUNIDADES_LABEL[oferta.ccaa]}`, 'neutral') : ''}
     </div>
 
   </div>
 
   <!-- FOOTER -->
-  <div style="background:#f9fafb;border-top:1px solid #e5e7eb;padding:10px 24px;">
-    <div style="font-size:10px;color:#9ca3af;">Cálculo orientativo basado en datos oficiales AEAT 2026 · calculadoranomina.org · Los resultados son estimaciones y no constituyen asesoramiento fiscal ni laboral</div>
+  <div style="background:#f9fafb;border-top:1.5px solid #e5e7eb;padding:12px 28px;">
+    <div style="font-size:12px;color:#9ca3af;line-height:1.5;">Cálculo orientativo basado en datos oficiales AEAT 2026 · calculadoranomina.org · Los resultados son estimaciones y no constituyen asesoramiento fiscal ni laboral.</div>
   </div>
 
 </div>`;
@@ -910,7 +911,7 @@ export default function JobChangeCalculator() {
                   {/* Header */}
                   <div className="flex items-center gap-2 mb-4">
                     <div className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: card.accent, boxShadow: `0 0 6px ${card.accent}` }} />
-                    <span className="font-syne font-bold tracking-widest uppercase" style={{ fontSize: "0.72rem", color: card.accent }}>
+                    <span className="font-syne font-bold tracking-widest uppercase" style={{ fontSize: "0.8rem", color: card.accent }}>
                       {card.label}
                     </span>
                   </div>
@@ -920,36 +921,36 @@ export default function JobChangeCalculator() {
                     <div className="font-syne font-extrabold tabnum leading-none" style={{ fontSize: "clamp(2.2rem, 5vw, 2.8rem)", color: "#f0f0ff" }}>
                       {fmtN(Math.round(card.r.monthlyNet))} €
                     </div>
-                    <div style={{ color: "#5a5a80", fontSize: "0.75rem", marginTop: 4 }}>neto mensual</div>
+                    <div style={{ color: "#9090b8", fontSize: "0.82rem", marginTop: 4 }}>neto mensual</div>
                   </div>
 
                   {/* Desglose completo */}
                   <div className="flex flex-col" style={{ borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: 12 }}>
                     {([
-                      { lbl: "Bruto anual",       val: `${fmtN(card.bruto)} €`,                              clr: "#7070a0" },
+                      { lbl: "Bruto anual",       val: `${fmtN(card.bruto)} €`,                              clr: "#a0a0c8" },
                       { lbl: "Neto anual",        val: `${fmtN(Math.round(card.r.annualNet))} €`,             clr: "#e0e0ff", bold: true },
-                      { lbl: "SS trabajador/año", val: `${fmtN(Math.round(card.r.annualSS))} €`,              clr: "#7070a0" },
-                      { lbl: "IRPF pagado/año",   val: `${fmtN(Math.round(card.r.annualIRPF))} €`,            clr: "#7070a0" },
+                      { lbl: "SS trabajador/año", val: `${fmtN(Math.round(card.r.annualSS))} €`,              clr: "#a0a0c8" },
+                      { lbl: "IRPF pagado/año",   val: `${fmtN(Math.round(card.r.annualIRPF))} €`,            clr: "#a0a0c8" },
                       { lbl: "IRPF efectivo",     val: `${fi(card.r.irpfEfectivo)} %`,                        clr: "#fbbf24" },
                       ...(card.bonus > 0 ? [{ lbl: "Bonus anual", val: `${fmtN(card.bonus)} €`, clr: card.accent, bold: false }] : []),
-                      { lbl: "Vacaciones",        val: `${card.vac} días`,                                    clr: "#9090b8" },
-                      { lbl: "Teletrabajo",       val: TELETRABAJO_LABEL[card.tele],                          clr: "#9090b8" },
+                      { lbl: "Vacaciones",        val: `${card.vac} días`,                                    clr: "#b0b0d0" },
+                      { lbl: "Teletrabajo",       val: TELETRABAJO_LABEL[card.tele],                          clr: "#b0b0d0" },
                     ] as { lbl: string; val: string; clr: string; bold?: boolean }[]).map((row, ri) => (
                       <div
                         key={ri}
                         className="flex items-center justify-between py-2"
                         style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}
                       >
-                        <span style={{ fontSize: "0.75rem", color: "#5a5a80" }}>{row.lbl}</span>
-                        <span className={row.bold ? "font-semibold" : ""} style={{ fontSize: "0.82rem", color: row.clr, tabularNums: true } as React.CSSProperties}>{row.val}</span>
+                        <span style={{ fontSize: "0.82rem", color: "#9090b8" }}>{row.lbl}</span>
+                        <span className={row.bold ? "font-semibold" : ""} style={{ fontSize: "0.88rem", color: row.clr, tabularNums: true } as React.CSSProperties}>{row.val}</span>
                       </div>
                     ))}
                   </div>
 
                   {/* Footer CCAA */}
                   <div className="flex items-center justify-between mt-3 pt-3" style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}>
-                    <span style={{ color: "#4a4a6a", fontSize: "0.72rem" }}>{card.ccaa}</span>
-                    <span style={{ color: "#4a4a6a", fontSize: "0.72rem" }}>{card.pagas} pagas</span>
+                    <span style={{ color: "#7878a8", fontSize: "0.78rem" }}>{card.ccaa}</span>
+                    <span style={{ color: "#7878a8", fontSize: "0.78rem" }}>{card.pagas} pagas</span>
                   </div>
                 </div>
               </div>
@@ -972,7 +973,7 @@ export default function JobChangeCalculator() {
               }}
             />
 
-            <p className="font-syne font-bold text-xs tracking-widest uppercase mb-4" style={{ color: "#5a5a80" }}>
+            <p className="font-syne font-bold text-xs tracking-widest uppercase mb-4" style={{ color: "#9090b8" }}>
               Diferencia real
             </p>
 
@@ -983,7 +984,7 @@ export default function JobChangeCalculator() {
             >
               {fmtSigned(Math.round(difMensual))}
             </div>
-            <div className="text-sm mb-6" style={{ color: "#6060a0" }}>al mes en neto</div>
+            <div className="text-sm mb-6" style={{ color: "#9090b8" }}>al mes en neto</div>
 
             {/* Desglose anual */}
             <div
@@ -994,7 +995,7 @@ export default function JobChangeCalculator() {
                 <div className="font-syne font-bold tabnum" style={{ fontSize: "1.4rem", color: difAnual >= 0 ? "#34d399" : "#f87171" }}>
                   {fmtSigned(Math.round(difAnual))}
                 </div>
-                <div style={{ color: "#5a5a80", fontSize: "0.72rem", marginTop: 3 }}>neto/año</div>
+                <div style={{ color: "#9090b8", fontSize: "0.78rem", marginTop: 3 }}>neto/año</div>
               </div>
               {difBonus !== 0 && (
                 <>
@@ -1003,21 +1004,21 @@ export default function JobChangeCalculator() {
                     <div className="font-syne font-bold tabnum" style={{ fontSize: "1.4rem", color: difBonus >= 0 ? "#34d399" : "#f87171" }}>
                       {fmtSigned(difBonus)}
                     </div>
-                    <div style={{ color: "#5a5a80", fontSize: "0.72rem", marginTop: 3 }}>bonus/año</div>
+                    <div style={{ color: "#9090b8", fontSize: "0.78rem", marginTop: 3 }}>bonus/año</div>
                   </div>
                   <span style={{ color: "#3a3a60", fontSize: "1.2rem", fontWeight: 700 }}>=</span>
                   <div className="text-center">
                     <div className="font-syne font-bold tabnum" style={{ fontSize: "1.4rem", color: difTotal >= 0 ? "#34d399" : "#f87171" }}>
                       {fmtSigned(Math.round(difTotal))}
                     </div>
-                    <div style={{ color: "#5a5a80", fontSize: "0.72rem", marginTop: 3 }}>compensación total/año</div>
+                    <div style={{ color: "#9090b8", fontSize: "0.78rem", marginTop: 3 }}>compensación total/año</div>
                   </div>
                 </>
               )}
             </div>
 
             {/* Texto dinámico */}
-            <p className="text-sm leading-relaxed mt-5 max-w-lg mx-auto" style={{ color: "#8080a8" }}>
+            <p className="text-sm leading-relaxed mt-5 max-w-lg mx-auto" style={{ color: "#b0b0cc" }}>
               {difMensual >= 200
                 ? `Cobrarías ${fmtN(Math.round(difMensual))} € más al mes netos.${difTotal > difAnual ? ` Contando el bonus, la mejora total anual sería de ${fmtN(Math.round(difTotal))} €.` : ""}`
                 : difMensual <= -100
@@ -1033,7 +1034,7 @@ export default function JobChangeCalculator() {
           >
             <p
               className="font-syne font-bold tracking-widest uppercase mb-4"
-              style={{ fontSize: "0.72rem", color: "#5a5a80" }}
+              style={{ fontSize: "0.72rem", color: "#9090b8" }}
             >
               Factores adicionales
             </p>
@@ -1112,7 +1113,7 @@ export default function JobChangeCalculator() {
                   <div>
                     <p className="font-syne font-extrabold" style={{ fontSize: "1.15rem", color: vc.color, lineHeight: 1.2 }}>{vc.title}</p>
                     <p className="text-sm mt-2 leading-relaxed font-medium" style={{ color: "#c0c0d8" }}>{body}</p>
-                    <p className="text-xs mt-3 leading-relaxed" style={{ color: "#5a5a80" }}>
+                    <p className="text-xs mt-3 leading-relaxed" style={{ color: "#8888b0" }}>
                       Este análisis es orientativo. La decisión depende también de factores que no se pueden medir: cultura de empresa, proyección profesional, estabilidad del sector y tus prioridades vitales.
                     </p>
                   </div>
@@ -1186,7 +1187,7 @@ export default function JobChangeCalculator() {
             >
               <p
                 className="font-syne font-bold tracking-widest uppercase mb-4"
-                style={{ fontSize: "0.72rem", color: "#5a5a80" }}
+                style={{ fontSize: "0.72rem", color: "#9090b8" }}
               >
                 Análisis detallado
               </p>
