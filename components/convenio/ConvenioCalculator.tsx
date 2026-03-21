@@ -24,34 +24,107 @@ const CCAA_OPTIONS = (
 ).sort((a, b) => a[1].localeCompare(b[1], "es"));
 
 const CANONICAL_CASE = {
-  contractType:       "indefinido" as const,
-  familySituation:    "soltero"    as const,
-  numChildren:        0,
-  childrenUnder3:     0            as const,
+  contractType:        "indefinido" as const,
+  familySituation:     "soltero"    as const,
+  numChildren:         0,
+  childrenUnder3:      0            as const,
   spouseWithoutIncome: false,
-  age:                35,
-  disability:         "none"       as const,
-  geographicMobility: false        as const,
+  age:                 35,
+  disability:          "none"       as const,
+  geographicMobility:  false        as const,
 };
 
-const LABEL_ST: React.CSSProperties = {
-  color:         "#7070a0",
+// ─── Design tokens — exactamente iguales a JobChangeCalculator ────────────────
+
+const LABEL_STYLE: React.CSSProperties = {
+  color:         "#b8b8d8",
   fontSize:      "0.72rem",
   fontWeight:    600,
   textTransform: "uppercase",
-  letterSpacing: "0.09em",
+  letterSpacing: "0.08em",
+  display:       "block",
+  marginBottom:  7,
 };
 
-const INPUT_ST: React.CSSProperties = {
+const INPUT_BASE: React.CSSProperties = {
   background:   "rgba(255,255,255,0.04)",
-  border:       "1px solid rgba(255,255,255,0.08)",
-  borderRadius: 10,
+  border:       "1px solid rgba(255,255,255,0.1)",
   color:        "#e0e0ff",
-  fontSize:     "0.95rem",
-  padding:      "10px 14px",
+  caretColor:   "#6366f1",
   width:        "100%",
+  borderRadius: 12,
+  padding:      "11px 14px",
+  fontSize:     "0.9rem",
+  fontWeight:   500,
   outline:      "none",
+  transition:   "border-color 0.15s",
 };
+
+// ─── Field wrappers ───────────────────────────────────────────────────────────
+
+function FieldSelect({
+  label,
+  value,
+  onChange,
+  children,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <label className="flex flex-col">
+      <span style={LABEL_STYLE}>{label}</span>
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        style={{ ...INPUT_BASE, appearance: "none" } as React.CSSProperties}
+        onFocus={(e) => { (e.currentTarget as HTMLSelectElement).style.borderColor = "rgba(99,102,241,0.6)"; }}
+        onBlur={(e)  => { (e.currentTarget as HTMLSelectElement).style.borderColor = "rgba(255,255,255,0.1)"; }}
+      >
+        {children}
+      </select>
+    </label>
+  );
+}
+
+function FieldNum({
+  label,
+  value,
+  onChange,
+  placeholder,
+  suffix,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  placeholder?: string;
+  suffix?: string;
+}) {
+  return (
+    <label className="flex flex-col">
+      <span style={LABEL_STYLE}>{label}</span>
+      <div className="relative">
+        <input
+          type="number"
+          min="0"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={placeholder}
+          style={{ ...INPUT_BASE, paddingRight: suffix ? "2.6rem" : INPUT_BASE.padding }}
+          onFocus={(e) => { (e.currentTarget as HTMLInputElement).style.borderColor = "rgba(99,102,241,0.6)"; }}
+          onBlur={(e)  => { (e.currentTarget as HTMLInputElement).style.borderColor = "rgba(255,255,255,0.1)"; }}
+        />
+        {suffix && (
+          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm font-semibold pointer-events-none" style={{ color: "#6060a0" }}>
+            {suffix}
+          </span>
+        )}
+      </div>
+    </label>
+  );
+}
 
 // ─── Main component ───────────────────────────────────────────────────────────
 
@@ -95,12 +168,12 @@ export default function ConvenioCalculator() {
       })
     : null;
 
-  const salarioActualNum  = parseFloat(salarioActual.replace(",", ".")) || 0;
-  const hasActualSalario  = salarioActual.trim() !== "" && salarioActualNum > 0;
-  const diferencia        = hasActualSalario && categoria ? salarioActualNum - categoria.salarioBase : 0;
-  const porDebajo         = hasActualSalario && !!categoria && diferencia < 0;
-  const cumple            = hasActualSalario && !!categoria && diferencia >= 0;
-  const prorrataMensual   = categoria ? Math.round((categoria.salarioBase * 2) / 12) : 0;
+  const salarioActualNum = parseFloat(salarioActual.replace(",", ".")) || 0;
+  const hasActualSalario = salarioActual.trim() !== "" && salarioActualNum > 0;
+  const diferencia       = hasActualSalario && categoria ? salarioActualNum - categoria.salarioBase : 0;
+  const porDebajo        = hasActualSalario && !!categoria && diferencia < 0;
+  const cumple           = hasActualSalario && !!categoria && diferencia >= 0;
+  const prorrataMensual  = categoria ? Math.round((categoria.salarioBase * 2) / 12) : 0;
 
   const verdictColor  = porDebajo ? "#f87171" : cumple ? "#34d399" : "#a5b4fc";
   const verdictBg     = porDebajo ? "rgba(248,113,113,0.06)" : cumple ? "rgba(52,211,153,0.06)" : "rgba(99,102,241,0.06)";
@@ -111,184 +184,227 @@ export default function ConvenioCalculator() {
   return (
     <div className="flex flex-col gap-6">
 
-      {/* ── Step 1: Sector grid ── */}
+      {/* ══ Step 1: Sector grid ══ */}
       <div>
         <p className="font-syne font-bold text-xs tracking-widest uppercase mb-4" style={{ color: "#9090b8" }}>
           1 · Selecciona tu sector
         </p>
+
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {CONVENIOS.map((conv) => {
-            const isSel = selectedConvenioId === conv.id;
+            const isSel      = selectedConvenioId === conv.id;
+            const minSal     = Math.min(...conv.categorias.map((c) => c.salarioBase));
+            const maxSal     = Math.max(...conv.categorias.map((c) => c.salarioBase));
+            const numCats    = conv.categorias.length;
+
             return (
               <button
                 key={conv.id}
                 onClick={() => selectConvenio(conv.id)}
-                className="flex flex-col items-center text-center gap-2.5 p-4 rounded-2xl transition-all"
+                className="relative flex flex-col rounded-2xl overflow-hidden text-left transition-all"
                 style={{
                   background:  isSel ? "rgba(99,102,241,0.1)" : "rgba(255,255,255,0.02)",
-                  border:      `1.5px solid ${isSel ? "#6366f1" : "rgba(255,255,255,0.07)"}`,
-                  boxShadow:   isSel ? "0 0 0 1px rgba(99,102,241,0.2), 0 4px 20px rgba(99,102,241,0.15)" : "none",
+                  border:      `1.5px solid ${isSel ? "rgba(99,102,241,0.65)" : "rgba(255,255,255,0.08)"}`,
+                  boxShadow:   isSel ? "0 0 0 1px rgba(99,102,241,0.2), 0 6px 28px rgba(99,102,241,0.18)" : "none",
                   cursor:      "pointer",
-                  transform:   isSel ? "translateY(-1px)" : "none",
+                  transform:   isSel ? "translateY(-2px)" : "none",
                 }}
               >
-                <span style={{ fontSize: "1.75rem", lineHeight: 1 }}>{conv.icono}</span>
-                <span
-                  className="font-syne font-bold leading-tight"
-                  style={{ fontSize: "0.82rem", color: isSel ? "#a5b4fc" : "#c0c0d8", lineHeight: 1.3 }}
-                >
-                  {conv.nombre}
-                </span>
-                <span style={{ fontSize: "0.67rem", color: isSel ? "#818cf8" : "#5a5a80" }}>
-                  {conv.trabajadores} trab.
-                </span>
+                {/* Top accent bar */}
+                <div
+                  style={{
+                    height:     3,
+                    background: isSel
+                      ? "linear-gradient(90deg, #6366f1, #818cf8)"
+                      : "rgba(255,255,255,0.04)",
+                    transition: "background 0.2s",
+                  }}
+                />
+
+                <div className="p-4 flex flex-col gap-3">
+                  {/* Emoji + Sector name */}
+                  <div className="flex items-center gap-3">
+                    <span style={{ fontSize: "1.7rem", lineHeight: 1 }}>{conv.icono}</span>
+                    <span
+                      className="font-syne font-bold leading-snug"
+                      style={{ fontSize: "0.85rem", color: isSel ? "#c4c4ff" : "#d0d0f0", lineHeight: 1.3 }}
+                    >
+                      {conv.nombre}
+                    </span>
+                  </div>
+
+                  {/* Salary range — the key info */}
+                  <div>
+                    <span
+                      className="font-syne font-bold tabnum"
+                      style={{ fontSize: "0.92rem", color: isSel ? "#6ee7b7" : "#34d399" }}
+                    >
+                      {fmtN(minSal)} – {fmtN(maxSal)} €
+                    </span>
+                    <span style={{ fontSize: "0.7rem", color: isSel ? "#9090b8" : "#6868a0", marginLeft: 3 }}>/mes</span>
+                  </div>
+
+                  {/* Meta row */}
+                  <div className="flex items-center justify-between">
+                    <span
+                      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full"
+                      style={{
+                        background: isSel ? "rgba(99,102,241,0.15)" : "rgba(255,255,255,0.04)",
+                        fontSize:   "0.68rem",
+                        color:      isSel ? "#a5b4fc" : "#8888b0",
+                        fontWeight: 600,
+                      }}
+                    >
+                      {numCats} categorías
+                    </span>
+                    <span style={{ fontSize: "0.68rem", color: isSel ? "#8888b0" : "#7070a0", fontWeight: 500 }}>
+                      {conv.trabajadores} trab.
+                    </span>
+                  </div>
+                </div>
               </button>
             );
           })}
         </div>
       </div>
 
-      {/* ── Step 2: Form ── */}
+      {/* ══ Step 2: Form — mismo estilo que JobChangeCalculator ══ */}
       {selectedConvenioId && convenio && (
         <div
-          className="rounded-2xl p-5 flex flex-col gap-4 animate-scaleIn"
-          style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)" }}
+          className="rounded-2xl overflow-hidden animate-scaleIn"
+          style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.08)" }}
         >
-          <p className="font-syne font-bold text-xs tracking-widest uppercase" style={{ color: "#9090b8" }}>
-            2 · Tu perfil profesional
-          </p>
+          {/* Accent top bar */}
+          <div style={{ height: 3, background: "linear-gradient(90deg, #6366f1, #818cf840)" }} />
 
-          {/* Categoría */}
-          <div className="flex flex-col gap-1.5">
-            <label style={LABEL_ST}>Categoría profesional</label>
-            <select
-              value={selectedCategoriaId ?? ""}
-              onChange={(e) => { setSelectedCategoriaId(e.target.value || null); setHasChecked(false); }}
-              style={INPUT_ST}
+          <div className="p-5 flex flex-col gap-4">
+            {/* Section header — identical to JobColumn */}
+            <div
+              className="flex items-center gap-3 pb-3"
+              style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}
             >
-              <option value="">— Selecciona tu categoría —</option>
+              <div
+                className="w-1 h-6 rounded-full shrink-0"
+                style={{ background: "#6366f1", boxShadow: "0 0 8px rgba(99,102,241,0.5)" }}
+              />
+              <span className="font-syne font-bold text-sm tracking-widest uppercase" style={{ color: "#818cf8" }}>
+                2 · Tu perfil profesional
+              </span>
+            </div>
+
+            {/* Categoría — full width */}
+            <FieldSelect
+              label="Categoría profesional"
+              value={selectedCategoriaId ?? ""}
+              onChange={(v) => { setSelectedCategoriaId(v || null); setHasChecked(false); }}
+            >
+              <option value="" style={{ background: "#0d0d1a", color: "#e0e0ff" }}>— Selecciona tu categoría —</option>
               {convenio.categorias.map((cat) => (
-                <option key={cat.id} value={cat.id}>
+                <option key={cat.id} value={cat.id} style={{ background: "#0d0d1a", color: "#e0e0ff" }}>
                   {cat.nombre} · mín. {fmtN(cat.salarioBase)} €/mes
                 </option>
               ))}
-            </select>
-          </div>
+            </FieldSelect>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-
-            {/* Salario actual */}
-            <div className="flex flex-col gap-1.5">
-              <label style={LABEL_ST}>
-                Tu salario mensual bruto
-                <span style={{ color: "#4a4a6a", marginLeft: 5 }}>(opcional)</span>
-              </label>
-              <div className="relative">
-                <input
-                  type="number"
-                  value={salarioActual}
-                  onChange={(e) => { setSalarioActual(e.target.value); setHasChecked(false); }}
-                  placeholder="Ej: 1.300"
-                  style={{ ...INPUT_ST, paddingRight: "2.6rem" }}
-                />
-                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm font-semibold" style={{ color: "#5a5a80" }}>€</span>
-              </div>
-            </div>
-
-            {/* CCAA */}
-            <div className="flex flex-col gap-1.5">
-              <label style={LABEL_ST}>Comunidad autónoma</label>
-              <select
+            {/* 3-column grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <FieldNum
+                label="Tu salario mensual bruto (opcional)"
+                value={salarioActual}
+                onChange={(v) => { setSalarioActual(v); setHasChecked(false); }}
+                placeholder="Ej: 1.300"
+                suffix="€"
+              />
+              <FieldSelect
+                label="Comunidad autónoma"
                 value={ccaa}
-                onChange={(e) => { setCcaa(e.target.value as ComunidadAutonoma); setHasChecked(false); }}
-                style={INPUT_ST}
+                onChange={(v) => { setCcaa(v as ComunidadAutonoma); setHasChecked(false); }}
               >
                 {CCAA_OPTIONS.map(([v, l]) => (
-                  <option key={v} value={v}>{l}</option>
+                  <option key={v} value={v} style={{ background: "#0d0d1a", color: "#e0e0ff" }}>{l}</option>
                 ))}
-              </select>
-            </div>
-
-            {/* Pagas */}
-            <div className="flex flex-col gap-1.5">
-              <label style={LABEL_ST}>Número de pagas</label>
-              <select
+              </FieldSelect>
+              <FieldSelect
+                label="Número de pagas"
                 value={pagas}
-                onChange={(e) => { setPagas(e.target.value as "12" | "14"); setHasChecked(false); }}
-                style={INPUT_ST}
+                onChange={(v) => { setPagas(v as "12" | "14"); setHasChecked(false); }}
               >
-                <option value="12">12 pagas</option>
-                <option value="14">14 pagas (con extras)</option>
-              </select>
+                <option value="12" style={{ background: "#0d0d1a", color: "#e0e0ff" }}>12 pagas</option>
+                <option value="14" style={{ background: "#0d0d1a", color: "#e0e0ff" }}>14 pagas (con extras)</option>
+              </FieldSelect>
             </div>
-          </div>
 
-          {validationError && (
-            <p className="text-sm px-4 py-3 rounded-xl" style={{ background: "rgba(248,113,113,0.08)", border: "1px solid rgba(248,113,113,0.2)", color: "#f87171" }}>
-              {validationError}
-            </p>
-          )}
+            {validationError && (
+              <p
+                className="text-sm px-4 py-3 rounded-xl"
+                style={{ background: "rgba(248,113,113,0.08)", border: "1px solid rgba(248,113,113,0.2)", color: "#f87171" }}
+              >
+                {validationError}
+              </p>
+            )}
 
-          <div className="flex justify-center pt-1">
-            <button
-              onClick={handleCheck}
-              className="font-syne font-black tracking-widest uppercase flex items-center gap-2.5"
-              style={{
-                background:  "linear-gradient(135deg, #4f52d4 0%, #6366f1 50%, #818cf8 100%)",
-                color:       "#fff",
-                borderRadius: 14,
-                padding:     "14px 36px",
-                fontSize:    "0.88rem",
-                letterSpacing: "0.12em",
-                boxShadow:   "0 6px 24px rgba(99,102,241,0.4)",
-                cursor:      "pointer",
-              }}
-            >
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                <circle cx="8" cy="8" r="6.5" />
-                <path d="M5.5 8l2 2 3-3.5" />
-              </svg>
-              Comprobar mi salario
-            </button>
+            {/* CTA button */}
+            <div className="flex justify-center pt-1">
+              <button
+                onClick={handleCheck}
+                className="font-syne font-black tracking-widest uppercase flex items-center gap-2.5"
+                style={{
+                  background:    "linear-gradient(135deg, #4f52d4 0%, #6366f1 50%, #818cf8 100%)",
+                  color:         "#fff",
+                  borderRadius:  16,
+                  padding:       "16px 40px",
+                  fontSize:      "0.9rem",
+                  letterSpacing: "0.12em",
+                  boxShadow:     "0 6px 30px rgba(99,102,241,0.5), 0 0 0 1px rgba(99,102,241,0.3)",
+                  cursor:        "pointer",
+                }}
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                  <circle cx="8" cy="8" r="6.5" />
+                  <path d="M5.5 8l2 2 3-3.5" />
+                </svg>
+                Comprobar mi salario
+              </button>
+            </div>
           </div>
         </div>
       )}
 
-      {/* ── Results ── */}
+      {/* ══ Results ══ */}
       {hasChecked && categoria && result && (
         <div ref={resultRef} className="flex flex-col gap-4 animate-scaleIn" style={{ padding: 4 }}>
 
-          {/* Separador */}
+          {/* Separator */}
           <div className="flex items-center gap-4 py-1">
             <div className="flex-1 h-px" style={{ background: "linear-gradient(90deg, transparent, rgba(99,102,241,0.3))" }} />
             <span className="font-syne font-bold text-xs tracking-widest uppercase shrink-0" style={{ color: "#6366f1" }}>Resultado</span>
             <div className="flex-1 h-px" style={{ background: "linear-gradient(90deg, rgba(99,102,241,0.3), transparent)" }} />
           </div>
 
-          {/* Veredicto principal */}
+          {/* Verdict main card */}
           <div className="rounded-2xl p-6 md:p-7" style={{ background: verdictBg, border: `1.5px solid ${verdictBorder}` }}>
-            <p className="font-syne font-bold text-xs tracking-widest uppercase mb-4" style={{ color: "#9090b8" }}>
+            <p className="font-syne font-bold text-xs tracking-widest uppercase mb-4" style={{ color: "#a0a0c8" }}>
               {convenio!.nombre} · {categoria.nombre}
             </p>
 
             <div className="flex flex-col sm:flex-row sm:items-end gap-5 sm:gap-10 mb-5">
               <div>
-                <p style={{ color: "#9090b8", fontSize: "0.82rem", marginBottom: 3 }}>Salario mínimo del convenio</p>
+                <p style={{ color: "#b0b0d0", fontSize: "0.85rem", marginBottom: 4 }}>Salario mínimo del convenio</p>
                 <p className="font-syne font-extrabold tabnum leading-none" style={{ fontSize: "clamp(2rem, 5vw, 2.6rem)", color: "#f0f0ff" }}>
                   {fmtN(categoria.salarioBase)} €
                 </p>
-                <p style={{ color: "#7878a8", fontSize: "0.78rem", marginTop: 4 }}>mensual bruto · 14 pagas</p>
+                <p style={{ color: "#9090b8", fontSize: "0.8rem", marginTop: 5 }}>mensual bruto · 14 pagas</p>
               </div>
               <div>
-                <p style={{ color: "#9090b8", fontSize: "0.82rem", marginBottom: 3 }}>Neto mensual estimado</p>
-                <p className="font-syne font-extrabold tabnum leading-none" style={{ fontSize: "clamp(2rem, 5vw, 2.6rem)", color: "#6366f1" }}>
+                <p style={{ color: "#b0b0d0", fontSize: "0.85rem", marginBottom: 4 }}>Neto mensual estimado</p>
+                <p className="font-syne font-extrabold tabnum leading-none" style={{ fontSize: "clamp(2rem, 5vw, 2.6rem)", color: "#818cf8" }}>
                   {fmtN(Math.round(result.monthlyNet))} €
                 </p>
-                <p style={{ color: "#7878a8", fontSize: "0.78rem", marginTop: 4 }}>{COMUNIDADES_LABEL[ccaa]} · {pagas} pagas</p>
+                <p style={{ color: "#9090b8", fontSize: "0.8rem", marginTop: 5 }}>{COMUNIDADES_LABEL[ccaa]} · {pagas} pagas</p>
               </div>
             </div>
 
-            {/* Comparación salario actual */}
+            {/* Comparison if user entered salary */}
             {hasActualSalario && (
               <div
                 className="rounded-xl p-4"
@@ -318,43 +434,43 @@ export default function ConvenioCalculator() {
             )}
           </div>
 
-          {/* Desglose */}
+          {/* Breakdown */}
           <div className="rounded-2xl p-5" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)" }}>
-            <p className="font-syne font-bold text-xs tracking-widest uppercase mb-4" style={{ color: "#9090b8" }}>
+            <p className="font-syne font-bold text-xs tracking-widest uppercase mb-4" style={{ color: "#a0a0c8" }}>
               Desglose del salario mínimo del convenio
             </p>
             <div className="flex flex-col">
               {[
-                { lbl: "Salario base mensual (× 14 pagas)",  val: `${fmtN(categoria.salarioBase)} €`,              clr: "#e0e0ff"  },
-                { lbl: "Prorrata pagas extra / mes",          val: `+${fmtN(prorrataMensual)} €`,                  clr: "#a0a0c8"  },
-                { lbl: "Bruto anual total",                   val: `${fmtN(categoria.salarioBase * 14)} €`,        clr: "#a0a0c8"  },
-                { lbl: "SS trabajador / año",                 val: `−${fmtN(Math.round(result.annualSS))} €`,      clr: "#f87171"  },
-                { lbl: "IRPF retenido / año",                 val: `−${fmtN(Math.round(result.annualIRPF))} €`,    clr: "#f87171"  },
-                { lbl: `Neto mensual (${pagas} pagas)`,       val: `${fmtN(Math.round(result.monthlyNet))} €`,     clr: "#34d399", bold: true },
-                { lbl: "Neto anual",                          val: `${fmtN(Math.round(result.annualNet))} €`,      clr: "#34d399", bold: true },
-                { lbl: "IRPF efectivo",                       val: `${fmtDec(result.irpfEfectivo)} %`,             clr: "#fbbf24"  },
+                { lbl: "Salario base mensual (× 14 pagas)",  val: `${fmtN(categoria.salarioBase)} €`,           clr: "#e0e0ff"  },
+                { lbl: "Prorrata pagas extra / mes",          val: `+${fmtN(prorrataMensual)} €`,                clr: "#c0c0e0"  },
+                { lbl: "Bruto anual total",                   val: `${fmtN(categoria.salarioBase * 14)} €`,      clr: "#c0c0e0"  },
+                { lbl: "SS trabajador / año",                 val: `−${fmtN(Math.round(result.annualSS))} €`,    clr: "#f87171"  },
+                { lbl: "IRPF retenido / año",                 val: `−${fmtN(Math.round(result.annualIRPF))} €`,  clr: "#f87171"  },
+                { lbl: `Neto mensual (${pagas} pagas)`,       val: `${fmtN(Math.round(result.monthlyNet))} €`,   clr: "#34d399", bold: true },
+                { lbl: "Neto anual",                          val: `${fmtN(Math.round(result.annualNet))} €`,    clr: "#34d399", bold: true },
+                { lbl: "IRPF efectivo",                       val: `${fmtDec(result.irpfEfectivo)} %`,           clr: "#fbbf24"  },
               ].map((row, i) => (
                 <div
                   key={i}
                   className="flex items-center justify-between py-2.5"
                   style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}
                 >
-                  <span style={{ fontSize: "0.85rem", color: "#9090b8" }}>{row.lbl}</span>
+                  <span style={{ fontSize: "0.87rem", color: "#b0b0cc" }}>{row.lbl}</span>
                   <span
                     className={row.bold ? "font-syne font-bold tabnum" : "tabnum"}
-                    style={{ fontSize: row.bold ? "1rem" : "0.9rem", color: row.clr }}
+                    style={{ fontSize: row.bold ? "1rem" : "0.92rem", color: row.clr }}
                   >
                     {row.val}
                   </span>
                 </div>
               ))}
             </div>
-            <p className="text-xs mt-3 leading-relaxed" style={{ color: "#6060a0" }}>
+            <p className="text-xs mt-3 leading-relaxed" style={{ color: "#8080a8" }}>
               Cálculo orientativo para persona soltera, 35 años, contrato indefinido en {COMUNIDADES_LABEL[ccaa]}. Datos AEAT 2026.
             </p>
           </div>
 
-          {/* CTA si está por debajo del convenio */}
+          {/* CTA if below convenio */}
           {porDebajo && (
             <div
               className="rounded-2xl p-5"
@@ -366,7 +482,7 @@ export default function ConvenioCalculator() {
                   <p className="font-syne font-bold" style={{ color: "#f87171", fontSize: "1rem", marginBottom: 8 }}>
                     ¿Qué puedo hacer si cobro por debajo del convenio?
                   </p>
-                  <p className="text-sm leading-relaxed mb-3" style={{ color: "#c0c0d8" }}>
+                  <p className="text-sm leading-relaxed mb-3" style={{ color: "#d0d0e8" }}>
                     Si tu empresa te paga por debajo del salario mínimo del convenio colectivo, está incumpliendo la ley laboral. Tienes varias vías para reclamarlo:
                   </p>
                   <ul className="flex flex-col gap-2">
@@ -374,10 +490,10 @@ export default function ConvenioCalculator() {
                       "Tu sindicato (CCOO, UGT u otros representativos de tu sector)",
                       "La Inspección de Trabajo — denuncia gratuita y confidencial",
                       "El Servicio de Mediación, Arbitraje y Conciliación (SMAC) — paso previo a la demanda",
-                      "Un abogado laboralista para reclamar las diferencias salariales de los últimos 4 años",
+                      "Un abogado laboralista para reclamar diferencias salariales de los últimos 4 años",
                     ].map((item, i) => (
-                      <li key={i} className="flex items-start gap-2 text-sm" style={{ color: "#c0c0d8" }}>
-                        <span className="shrink-0 font-bold" style={{ color: "#f87171" }}>·</span>
+                      <li key={i} className="flex items-start gap-2 text-sm" style={{ color: "#d0d0e8" }}>
+                        <span className="shrink-0 font-bold mt-0.5" style={{ color: "#f87171" }}>·</span>
                         {item}
                       </li>
                     ))}
@@ -387,7 +503,7 @@ export default function ConvenioCalculator() {
             </div>
           )}
 
-          {/* CTA calculadora completa */}
+          {/* CTA main calculator */}
           <div
             className="rounded-2xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
             style={{ background: "rgba(99,102,241,0.06)", border: "1px solid rgba(99,102,241,0.18)" }}
@@ -396,7 +512,7 @@ export default function ConvenioCalculator() {
               <p className="font-syne font-bold" style={{ color: "#a5b4fc", fontSize: "0.95rem" }}>
                 ¿Quieres calcular tu neto exacto con tu situación personal?
               </p>
-              <p className="text-sm mt-1" style={{ color: "#7878a8" }}>
+              <p className="text-sm mt-1" style={{ color: "#9090b8" }}>
                 Personaliza por hijos, estado civil, discapacidad, edad y más.
               </p>
             </div>
